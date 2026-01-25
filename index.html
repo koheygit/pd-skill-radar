@@ -6,18 +6,20 @@
   <title>PD Type & Skill Diagnostic</title>
   <style>
     :root{
-      --bg:#ffffff;
-      --panel:#ffffff;
-      --line:#e7e9ee;
-      --line2:#f0f2f6;
+      /* Modern Minimal */
+      --bg:#f3f4f6;         /* light gray page background */
+      --surface:#ffffff;     /* white surface */
       --text:#111827;
       --muted:#6b7280;
-      --acc:#2563eb;      /* blue */
-      --accSoft:#eff6ff;  /* light blue */
+      --line:#e5e7eb;        /* separators */
+      --line2:#eef2f7;
+      --acc:#2563eb;
+      --accSoft:#eff6ff;
       --danger:#dc2626;
       --shadow: 0 10px 24px rgba(17,24,39,.06);
-      --radius:14px;
+      --radius:14px;         /* for clickable items only */
     }
+
     *{ box-sizing:border-box; }
     body{
       margin:0;
@@ -25,93 +27,121 @@
       background:var(--bg);
       color:var(--text);
     }
-    .wrap{ max-width:1060px; margin:0 auto; padding:22px 16px 48px; }
-    h1{ margin:0 0 6px; font-size:26px; letter-spacing:-.2px; }
+
+    .wrap{ max-width:1060px; margin:0 auto; padding:18px 14px 40px; }
+    h1{ margin:0 0 6px; font-size:24px; letter-spacing:-.2px; }
     h2{ margin:0 0 10px; font-size:18px; letter-spacing:-.1px; }
-    h3{ margin:0 0 10px; font-size:15px; }
+    h3{ margin:0; font-size:14px; letter-spacing:-.1px; }
     p{ margin:8px 0 14px; color:var(--muted); line-height:1.65; }
     .small{ font-size:12px; color:var(--muted); }
     .mono{ font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size:12px; color:#374151; }
 
-    .row{ display:flex; gap:14px; flex-wrap:wrap; }
     .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
     @media (max-width:920px){ .grid2{ grid-template-columns:1fr; } }
+    .row{ display:flex; gap:12px; flex-wrap:wrap; }
 
-    .card{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:var(--radius);
+    /* ===== Surfaces ===== */
+    /* White, borderless, no card feel (as requested for the main header area) */
+    .surface{
+      background:var(--surface);
+      border:none;
+      border-radius:0;
+      box-shadow:none;
       padding:16px;
-      box-shadow:var(--shadow);
     }
-    .card.flat{ box-shadow:none; background:#fff; }
-    .sep{ height:1px; background:var(--line2); margin:14px 0; }
 
-    /* Buttons */
+    /* Content sections that should still feel contained on gray background */
+    .screen{
+      background:var(--surface);
+      border:none;
+      border-radius:0;
+      box-shadow:none;
+      padding:16px;
+    }
+
+    /* Divider lines (instead of rounded boxes) */
+    .rule{ height:1px; background:var(--line); margin:14px 0; }
+    .rule.soft{ background:var(--line2); }
+
+    /* ===== Clickable vs Non-clickable clarity ===== */
+    /* Clickable: always looks pressable even without hover */
+    .tap{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:14px 14px;
+      border-radius:var(--radius);
+      border:1.5px solid #d1d5db;
+      background:#ffffff;
+      box-shadow: 0 2px 10px rgba(17,24,39,.06);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .04s ease, border-color .12s ease, background .12s ease;
+    }
+    .tap:active{ transform: translateY(1px); }
+    .tap .left{ display:flex; flex-direction:column; gap:4px; }
+    .tap .title{ font-weight:850; letter-spacing:-.1px; color:var(--text); }
+    .tap .desc{ font-size:12px; color:var(--muted); line-height:1.45; }
+    .tap .chev{
+      flex:0 0 auto;
+      width:30px; height:30px;
+      border-radius:999px;
+      display:grid; place-items:center;
+      background:#f9fafb;
+      border:1px solid var(--line);
+      color:#374151;
+      font-weight:900;
+    }
+
+    /* Selected state: clearly different without hover */
+    .tap.selected{
+      border-color: rgba(37,99,235,.55);
+      background: var(--accSoft);
+      box-shadow: 0 4px 14px rgba(37,99,235,.12);
+    }
+    .tap.selected .chev{
+      background:#ffffff;
+      border-color: rgba(37,99,235,.35);
+      color: var(--acc);
+    }
+
+    /* Non-clickable helper blocks */
+    .note{ color:var(--muted); font-size:12px; line-height:1.6; }
+
+    /* ===== Buttons ===== */
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       gap:8px;
-      padding:11px 14px;
+      padding:12px 14px;
       border-radius:12px;
       border:1px solid var(--line);
       background:#fff;
       color:var(--text);
-      font-weight:750;
+      font-weight:850;
       cursor:pointer;
-      min-height:42px;
-      transition: background .12s ease, border-color .12s ease, transform .04s ease;
+      min-height:44px;
     }
-    .btn:hover{ background:#fafafa; border-color:#d8dbe3; }
     .btn:active{ transform: translateY(1px); }
     .btn.primary{
-      border-color: transparent;
+      border-color:transparent;
       background:var(--acc);
       color:#fff;
+      box-shadow: 0 10px 18px rgba(37,99,235,.18);
     }
-    .btn.primary:hover{ background:#1d4ed8; }
+    .btn.primary:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      box-shadow:none;
+    }
     .btn.danger{
-      border-color: rgba(220,38,38,.25);
-      background:#fff;
       color:var(--danger);
-    }
-    .btn.danger:hover{ background:#fff5f5; border-color: rgba(220,38,38,.35); }
-    .btn:disabled{ opacity:.55; cursor:not-allowed; }
-
-    /* Clickable choices (no radio decoration) */
-    .choices{ display:grid; gap:10px; }
-    .choice{
-      border:1px solid var(--line);
       background:#fff;
-      padding:14px;
-      border-radius:12px;
-      cursor:pointer;
-      transition: background .12s ease, border-color .12s ease, transform .04s ease;
-    }
-    .choice:hover{ background:#fafafa; border-color:#d8dbe3; }
-    .choice:active{ transform: translateY(1px); }
-    .choice.selected{
-      border-color: rgba(37,99,235,.55);
-      background: var(--accSoft);
-    }
-    .choice .lead{
-      display:flex; align-items:center; gap:8px;
-      font-weight:800;
-      letter-spacing:-.1px;
-    }
-    .choice .sub{ margin-top:4px; font-size:12px; color:var(--muted); line-height:1.5; }
-    .kbd{
-      display:inline-flex; align-items:center; justify-content:center;
-      min-width:26px;
-      padding:3px 8px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#fff;
-      color:#374151;
-      font-weight:800;
-      font-size:12px;
+      border-color: rgba(220,38,38,.25);
     }
 
-    /* Pills & progress */
+    /* ===== Pills / progress ===== */
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding:8px 10px;
@@ -122,28 +152,29 @@
     }
     .progress{
       height:10px;
-      background:#f3f4f6;
+      background:#eef2f7;
       border-radius:999px;
       overflow:hidden;
     }
     .bar{ height:100%; width:0%; background:var(--acc); }
 
-    /* Inputs */
+    /* ===== Inputs ===== */
     input[type="text"]{
       width:100%;
-      padding:11px 12px;
+      padding:12px 12px;
       border-radius:12px;
       border:1px solid var(--line);
       outline:none;
       font-weight:650;
       color:var(--text);
+      background:#fff;
     }
     input[type="text"]:focus{
       border-color: rgba(37,99,235,.55);
       box-shadow: 0 0 0 4px rgba(37,99,235,.10);
     }
 
-    /* Skills accordion */
+    /* ===== Skills accordion ===== */
     details{
       border:1px solid var(--line);
       border-radius:12px;
@@ -152,7 +183,7 @@
     }
     summary{
       cursor:pointer;
-      font-weight:850;
+      font-weight:900;
       list-style:none;
       display:flex; align-items:center; justify-content:space-between;
       padding:6px 4px;
@@ -160,12 +191,12 @@
     }
     summary::-webkit-details-marker{ display:none; }
     .caret{ color:var(--muted); font-weight:900; }
+
     .chk{
       display:flex; gap:10px; align-items:flex-start;
       padding:10px 4px;
-      border-bottom:1px dashed #eef0f4;
+      border-top:1px solid var(--line2);  /* line separation */
     }
-    .chk:last-child{ border-bottom:none; }
     input[type="checkbox"]{ margin-top:3px; transform:scale(1.15); }
 
     .kpi{ display:flex; gap:10px; flex-wrap:wrap; }
@@ -175,6 +206,7 @@
       padding:10px 12px;
       background:#fff;
     }
+
     .hidden{ display:none !important; }
   </style>
 </head>
@@ -182,52 +214,72 @@
 <body>
 <div class="wrap">
   <h1>PD Type & Skill Diagnostic</h1>
-  <p class="small">タイプ（メイン＋サブ）＋能力（7軸・GATE）＋レーダーチャート（平均＋タイプ典型値）</p>
+  <div class="small">タイプ（メイン＋サブ）＋能力（7軸・GATE）＋レーダーチャート（平均＋タイプ典型値）</div>
+
+  <div class="rule soft"></div>
 
   <!-- HOME -->
-  <section id="view-home" class="card">
+  <section id="view-home" class="surface">
     <h2>1) モード選択</h2>
     <p>どちらかを選んでスタートしてください（カードをクリック）。</p>
 
+    <!-- Inside: no rounded container; separated by lines -->
     <div class="grid2">
-      <div class="card flat">
+      <div>
         <h3>評価モード（必須）</h3>
-        <div class="choices" id="mode-choices">
-          <div class="choice" role="button" tabindex="0" data-mode="self">
-            <div class="lead"><span class="kbd">SELF</span> 自己評価（4段階・中立なし）</div>
-            <div class="sub">とてもそう思う / ややそう思う / あまりそう思わない / そう思わない</div>
+        <div class="rule"></div>
+
+        <div class="row" style="flex-direction:column">
+          <div class="tap" role="button" tabindex="0" data-mode="self" id="modeSelf">
+            <div class="left">
+              <div class="title">自己評価（4段階・中立なし）</div>
+              <div class="desc">とてもそう思う / ややそう思う / あまりそう思わない / そう思わない</div>
+            </div>
+            <div class="chev">›</div>
           </div>
-          <div class="choice" role="button" tabindex="0" data-mode="other">
-            <div class="lead"><span class="kbd">OTHER</span> 他者評価（二択・具体シーン）</div>
-            <div class="sub">A/B のうち、より頻繁に見られる行動を選択</div>
+
+          <div class="tap" role="button" tabindex="0" data-mode="other" id="modeOther">
+            <div class="left">
+              <div class="title">他者評価（二択・具体シーン）</div>
+              <div class="desc">A/B のうち、より頻繁に見られる行動を選択</div>
+            </div>
+            <div class="chev">›</div>
           </div>
         </div>
 
-        <div class="sep"></div>
-        <label class="small" for="scopeText">評価スコープ（任意）</label>
-        <input id="scopeText" type="text" placeholder="例：直近1年 / 今回PJ など" />
+        <div class="rule"></div>
+
+        <div class="note">評価スコープ（任意）</div>
+        <div style="margin-top:6px">
+          <input id="scopeText" type="text" placeholder="例：直近1年 / 今回PJ など" />
+        </div>
       </div>
 
-      <div class="card flat">
+      <div>
         <h3>スタート</h3>
-        <p class="small">※優劣判定ではありません。配置・育成・対話の材料として使用してください。</p>
+        <div class="rule"></div>
+
+        <div class="note">※優劣判定ではありません。配置・育成・対話の材料として使用してください。</div>
+
+        <div class="rule soft"></div>
 
         <div class="kpi">
           <div class="mini">
             <div class="small">タイプ</div>
-            <div style="font-weight:850">メイン＋サブ</div>
+            <div style="font-weight:900">メイン＋サブ</div>
           </div>
           <div class="mini">
             <div class="small">能力</div>
-            <div style="font-weight:850">7軸（GATE）</div>
+            <div style="font-weight:900">7軸（GATE）</div>
           </div>
           <div class="mini">
             <div class="small">表示</div>
-            <div style="font-weight:850">平均＋典型値</div>
+            <div style="font-weight:900">平均＋典型値</div>
           </div>
         </div>
 
-        <div class="sep"></div>
+        <div class="rule"></div>
+
         <button id="btnStart" class="btn primary" disabled>タイプ判定へ</button>
         <div class="small" style="margin-top:8px">モードを選ぶとボタンが有効になります。</div>
       </div>
@@ -235,54 +287,47 @@
   </section>
 
   <!-- TYPE TEST -->
-  <section id="view-type" class="card hidden">
-    <div class="row">
-      <div style="flex:1 1 620px">
-        <h2>2) タイプ判定</h2>
-        <div class="pill"><span id="modeBadge">mode</span><span class="small">｜</span><span id="qCounter">0/24</span></div>
-        <div style="margin-top:10px" class="progress"><div id="qBar" class="bar"></div></div>
+  <section id="view-type" class="screen hidden">
+    <h2>2) タイプ判定</h2>
 
-        <div class="sep"></div>
+    <div class="row" style="justify-content:space-between; align-items:center">
+      <div class="pill"><span id="modeBadge">mode</span><span class="small">｜</span><span id="qCounter">0/24</span></div>
+      <div class="small">PCショートカット：自己評価 1〜4 / 他者評価 A・B</div>
+    </div>
 
-        <div id="typeQuestionBox" class="card flat" style="border-color:var(--line)">
-          <div class="small" id="qIdText">Q</div>
-          <div style="font-size:20px; font-weight:900; letter-spacing:-.2px; margin-top:6px" id="qText">...</div>
-          <p class="small" style="margin:10px 0 0">下の選択肢カードをクリックしてください。</p>
+    <div style="margin-top:10px" class="progress"><div id="qBar" class="bar"></div></div>
 
-          <div class="sep"></div>
+    <div class="rule"></div>
 
-          <div id="selfChoices" class="choices hidden"></div>
-          <div id="otherChoices" class="choices hidden"></div>
+    <!-- Question block (white, no border) -->
+    <div>
+      <div class="small" id="qIdText">Q</div>
+      <div id="qText" style="margin-top:6px; font-size:20px; font-weight:950; letter-spacing:-.2px">...</div>
+      <div class="small" style="margin-top:8px">下の「選択カード」をクリックしてください。</div>
 
-          <div class="sep"></div>
-          <div class="row">
-            <button id="btnTypeBack" class="btn">戻る</button>
-            <button id="btnTypeReset" class="btn danger">最初に戻る</button>
-          </div>
-        </div>
-      </div>
+      <div class="rule"></div>
 
-      <div class="card flat" style="flex:1 1 300px">
-        <h3>ヒント</h3>
-        <p class="small">迷ったら「より頻繁に当てはまる」ほうを選びます。</p>
-        <div class="sep"></div>
-        <div class="small">進捗</div>
-        <div id="typeProgressHint" style="font-weight:900; font-size:22px">—</div>
-        <div class="sep"></div>
-        <div class="small">ショートカット（PC）</div>
-        <div class="small">自己評価：<b>1〜4</b> / 他者評価：<b>A / B</b></div>
+      <div id="selfChoices" class="row hidden" style="flex-direction:column"></div>
+      <div id="otherChoices" class="row hidden" style="flex-direction:column"></div>
+
+      <div class="rule"></div>
+
+      <div class="row">
+        <button id="btnTypeBack" class="btn">戻る</button>
+        <button id="btnTypeReset" class="btn danger">最初に戻る</button>
       </div>
     </div>
   </section>
 
   <!-- SKILL CHECK -->
-  <section id="view-skill" class="card hidden">
+  <section id="view-skill" class="screen hidden">
     <h2>3) 能力判定（7軸・GATE）</h2>
     <p>該当する項目にチェックしてください（未チェックでもOK：Lv1保証）。</p>
 
-    <div id="skillAccordions" class="grid2"></div>
+    <div class="grid2" id="skillAccordions"></div>
 
-    <div class="sep"></div>
+    <div class="rule"></div>
+
     <div class="row">
       <button id="btnSkillBack" class="btn">タイプ判定へ戻る</button>
       <button id="btnToResult" class="btn primary">結果を見る</button>
@@ -290,56 +335,61 @@
   </section>
 
   <!-- RESULT -->
-  <section id="view-result" class="card hidden">
+  <section id="view-result" class="screen hidden">
     <h2>4) 結果</h2>
 
     <div class="grid2">
-      <div class="card flat">
+      <div>
         <div class="pill">
           <span id="resultMode">—</span>
           <span class="small">｜</span>
           <span id="resultScope" class="small">—</span>
         </div>
 
-        <div class="sep"></div>
+        <div class="rule"></div>
 
         <div class="kpi">
           <div class="mini">
             <div class="small">メイン</div>
-            <div id="mainTypeText" style="font-weight:900; font-size:20px">—</div>
+            <div id="mainTypeText" style="font-weight:950; font-size:20px">—</div>
           </div>
           <div class="mini">
             <div class="small">サブ</div>
-            <div id="subTypeText" style="font-weight:900; font-size:20px">—</div>
+            <div id="subTypeText" style="font-weight:950; font-size:20px">—</div>
           </div>
         </div>
 
-        <div class="sep"></div>
+        <div class="rule"></div>
+
         <div class="small">能力（Lv / 差分）</div>
         <div id="skillList" style="margin-top:8px"></div>
 
-        <div class="sep"></div>
+        <div class="rule"></div>
+
         <div class="row">
           <button id="btnRestart" class="btn">もう一度</button>
           <button id="btnExport" class="btn">JSONを表示</button>
         </div>
 
-        <div id="exportBox" class="card hidden" style="margin-top:12px; box-shadow:none">
+        <div id="exportBox" class="hidden" style="margin-top:12px">
           <div class="small">エクスポート（コピペ用）</div>
           <pre id="exportJson" class="mono" style="white-space:pre-wrap; margin:8px 0 0"></pre>
         </div>
       </div>
 
-      <div class="card flat">
-        <h3>レーダーチャート</h3>
-        <p class="small">実測（太線）＋平均（Lv3）＋タイプ典型値（薄線）</p>
+      <div>
+        <h3 style="margin-top:2px">レーダーチャート</h3>
+        <div class="small">実測（太線）＋平均（Lv3）＋タイプ典型値（薄線）</div>
+        <div class="rule soft"></div>
         <canvas id="radar" height="360"></canvas>
       </div>
     </div>
 
-    <div class="sep"></div>
-    <div class="card flat">
+    <div class="rule"></div>
+
+    <div>
       <h3>タイプ説明（簡易）</h3>
+      <div class="rule soft"></div>
       <div id="typeDesc" class="small" style="white-space:pre-wrap">—</div>
     </div>
   </section>
@@ -582,7 +632,6 @@ const app = {
   subType: null,
   radarChart: null
 };
-
 const $ = (id)=>document.getElementById(id);
 
 function initScores(){
@@ -597,9 +646,7 @@ function shuffle(arr){
   }
   return a;
 }
-function typeLabel(id){
-  return TYPES.find(t=>t.id===id)?.label ?? id;
-}
+function typeLabel(id){ return TYPES.find(t=>t.id===id)?.label ?? id; }
 function show(viewId){
   ["view-home","view-type","view-skill","view-result"].forEach(v=>$(v).classList.add("hidden"));
   $(viewId).classList.remove("hidden");
@@ -618,7 +665,8 @@ function resetAll(){
   app.mainType = null;
   app.subType = null;
 
-  document.querySelectorAll("#mode-choices .choice").forEach(el=>el.classList.remove("selected"));
+  // clear selected styling
+  document.querySelectorAll('[data-mode]').forEach(el=>el.classList.remove("selected"));
   $("btnStart").disabled = true;
   $("scopeText").value = "";
   $("exportBox").classList.add("hidden");
@@ -627,7 +675,7 @@ function resetAll(){
 
 function setMode(mode){
   app.mode = mode;
-  document.querySelectorAll("#mode-choices .choice").forEach(el=>{
+  document.querySelectorAll('[data-mode]').forEach(el=>{
     el.classList.toggle("selected", el.dataset.mode===mode);
   });
   $("btnStart").disabled = !app.mode;
@@ -641,7 +689,6 @@ function startTypeTest(){
   app.typeQ = (app.mode==="self") ? shuffle(SELF_Q) : shuffle(OTHER_Q);
 
   $("modeBadge").textContent = (app.mode==="self") ? "自己評価" : "他者評価";
-  $("typeProgressHint").textContent = "開始";
   renderTypeQuestion();
   show("view-type");
 }
@@ -651,7 +698,6 @@ function renderTypeQuestion(){
   const idx = app.typeIdx;
   $("qCounter").textContent = `${idx+1}/${total}`;
   $("qBar").style.width = `${Math.round((idx)/total*100)}%`;
-  $("typeProgressHint").textContent = `${idx+1} / ${total}`;
 
   const q = app.typeQ[idx];
   $("qIdText").textContent = q.id;
@@ -673,9 +719,13 @@ function renderTypeQuestion(){
 
     options.forEach((op, i)=>{
       const div = document.createElement("div");
-      div.className = "choice";
-      div.innerHTML = `<div class="lead"><span class="kbd">${i+1}</span>${op.label}</div>
-                       <div class="sub">スコア：${op.val>0?"+":""}${op.val}</div>`;
+      div.className = "tap";
+      div.innerHTML = `
+        <div class="left">
+          <div class="title"><span style="margin-right:8px; color:#374151; font-weight:900;">${i+1}</span>${op.label}</div>
+          <div class="desc">スコア：${op.val>0?"+":""}${op.val}</div>
+        </div>
+        <div class="chev">›</div>`;
       div.onclick = ()=>answerSelf(q, op.val);
       $("selfChoices").appendChild(div);
     });
@@ -684,15 +734,23 @@ function renderTypeQuestion(){
     $("qText").textContent = q.p;
 
     const divA = document.createElement("div");
-    divA.className = "choice";
-    divA.innerHTML = `<div class="lead"><span class="kbd">A</span>${q.A.t}</div>
-                      <div class="sub">より頻繁に見られる方</div>`;
+    divA.className = "tap";
+    divA.innerHTML = `
+      <div class="left">
+        <div class="title"><span style="margin-right:8px; color:#374151; font-weight:900;">A</span>${q.A.t}</div>
+        <div class="desc">より頻繁に見られる方</div>
+      </div>
+      <div class="chev">›</div>`;
     divA.onclick = ()=>answerOther(q, "A");
 
     const divB = document.createElement("div");
-    divB.className = "choice";
-    divB.innerHTML = `<div class="lead"><span class="kbd">B</span>${q.B.t}</div>
-                      <div class="sub">より頻繁に見られる方</div>`;
+    divB.className = "tap";
+    divB.innerHTML = `
+      <div class="left">
+        <div class="title"><span style="margin-right:8px; color:#374151; font-weight:900;">B</span>${q.B.t}</div>
+        <div class="desc">より頻繁に見られる方</div>
+      </div>
+      <div class="chev">›</div>`;
     divB.onclick = ()=>answerOther(q, "B");
 
     $("otherChoices").appendChild(divA);
@@ -782,7 +840,7 @@ function buildSkillUI(){
     const det = document.createElement("details");
     det.open = true;
 
-    // 暫定レベル表示はなし
+    // 暫定レベル表示なし
     const sum = document.createElement("summary");
     sum.innerHTML = `<span>${ax.name}</span><span class="caret">▾</span>`;
     det.appendChild(sum);
@@ -835,7 +893,7 @@ function renderResult(){
     const diffTxt = (diff===0) ? "±0" : (diff>0 ? `+${diff}` : `${diff}`);
     const line = document.createElement("div");
     line.style.padding="10px 0";
-    line.style.borderBottom="1px dashed #eef0f4";
+    line.style.borderTop="1px solid var(--line2)";
     line.innerHTML = `<b>${ax.name}</b>： Lv${lv} <span class="small">（${diffTxt}）</span>`;
     ul.appendChild(line);
   });
@@ -894,7 +952,7 @@ function exportState(){
 ========================= */
 resetAll();
 
-document.querySelectorAll("#mode-choices .choice").forEach(el=>{
+document.querySelectorAll('[data-mode]').forEach(el=>{
   const click = ()=>setMode(el.dataset.mode);
   el.addEventListener("click", click);
   el.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); click(); } });
@@ -914,6 +972,7 @@ $("btnExport").addEventListener("click", exportState);
 document.addEventListener("keydown",(e)=>{
   const onType = !$("view-type").classList.contains("hidden");
   if(!onType) return;
+
   if(app.mode==="self"){
     if(["1","2","3","4"].includes(e.key)){
       const idx = parseInt(e.key,10)-1;
