@@ -6,169 +6,175 @@
   <title>PD Type & Skill Diagnostic</title>
   <style>
     :root{
-      --bg:#0b0f14;
-      --card:#121826;
-      --card2:#0f1624;
-      --text:#e8eef5;
-      --muted:#95a9bf;
-      --line:#253347;
-      --acc:#4ea1ff;
-      --acc2:#6be4ff;
-      --ok:#35d07f;
-      --warn:#ffcc66;
-      --danger:#ff5577;
-      --shadow: 0 10px 30px rgba(0,0,0,.35);
-      --radius:16px;
+      --bg:#ffffff;
+      --panel:#ffffff;
+      --line:#e7e9ee;
+      --line2:#f0f2f6;
+      --text:#111827;
+      --muted:#6b7280;
+      --acc:#2563eb;      /* blue */
+      --accSoft:#eff6ff;  /* light blue */
+      --danger:#dc2626;
+      --shadow: 0 10px 24px rgba(17,24,39,.06);
+      --radius:14px;
     }
     *{ box-sizing:border-box; }
     body{
       margin:0;
-      font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Noto Sans JP";
-      background:radial-gradient(1200px 600px at 20% -20%, rgba(78,161,255,.22), transparent 50%),
-                 radial-gradient(1000px 500px at 110% 0%, rgba(107,228,255,.16), transparent 55%),
-                 var(--bg);
+      font-family:ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Noto Sans JP";
+      background:var(--bg);
       color:var(--text);
     }
-    .wrap{ max-width:1080px; margin:0 auto; padding:18px; }
-    h1{ margin:0 0 6px; font-size:28px; letter-spacing:.2px; }
-    h2{ margin:0 0 10px; font-size:18px; }
-    h3{ margin:0 0 8px; font-size:16px; }
+    .wrap{ max-width:1060px; margin:0 auto; padding:22px 16px 48px; }
+    h1{ margin:0 0 6px; font-size:26px; letter-spacing:-.2px; }
+    h2{ margin:0 0 10px; font-size:18px; letter-spacing:-.1px; }
+    h3{ margin:0 0 10px; font-size:15px; }
     p{ margin:8px 0 14px; color:var(--muted); line-height:1.65; }
     .small{ font-size:12px; color:var(--muted); }
-    .mono{ font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace; font-size:12px; color:#b9cbe0; }
+    .mono{ font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size:12px; color:#374151; }
+
     .row{ display:flex; gap:14px; flex-wrap:wrap; }
     .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-    @media (max-width:860px){ .grid2{ grid-template-columns:1fr; } }
+    @media (max-width:920px){ .grid2{ grid-template-columns:1fr; } }
+
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)) , var(--card);
+      background:var(--panel);
       border:1px solid var(--line);
       border-radius:var(--radius);
-      padding:14px;
-      box-shadow: var(--shadow);
+      padding:16px;
+      box-shadow:var(--shadow);
     }
-    .card.soft{ background: var(--card2); box-shadow:none; }
-    .sep{ height:1px; background:var(--line); margin:12px 0; }
+    .card.flat{ box-shadow:none; background:#fff; }
+    .sep{ height:1px; background:var(--line2); margin:14px 0; }
 
-    /* ===== Buttons ===== */
+    /* Buttons */
     .btn{
-      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px;
+      padding:11px 14px;
+      border-radius:12px;
       border:1px solid var(--line);
-      background:linear-gradient(180deg,#142036,#0f1624);
+      background:#fff;
       color:var(--text);
-      padding:12px 14px;
-      border-radius:14px;
+      font-weight:750;
       cursor:pointer;
-      font-weight:800;
-      min-height:44px;
-      user-select:none;
-      transition: transform .08s ease, border-color .12s ease, filter .12s ease;
+      min-height:42px;
+      transition: background .12s ease, border-color .12s ease, transform .04s ease;
     }
-    .btn:hover{ border-color:#35557a; filter:brightness(1.05); }
+    .btn:hover{ background:#fafafa; border-color:#d8dbe3; }
     .btn:active{ transform: translateY(1px); }
     .btn.primary{
-      border-color:#2a5a92;
-      background:linear-gradient(180deg, rgba(78,161,255,.22), rgba(18,48,84,.88));
+      border-color: transparent;
+      background:var(--acc);
+      color:#fff;
     }
-    .btn.primary::before{ content:"▶"; font-weight:900; }
-    .btn.ghost{ background:transparent; }
-    .btn.danger{ border-color:#6a2134; background:linear-gradient(180deg, rgba(255,85,119,.15), rgba(42,15,22,.95)); }
-    .btn.danger::before{ content:"↺"; }
-    .btn:disabled{ opacity:.5; cursor:not-allowed; filter:saturate(.5); }
+    .btn.primary:hover{ background:#1d4ed8; }
+    .btn.danger{
+      border-color: rgba(220,38,38,.25);
+      background:#fff;
+      color:var(--danger);
+    }
+    .btn.danger:hover{ background:#fff5f5; border-color: rgba(220,38,38,.35); }
+    .btn:disabled{ opacity:.55; cursor:not-allowed; }
 
-    /* ===== Tap targets / choices ===== */
+    /* Clickable choices (no radio decoration) */
     .choices{ display:grid; gap:10px; }
     .choice{
-      position:relative;
       border:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)), var(--card2);
-      padding:14px 14px 14px 52px;
-      border-radius:14px;
+      background:#fff;
+      padding:14px;
+      border-radius:12px;
       cursor:pointer;
-      user-select:none;
-      transition: transform .08s ease, border-color .12s ease, filter .12s ease, box-shadow .12s ease;
+      transition: background .12s ease, border-color .12s ease, transform .04s ease;
     }
-    .choice:hover{ border-color:#3a5f8b; filter:brightness(1.06); }
+    .choice:hover{ background:#fafafa; border-color:#d8dbe3; }
     .choice:active{ transform: translateY(1px); }
-    .choice.selected{ outline:2px solid var(--acc); border-color:#2a5a92; }
-    .choice::before{
-      content:"";
-      position:absolute; left:14px; top:50%; transform:translateY(-50%);
-      width:28px; height:28px; border-radius:999px;
-      border:2px solid #3b4f6a;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.08), rgba(0,0,0,0));
-      box-shadow: inset 0 0 0 4px rgba(0,0,0,.18);
+    .choice.selected{
+      border-color: rgba(37,99,235,.55);
+      background: var(--accSoft);
     }
-    .choice:hover::before{ border-color:#4e79aa; }
-    .choice.selected::before{
-      border-color: var(--acc);
-      box-shadow: inset 0 0 0 6px rgba(78,161,255,.35);
-      background: radial-gradient(circle at 30% 30%, rgba(107,228,255,.18), rgba(78,161,255,.08));
+    .choice .lead{
+      display:flex; align-items:center; gap:8px;
+      font-weight:800;
+      letter-spacing:-.1px;
     }
+    .choice .sub{ margin-top:4px; font-size:12px; color:var(--muted); line-height:1.5; }
     .kbd{
       display:inline-flex; align-items:center; justify-content:center;
-      min-width:22px; padding:2px 6px; border-radius:8px;
-      border:1px solid #31445e; background:#0c1320; color:#cfe0f5;
-      font-weight:900; font-size:12px;
-      margin-right:8px;
-    }
-
-    /* ===== Pills & progress ===== */
-    .pill{
-      display:inline-flex; gap:8px; align-items:center;
+      min-width:26px;
+      padding:3px 8px;
+      border-radius:999px;
       border:1px solid var(--line);
-      padding:8px 10px; border-radius:999px;
+      background:#fff;
+      color:#374151;
+      font-weight:800;
+      font-size:12px;
+    }
+
+    /* Pills & progress */
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 10px;
+      border:1px solid var(--line);
+      border-radius:999px;
       color:var(--muted);
-      background: rgba(0,0,0,.15);
+      background:#fff;
     }
-    .progress{ height:12px; background:#0c1320; border:1px solid var(--line); border-radius:999px; overflow:hidden; }
-    .bar{ height:100%; background:linear-gradient(90deg,#2a6fb4,#4ea1ff,#6be4ff); width:0%; }
+    .progress{
+      height:10px;
+      background:#f3f4f6;
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .bar{ height:100%; width:0%; background:var(--acc); }
 
-    /* ===== Inputs ===== */
+    /* Inputs */
     input[type="text"]{
-      width:100%; padding:12px 12px; border-radius:14px; border:1px solid var(--line);
-      background:#0c1320; color:var(--text); font-weight:650;
+      width:100%;
+      padding:11px 12px;
+      border-radius:12px;
+      border:1px solid var(--line);
       outline:none;
+      font-weight:650;
+      color:var(--text);
     }
-    input[type="text"]:focus{ border-color:#3a6fb1; box-shadow:0 0 0 3px rgba(78,161,255,.15); }
+    input[type="text"]:focus{
+      border-color: rgba(37,99,235,.55);
+      box-shadow: 0 0 0 4px rgba(37,99,235,.10);
+    }
 
-    /* ===== Skills accordion ===== */
+    /* Skills accordion */
     details{
       border:1px solid var(--line);
-      border-radius:14px;
-      background:var(--card2);
-      padding:10px;
+      border-radius:12px;
+      background:#fff;
+      padding:10px 12px;
     }
     summary{
       cursor:pointer;
-      font-weight:900;
+      font-weight:850;
       list-style:none;
       display:flex; align-items:center; justify-content:space-between;
-      padding:6px 6px;
+      padding:6px 4px;
+      user-select:none;
     }
     summary::-webkit-details-marker{ display:none; }
     .caret{ color:var(--muted); font-weight:900; }
-    details[open] .caret{ transform:rotate(180deg); }
     .chk{
       display:flex; gap:10px; align-items:flex-start;
-      padding:10px 6px;
-      border-bottom:1px dashed #1f2a3a;
+      padding:10px 4px;
+      border-bottom:1px dashed #eef0f4;
     }
     .chk:last-child{ border-bottom:none; }
-    input[type="checkbox"]{ margin-top:3px; transform:scale(1.2); }
+    input[type="checkbox"]{ margin-top:3px; transform:scale(1.15); }
 
-    .tag{
-      display:inline-block;
-      padding:4px 10px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:#0c1320;
-      color:#cfe0f5;
-      font-weight:900;
-      font-size:12px;
-    }
     .kpi{ display:flex; gap:10px; flex-wrap:wrap; }
-    .kpi .card{ padding:10px 12px; box-shadow:none; background:var(--card2); }
-
+    .kpi .mini{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      background:#fff;
+    }
     .hidden{ display:none !important; }
   </style>
 </head>
@@ -181,19 +187,19 @@
   <!-- HOME -->
   <section id="view-home" class="card">
     <h2>1) モード選択</h2>
-    <p>どちらかを選んでスタートしてください。ボタン風に見えるカードはすべてクリックできます。</p>
+    <p>どちらかを選んでスタートしてください（カードをクリック）。</p>
 
     <div class="grid2">
-      <div class="card soft">
+      <div class="card flat">
         <h3>評価モード（必須）</h3>
-        <div class="choices" id="mode-choices" aria-label="mode choices">
+        <div class="choices" id="mode-choices">
           <div class="choice" role="button" tabindex="0" data-mode="self">
-            <div><b>自己評価</b>（4段階・中立なし）</div>
-            <div class="small">とてもそう思う / ややそう思う / あまりそう思わない / そう思わない</div>
+            <div class="lead"><span class="kbd">SELF</span> 自己評価（4段階・中立なし）</div>
+            <div class="sub">とてもそう思う / ややそう思う / あまりそう思わない / そう思わない</div>
           </div>
           <div class="choice" role="button" tabindex="0" data-mode="other">
-            <div><b>他者評価</b>（二択・具体シーン）</div>
-            <div class="small">A/B のうち、より頻繁に見られる行動を選択</div>
+            <div class="lead"><span class="kbd">OTHER</span> 他者評価（二択・具体シーン）</div>
+            <div class="sub">A/B のうち、より頻繁に見られる行動を選択</div>
           </div>
         </div>
 
@@ -202,22 +208,22 @@
         <input id="scopeText" type="text" placeholder="例：直近1年 / 今回PJ など" />
       </div>
 
-      <div class="card soft">
+      <div class="card flat">
         <h3>スタート</h3>
-        <p class="small">※この診断は優劣をつけるものではありません。配置・育成・対話の材料として使ってください。</p>
+        <p class="small">※優劣判定ではありません。配置・育成・対話の材料として使用してください。</p>
 
         <div class="kpi">
-          <div class="card">
+          <div class="mini">
             <div class="small">タイプ</div>
-            <div><b>メイン＋サブ</b></div>
+            <div style="font-weight:850">メイン＋サブ</div>
           </div>
-          <div class="card">
+          <div class="mini">
             <div class="small">能力</div>
-            <div><b>7軸（GATE）</b></div>
+            <div style="font-weight:850">7軸（GATE）</div>
           </div>
-          <div class="card">
+          <div class="mini">
             <div class="small">表示</div>
-            <div><b>平均＋典型値</b></div>
+            <div style="font-weight:850">平均＋典型値</div>
           </div>
         </div>
 
@@ -238,10 +244,10 @@
 
         <div class="sep"></div>
 
-        <div id="typeQuestionBox" class="card soft">
+        <div id="typeQuestionBox" class="card flat" style="border-color:var(--line)">
           <div class="small" id="qIdText">Q</div>
-          <div style="font-size:20px; font-weight:950; margin-top:6px" id="qText">...</div>
-          <p class="small" style="margin:10px 0 0">↓ 下の「選択肢カード」をクリックしてください。</p>
+          <div style="font-size:20px; font-weight:900; letter-spacing:-.2px; margin-top:6px" id="qText">...</div>
+          <p class="small" style="margin:10px 0 0">下の選択肢カードをクリックしてください。</p>
 
           <div class="sep"></div>
 
@@ -250,18 +256,21 @@
 
           <div class="sep"></div>
           <div class="row">
-            <button id="btnTypeBack" class="btn ghost">← 戻る</button>
+            <button id="btnTypeBack" class="btn">戻る</button>
             <button id="btnTypeReset" class="btn danger">最初に戻る</button>
           </div>
         </div>
       </div>
 
-      <div class="card soft" style="flex:1 1 300px">
+      <div class="card flat" style="flex:1 1 300px">
         <h3>ヒント</h3>
         <p class="small">迷ったら「より頻繁に当てはまる」ほうを選びます。</p>
         <div class="sep"></div>
         <div class="small">進捗</div>
-        <div id="typeProgressHint" style="font-weight:950; font-size:22px">—</div>
+        <div id="typeProgressHint" style="font-weight:900; font-size:22px">—</div>
+        <div class="sep"></div>
+        <div class="small">ショートカット（PC）</div>
+        <div class="small">自己評価：<b>1〜4</b> / 他者評価：<b>A / B</b></div>
       </div>
     </div>
   </section>
@@ -269,13 +278,13 @@
   <!-- SKILL CHECK -->
   <section id="view-skill" class="card hidden">
     <h2>3) 能力判定（7軸・GATE）</h2>
-    <p>各項目はチェックボックスです。該当するものにチェックしてください（未チェックでもOK：Lv1保証）。</p>
+    <p>該当する項目にチェックしてください（未チェックでもOK：Lv1保証）。</p>
 
     <div id="skillAccordions" class="grid2"></div>
 
     <div class="sep"></div>
     <div class="row">
-      <button id="btnSkillBack" class="btn ghost">← タイプ判定へ戻る</button>
+      <button id="btnSkillBack" class="btn">タイプ判定へ戻る</button>
       <button id="btnToResult" class="btn primary">結果を見る</button>
     </div>
   </section>
@@ -285,7 +294,7 @@
     <h2>4) 結果</h2>
 
     <div class="grid2">
-      <div class="card soft">
+      <div class="card flat">
         <div class="pill">
           <span id="resultMode">—</span>
           <span class="small">｜</span>
@@ -295,13 +304,13 @@
         <div class="sep"></div>
 
         <div class="kpi">
-          <div class="card">
+          <div class="mini">
             <div class="small">メイン</div>
-            <div id="mainTypeText" style="font-weight:950; font-size:22px">—</div>
+            <div id="mainTypeText" style="font-weight:900; font-size:20px">—</div>
           </div>
-          <div class="card">
+          <div class="mini">
             <div class="small">サブ</div>
-            <div id="subTypeText" style="font-weight:950; font-size:22px">—</div>
+            <div id="subTypeText" style="font-weight:900; font-size:20px">—</div>
           </div>
         </div>
 
@@ -311,17 +320,17 @@
 
         <div class="sep"></div>
         <div class="row">
-          <button id="btnRestart" class="btn ghost">もう一度</button>
+          <button id="btnRestart" class="btn">もう一度</button>
           <button id="btnExport" class="btn">JSONを表示</button>
         </div>
 
-        <div id="exportBox" class="card hidden" style="margin-top:12px">
+        <div id="exportBox" class="card hidden" style="margin-top:12px; box-shadow:none">
           <div class="small">エクスポート（コピペ用）</div>
           <pre id="exportJson" class="mono" style="white-space:pre-wrap; margin:8px 0 0"></pre>
         </div>
       </div>
 
-      <div class="card soft">
+      <div class="card flat">
         <h3>レーダーチャート</h3>
         <p class="small">実測（太線）＋平均（Lv3）＋タイプ典型値（薄線）</p>
         <canvas id="radar" height="360"></canvas>
@@ -329,7 +338,7 @@
     </div>
 
     <div class="sep"></div>
-    <div class="card soft">
+    <div class="card flat">
       <h3>タイプ説明（簡易）</h3>
       <div id="typeDesc" class="small" style="white-space:pre-wrap">—</div>
     </div>
@@ -580,7 +589,6 @@ function initScores(){
   app.typeScores = {};
   TYPES.forEach(t => app.typeScores[t.id] = 0);
 }
-
 function shuffle(arr){
   const a = arr.slice();
   for(let i=a.length-1;i>0;i--){
@@ -589,11 +597,9 @@ function shuffle(arr){
   }
   return a;
 }
-
 function typeLabel(id){
   return TYPES.find(t=>t.id===id)?.label ?? id;
 }
-
 function show(viewId){
   ["view-home","view-type","view-skill","view-result"].forEach(v=>$(v).classList.add("hidden"));
   $(viewId).classList.remove("hidden");
@@ -668,7 +674,8 @@ function renderTypeQuestion(){
     options.forEach((op, i)=>{
       const div = document.createElement("div");
       div.className = "choice";
-      div.innerHTML = `<span class="kbd">${i+1}</span><b>${op.label}</b> <span class="small">(${op.val>0?"+":""}${op.val})</span>`;
+      div.innerHTML = `<div class="lead"><span class="kbd">${i+1}</span>${op.label}</div>
+                       <div class="sub">スコア：${op.val>0?"+":""}${op.val}</div>`;
       div.onclick = ()=>answerSelf(q, op.val);
       $("selfChoices").appendChild(div);
     });
@@ -678,12 +685,14 @@ function renderTypeQuestion(){
 
     const divA = document.createElement("div");
     divA.className = "choice";
-    divA.innerHTML = `<span class="kbd">A</span><b>${q.A.t}</b>`;
+    divA.innerHTML = `<div class="lead"><span class="kbd">A</span>${q.A.t}</div>
+                      <div class="sub">より頻繁に見られる方</div>`;
     divA.onclick = ()=>answerOther(q, "A");
 
     const divB = document.createElement("div");
     divB.className = "choice";
-    divB.innerHTML = `<span class="kbd">B</span><b>${q.B.t}</b>`;
+    divB.innerHTML = `<div class="lead"><span class="kbd">B</span>${q.B.t}</div>
+                      <div class="sub">より頻繁に見られる方</div>`;
     divB.onclick = ()=>answerOther(q, "B");
 
     $("otherChoices").appendChild(divA);
@@ -699,7 +708,6 @@ function answerSelf(q, val){
   app.typeAnswers.push({qid:q.id, val, type:q.type, w:q.w});
   advanceType();
 }
-
 function answerOther(q, pick){
   const win=2, lose=-2;
   const a=q.A.type, b=q.B.type;
@@ -708,7 +716,6 @@ function answerOther(q, pick){
   app.typeAnswers.push({qid:q.id, pick, A:a, B:b});
   advanceType();
 }
-
 function advanceType(){
   app.typeIdx++;
   if(app.typeIdx >= app.typeQ.length){
@@ -719,7 +726,6 @@ function advanceType(){
   }
   renderTypeQuestion();
 }
-
 function backType(){
   if(app.typeIdx<=0) return;
   app.typeIdx--;
@@ -742,7 +748,6 @@ function backType(){
 
   renderTypeQuestion();
 }
-
 function finalizeTypes(){
   const order = TYPES.map(t=>t.id);
   const sorted = TYPES
@@ -752,9 +757,7 @@ function finalizeTypes(){
   app.subType  = sorted[1].id;
 }
 
-function anyChecked(arr, idxs){
-  return idxs.some(i => !!arr[i]);
-}
+function anyChecked(arr, idxs){ return idxs.some(i => !!arr[i]); }
 function calcAxisLevel(axisId){
   const ax = AXES.find(a=>a.id===axisId);
   const checks = app.skillChecks[axisId] || [];
@@ -779,13 +782,13 @@ function buildSkillUI(){
     const det = document.createElement("details");
     det.open = true;
 
-    // ★ 暫定レベル表示は削除（要望）
+    // 暫定レベル表示はなし
     const sum = document.createElement("summary");
     sum.innerHTML = `<span>${ax.name}</span><span class="caret">▾</span>`;
     det.appendChild(sum);
 
     const box = document.createElement("div");
-    box.style.marginTop="10px";
+    box.style.marginTop="8px";
 
     ax.items.forEach((text, i)=>{
       const row = document.createElement("label");
@@ -831,8 +834,8 @@ function renderResult(){
     const diff = lv - 3;
     const diffTxt = (diff===0) ? "±0" : (diff>0 ? `+${diff}` : `${diff}`);
     const line = document.createElement("div");
-    line.style.padding="9px 0";
-    line.style.borderBottom="1px dashed #1f2a3a";
+    line.style.padding="10px 0";
+    line.style.borderBottom="1px dashed #eef0f4";
     line.innerHTML = `<b>${ax.name}</b>： Lv${lv} <span class="small">（${diffTxt}）</span>`;
     ul.appendChild(line);
   });
@@ -864,10 +867,8 @@ function renderResult(){
     },
     options: {
       responsive: true,
-      scales: {
-        r: { min: 1, max: 5, ticks: { stepSize: 1, showLabelBackdrop:false }, grid: { circular:true } }
-      },
-      plugins: { legend: { labels: { color: "#cfe0f5" } } }
+      scales: { r: { min:1, max:5, ticks:{ stepSize:1, showLabelBackdrop:false }, grid:{ circular:true } } },
+      plugins: { legend: { labels: { color: "#111827" } } }
     }
   });
 }
@@ -909,11 +910,10 @@ $("btnToResult").addEventListener("click", toResult);
 $("btnRestart").addEventListener("click", ()=>{ resetAll(); show("view-home"); });
 $("btnExport").addEventListener("click", exportState);
 
-// keyboard shortcuts (optional but helps UX)
+// keyboard shortcuts (PC)
 document.addEventListener("keydown",(e)=>{
   const onType = !$("view-type").classList.contains("hidden");
   if(!onType) return;
-
   if(app.mode==="self"){
     if(["1","2","3","4"].includes(e.key)){
       const idx = parseInt(e.key,10)-1;
