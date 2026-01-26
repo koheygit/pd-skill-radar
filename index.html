@@ -800,9 +800,9 @@ function addScore(type, pts){
   app.typeScores[type] = (app.typeScores[type] || 0) + pts;
 }
 function answerSelf(q, val){
-  const v = (val < 0) ? val * 0.5 : val;
-  app.typeScores[q.type] += val * q.w;
-  app.typeAnswers.push({qid:q.id, val, type:q.type, w:q.w});
+  const v = (val < 0) ? val * 0.5 : val; // ←弱めたいなら
+  app.typeScores[q.type] += v * q.w;
+  app.typeAnswers.push({qid:q.id, val, v, type:q.type, w:q.w});
   advanceType();
 }
 function answerOther(q, pick){
@@ -834,6 +834,7 @@ function advanceType(){
 }
 function backType(){
   if(app.typeIdx<=0) return;
+
   app.typeIdx--;
   initScores();
 
@@ -843,20 +844,22 @@ function backType(){
   answered.forEach(a=>{
     const q = app.typeQ.find(x=>x.id===a.qid);
 
-    // self と other で復元ロジックを分ける
     if(app.mode==="self"){
-      // selfは元の復元方式（val*w）でOK
-      app.typeScores[q.type] += a.val * q.w;
-    } else {
-      // otherは新ルールで復元
-      const pick = a.pick;
-      const chosen = q[pick].type;
-      const other  = if(a.pick==="C") return;q[pick==="A" ? "B" : "A"].type;
-      const sameFamily = (FAMILY[chosen] === FAMILY[other]);
-
-      addScore(chosen, 1.0);
-      if(!sameFamily) addScore(ALLY[chosen], 0.5);
+      const vv = (a.v ?? a.val); // v保存してるなら v を優先
+      app.typeScores[q.type] += vv * q.w;
+      return;
     }
+
+    // Objective
+    const pick = a.pick;
+    if(pick==="C") return;
+
+    const chosen = q[pick].type;
+    const other  = q[pick==="A" ? "B" : "A"].type;
+    const sameFamily = (FAMILY[chosen] === FAMILY[other]);
+
+    addScore(chosen, 1.0);
+    if(!sameFamily) addScore(ALLY[chosen], 0.5);
   });
 
   renderTypeQuestion();
@@ -1253,6 +1256,7 @@ document.addEventListener("keydown",(e)=>{
   }else{
     if(e.key.toLowerCase()==="a"){ answerOther(app.typeQ[app.typeIdx],"A"); }
     if(e.key.toLowerCase()==="b"){ answerOther(app.typeQ[app.typeIdx],"B"); }
+    if(e.key.toLowerCase()==="c"){ answerOther(app.typeQ[app.typeIdx],"C"); }
   }
 });
 </script>
