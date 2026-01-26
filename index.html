@@ -1,4 +1,6 @@
-<!doctype html>
+こんな感じ
+
+<!doctype html> 
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
@@ -189,8 +191,8 @@
   
   <div class="header-info">
     <div style="font-weight:700; margin-bottom:4px;">診断概要</div>
-    <div>タイプ：メイン＋サブ ／ 能力：7軸（GATE） ／ 表示：平均＋典型値</div>
-    <div style="margin-top:6px; color:#ef4444;">※優劣判定ではありません。配置・育成・対話の材料として使用してください。</div>
+    <div>タイプ：メイン（属性）＋サブ ／ 能力：7軸（GATE）、表示：平均＋メインタイプの典型値</div>
+    <div style="margin-top:6px;">※優劣判定ではありません。配置・育成・対話の材料として使用してください。</div>
   </div>
 
   <div class="rule soft"></div>
@@ -332,7 +334,7 @@
           <div class="rule soft"></div>
           
           <div class="result-section-title">能力レーダーチャート</div>
-          <div class="small" style="margin-bottom:8px;">実測（橙太線）／ 平均Lv3（灰点線）<span id="radarTypicalLabel"> ／ タイプ典型（黄破線）</span></div>
+          <div class="small" style="margin-bottom:8px;">実測（橙太線）／ 平均Lv3（灰点線）<span id="radarTypicalLabel"> ／ メインタイプ典型（青破線）</span></div>
           <div style="position: relative; width: 100%; min-height:300px;">
              <canvas id="radar"></canvas>
           </div>
@@ -588,14 +590,18 @@ const OTHER_Q = [
 ];
 
 const TYPE_MAP = {
-  yanki_aniki:        { x:-0.8, y: 0.7 },
-  yanki_ubu:          { x:-0.6, y:-0.35 },
-  otaku_you:          { x: 0.8, y: 0.7 },
-  otaku_in:           { x: 0.8, y:-0.55 },
-  shokunin_flexible:  { x: 0.4, y: 0.25 },
-  shokunin_stubborn:  { x: 0.6, y:-0.6 },
-  artist_open:        { x:-0.5, y: 0.4 },
-  artist_mystery:     { x:-0.8, y:-0.7 }
+  // ヤンキー系
+  yanki_aniki:        { x:-0.8, y: 0.4, group:'open' },
+  yanki_ubu:          { x:-0.6, y:-0.2, group:'close' },
+  // オタク系
+  otaku_you:          { x: 0.7, y: 0.4, group:'open' },
+  otaku_in:           { x: 0.7, y:-0.4, group:'close' },
+  // 職人系
+  shokunin_flexible:  { x:-0.4, y:-0.7, group:'open' },
+  shokunin_stubborn:  { x: 0.3, y:-0.8, group:'close' },
+  // アーティスト系
+  artist_open:        { x:-0.5, y: 0.7, group:'open' },
+  artist_mystery:     { x: 0.2, y: 0.8, group:'close' }
 };
 
 /* =========================
@@ -860,43 +866,68 @@ function renderTypeMapSVG(mainId, subId){
   // メインタイプが決まっていなければ何も表示しない
   if(!mainId) return "";
   
-  const W=560, H=360, pad=34, cx=W/2, cy=H/2, s=150;
-  // 色設定（オレンジテーマ）
-  const axisColor="#e5e7eb", textColor="#6b7280", nodeColor="#d1d5db", mainColor="#f97316";
-  
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+const W=560, H=360, pad=40, cx=W/2, cy=H/2, s=140;
+
+  // ▼▼▼ 1. 軸ラベル（推進・分析など）の設定 ▼▼▼
+  const axisLabelColor = "#9ca3af"; // 色（薄いグレー）
+  const axisLabelSize  = "14";      // サイズ（標準は14）
+
+  // ▼▼▼ 2. タイプ名（兄貴肌ヤンキーなど）の設定 ▼▼▼
+  const typeLabelSize  = "12";      // サイズ（標準は11）
+  const colorOpen      = "#c2410c"; // OPEN属性の文字色（濃いオレンジ）
+  const colorClose     = "#1e3a8a"; // CLOSE属性の文字色（濃いネイビー）
+
+// ▼▼▼ 3. ドットのサイズ設定（半径 r の値） ▼▼▼
+  const dotR_Base = 6;  // 通常のグレーの点（元は4）
+  const dotR_Main = 9;  // メインタイプの点（元は6）
+  const dotR_Sub  = 11; // サブタイプの枠線（元は8）
+  // ▲▲▲ 設定ここまで ▲▲▲
+
+  const axisColor="#e5e7eb";
+  const mainColor="#f97316"; 
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="font-family:'Jost', 'Noto Sans JP', sans-serif;">`;
   
   // 軸線
   svg += `<line x1="${cx}" y1="${pad}" x2="${cx}" y2="${H-pad}" stroke="${axisColor}"/>`;
   svg += `<line x1="${pad}" y1="${cy}" x2="${W-pad}" y2="${cy}" stroke="${axisColor}"/>`;
   
   // 軸ラベル
-  svg += `<text x="${pad}" y="${cy-10}" fill="${textColor}" font-size="12" font-weight="700">推進</text>`;
-  svg += `<text x="${W-pad}" y="${cy-10}" fill="${textColor}" font-size="12" text-anchor="end" font-weight="700">分析</text>`;
-  svg += `<text x="${cx}" y="${pad-10}" fill="${textColor}" font-size="12" text-anchor="middle" font-weight="700">オープン</text>`;
-  svg += `<text x="${cx}" y="${H-pad+22}" fill="${textColor}" font-size="12" text-anchor="middle" font-weight="700">クローズ</text>`;
+  svg += `<text x="${pad}" y="${cy-10}" fill="${axisLabelColor}" font-size="${axisLabelSize}" font-weight="700">推進</text>`;
+  svg += `<text x="${W-pad}" y="${cy-10}" fill="${axisLabelColor}" font-size="${axisLabelSize}" text-anchor="end" font-weight="700">分析</text>`;
+  svg += `<text x="${cx}" y="${pad-10}" fill="${axisLabelColor}" font-size="${axisLabelSize}" text-anchor="middle" font-weight="700">発想</text>`;
+  svg += `<text x="${cx}" y="${H-pad+22}" fill="${axisLabelColor}" font-size="${axisLabelSize}" text-anchor="middle" font-weight="700">実装</text>`;
 
-  // 全タイプのベース（グレーの点と文字）
+  // 各タイプ描画
   TYPES.forEach(t=>{
     const m = TYPE_MAP[t.id];
     if(!m) return;
     const x = cx + m.x*s, y = cy - m.y*s;
-    const right=x>=cx, top=y<=cy;
-    const lx=x+(right?12:-12), ly=y+(top?-10:16), anc=right?"start":"end";
-    svg += `<circle cx="${x}" cy="${y}" r="4" fill="${nodeColor}"/>`;
-    svg += `<text x="${lx}" y="${ly}" font-size="11" fill="${textColor}" text-anchor="${anc}">${t.label}</text>`;
+    const right = x >= cx;
+    const top = y <= cy;
+    const lx = x + (right ? 12 : -12); // 文字との距離も少し離しました
+    const ly = y + (top ? -10 : 16);
+    const anc = right ? "start" : "end";
+
+    const txtColor = (m.group === 'open') ? colorOpen : colorClose;
+    const dotColor = "#d1d5db";
+
+    // 通常ドットの描画（サイズ変数を使用）
+    svg += `<circle cx="${x}" cy="${y}" r="${dotR_Base}" fill="${dotColor}"/>`;
+    svg += `<text x="${lx}" y="${ly}" font-size="${typeLabelSize}" fill="${txtColor}" font-weight="700" text-anchor="${anc}">${t.label}</text>`;
   });
 
-  // メインタイプの描画（塗りつぶし円）
+  // メインタイプ（サイズ変数を使用）
   const pm = TYPE_MAP[mainId];
   if(pm){
-    svg += `<circle cx="${cx+pm.x*s}" cy="${cy-pm.y*s}" r="12" fill="${mainColor}"/>`;
+    svg += `<circle cx="${cx+pm.x*s}" cy="${cy-pm.y*s}" r="${dotR_Main * 3}" fill="${mainColor}" opacity="0.3"/>`; // 背景の薄い円も連動して大きく
+    svg += `<circle cx="${cx+pm.x*s}" cy="${cy-pm.y*s}" r="${dotR_Main}" fill="${mainColor}"/>`;
   }
 
-  // サブタイプの描画（枠線円）※サブがある場合のみ実行
+  // サブタイプ（サイズ変数を使用）
   if(subId && TYPE_MAP[subId]){
     const ps = TYPE_MAP[subId];
-    svg += `<circle cx="${cx+ps.x*s}" cy="${cy-ps.y*s}" r="9" fill="none" stroke="${mainColor}" stroke-width="3"/>`;
+    svg += `<circle cx="${cx+ps.x*s}" cy="${cy-ps.y*s}" r="${dotR_Sub}" fill="none" stroke="${mainColor}" stroke-width="3"/>`;
   }
   
   svg += `</svg>`;
@@ -907,7 +938,6 @@ function renderResult(){
   $("resultMode").textContent = app.mode ? (app.mode==="self"?"自己評価":"客観評価") : "評価モードなし";
   $("resultScope").textContent = app.scopeText ? `スコープ：${app.scopeText}` : "スコープ：—";
 
-  // Type Logic
   if(app.typeSkipped){
     $("typeResultContent").classList.add("hidden");
     $("typeResultSkipped").classList.remove("hidden");
@@ -917,27 +947,51 @@ function renderResult(){
     $("typeResultSkipped").classList.add("hidden");
     $("radarTypicalLabel").classList.remove("hidden");
 
-    // メインタイプ表示
+    // メイン・サブ表示
     $("mainTypeText").textContent = typeDesignerLabel(app.mainType);
-    
-    // サブタイプ表示（分岐）
     if(app.subType){
       $("subTypeText").textContent = typeDesignerLabel(app.subType);
       $("subTypeText").style.color = "var(--text)";
-      
       $("typeDesc").textContent = 
         `【メイン】${typeLabel(app.mainType)}：${TYPE_DESC[app.mainType]}\n\n` +
         `【サブ】${typeLabel(app.subType)}：${TYPE_DESC[app.subType]}`;
     } else {
       $("subTypeText").textContent = "なし（メイン特化）";
       $("subTypeText").style.color = "var(--muted)";
-      
       $("typeDesc").textContent = 
         `【メイン】${typeLabel(app.mainType)}：${TYPE_DESC[app.mainType]}\n\n` +
         `（スコア差が大きいため、このタイプの特性が特に強く出ています）`;
     }
 
+    // マップ描画
     $("typeMapWrap").innerHTML = renderTypeMapSVG(app.mainType, app.subType);
+
+    // ▼▼▼ ここが追加：属性判定エリアの挿入 ▼▼▼
+    const pm = TYPE_MAP[app.mainType];
+    const isOpen = (pm.group === 'open');
+
+    // スタイル定義
+    const styleBase = "font-size:11px; font-weight:700; padding:6px 14px; border-radius:99px; transition:all 0.3s; display:flex; align-items:center; gap:6px;";
+    // 活性時の色（オープン=オレンジ系 / クローズ=ネイビー系）
+    const styleOpenOn  = "background:#fff7ed; color:#c2410c; border:1px solid #c2410c; opacity:1;";
+    const styleCloseOn = "background:#f0f9ff; color:#1e3a8a; border:1px solid #1e3a8a; opacity:1;";
+    // 非活性時の色（グレーアウト）
+    const styleOff     = "background:transparent; color:#d1d5db; border:1px solid #e5e7eb; opacity:0.5;";
+
+    const htmlAttr = `
+      <div style="margin-top:16px; padding-top:12px; border-top:1px dashed var(--line); display:flex; flex-direction:column; align-items:center;">
+        <div class="type-label-tag" style="margin-bottom:8px;">メイン属性</div>
+        <div style="display:flex; gap:12px;">
+          <div style="${styleBase} ${isOpen ? styleOpenOn : styleOff}">
+            <span>OPEN 属性</span>
+          </div>
+          <div style="${styleBase} ${!isOpen ? styleCloseOn : styleOff}">
+            <span>CLOSE 属性</span>
+          </div>
+        </div>
+      </div>
+    `;
+    $("typeMapWrap").insertAdjacentHTML('beforeend', htmlAttr);
   }
 
   // Skill List (Split into Skill and Behavior)
@@ -997,7 +1051,7 @@ function renderResult(){
       label:"平均(Lv3)", 
       data: avg, 
       borderWidth: 1, 
-      borderDash: [5,5], 
+      borderDash: [4,4], 
       borderColor:"#9ca3af", 
       pointRadius: 0 
     }
@@ -1005,11 +1059,11 @@ function renderResult(){
 
   if(!app.typeSkipped && app.mainType && TYPE_TEMPLATES[app.mainType]){
     datasets.push({
-      label:`タイプ典型`,
+      label:`メインタイプ典型`,
       data: TYPE_TEMPLATES[app.mainType],
       borderWidth: 2, 
-      borderDash: [5,5], 
-      borderColor:"#ffe430", 
+      borderDash: [4,4], 
+      borderColor:"#1e3a8a", 
       pointRadius: 0
     });
   }
