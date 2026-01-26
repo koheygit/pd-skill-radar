@@ -871,8 +871,8 @@ function renderTypeMapSVG(mainId, subId){
   svg += `<line x1="${pad}" y1="${cy}" x2="${W-pad}" y2="${cy}" stroke="${axisColor}"/>`;
   
   // 軸ラベル
-  svg += `<text x="${pad}" y="${cy-10}" fill="${textColor}" font-size="12" font-weight="700">推進</text>`;
-  svg += `<text x="${W-pad}" y="${cy-10}" fill="${textColor}" font-size="12" text-anchor="end" font-weight="700">分析</text>`;
+  svg += `<text x="${pad}" y="${cy-10}" fill="${textColor}" font-size="12" font-weight="700">推進/発想</text>`;
+  svg += `<text x="${W-pad}" y="${cy-10}" fill="${textColor}" font-size="12" text-anchor="end" font-weight="700">分析/実装</text>`;
   svg += `<text x="${cx}" y="${pad-10}" fill="${textColor}" font-size="12" text-anchor="middle" font-weight="700">オープン</text>`;
   svg += `<text x="${cx}" y="${H-pad+22}" fill="${textColor}" font-size="12" text-anchor="middle" font-weight="700">クローズ</text>`;
 
