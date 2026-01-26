@@ -486,30 +486,45 @@ const TYPE_TEMPLATES = {
 };
 
 const SELF_Q = [
-  {id:"S01", t:"会議が長引くくらいなら、多少荒くても決断して前に進みたい", type:"yanki_aniki", w:2},
-  {id:"S02", t:"周囲が迷っているとき、自分が前に出て空気を動かすことが多い", type:"yanki_aniki", w:1},
-  {id:"S03", t:"詰め切れていないと分かっていても「止まる方がリスク」だと感じる", type:"yanki_aniki", w:1},
-  {id:"S04", t:"強気に振る舞うことが多いが、内心では評価や失敗がかなり気になる", type:"yanki_ubu", w:2},
-  {id:"S05", t:"弱みを見せるより「大丈夫です」と言って抱え込みがち", type:"yanki_ubu", w:1},
-  {id:"S06", t:"無理をしてでも期待に応えようとして、あとで消耗することが多い", type:"yanki_ubu", w:1},
-  {id:"S07", t:"論点・前提・選択肢を整理して共有することで、場を前に進めるタイプだ", type:"otaku_you", w:2},
-  {id:"S08", t:"感情論よりも、事実や構造で話した方が安心できる", type:"otaku_you", w:1},
-  {id:"S09", t:"判断に迷ったときは「何を根拠に決めるか」をまず考える", type:"otaku_you", w:1},
-  {id:"S10", t:"自分の中で筋が通っていない提案には、どうしても納得できない", type:"otaku_in", w:2},
-  {id:"S11", t:"議論が雑になると、会話から一歩引いて内側で固め直す", type:"otaku_in", w:1},
-  {id:"S12", t:"「とりあえず進めよう」に強い違和感を覚えやすい", type:"otaku_in", w:1},
-  {id:"S13", t:"他人からの指摘や制約を取り込みながら、完成度を上げていく方が性に合う", type:"shokunin_flexible", w:2},
-  {id:"S14", t:"途中段階でも共有しながら進める方が、結果的に良くなると感じる", type:"shokunin_flexible", w:1},
-  {id:"S15", t:"自分一人で完璧を目指すより、すり合わせで質を上げたい", type:"shokunin_flexible", w:1},
-  {id:"S16", t:"自分の基準と合わない修正は、正直「本質からズレている」と感じる", type:"shokunin_stubborn", w:2},
-  {id:"S17", t:"作っている途中で意見をもらうより、完成してから見せたい", type:"shokunin_stubborn", w:1},
-  {id:"S18", t:"周囲の評価よりも「自分が納得しているか」を最優先している", type:"shokunin_stubborn", w:1},
-  {id:"S19", t:"言語化しきれていなくても「この方向は面白い」という感覚を外に出す", type:"artist_open", w:2},
-  {id:"S20", t:"他人の反応や違う視点を混ぜることで、アイデアが育つと感じる", type:"artist_open", w:1},
-  {id:"S21", t:"場の空気が停滞すると、意図的に視点をずらしたくなる", type:"artist_open", w:1},
-  {id:"S22", t:"自分の中でしっくり来ていれば、他人の理解は必須ではない", type:"artist_mystery", w:2},
-  {id:"S23", t:"発想や判断を、わざわざ説明しなくてもいいと思うことが多い", type:"artist_mystery", w:1},
-  {id:"S24", t:"他人と混ぜるより、一人で考え続ける方が深まる", type:"artist_mystery", w:1}
+  // 兄貴肌ヤンキー（推進・決断）
+  {id:"S01", t:"情報が出揃っていなくても、まず方向性を決めて前に進めるほうだ", type:"yanki_aniki", w:1},
+  {id:"S02", t:"議論が停滞すると、結論や次の一手を置いて場を動かすことが多い", type:"yanki_aniki", w:1},
+  {id:"S03", t:"完成度よりも、まず試して学ぶ進め方を選びやすい", type:"yanki_aniki", w:1},
+
+  // うぶヤンキー（責任感・抱え込み）
+  {id:"S04", t:"頼まれると引き受けやすく、後から調整することが多い", type:"yanki_ubu", w:1},
+  {id:"S05", t:"自分の負荷が高いと感じても、すぐに周囲に相談するのは得意ではない", type:"yanki_ubu", w:1},
+  {id:"S06", t:"期待に応えようとして、担当範囲が増えやすい", type:"yanki_ubu", w:1},
+
+  // 陽キャオタク（整理・構造化）
+  {id:"S07", t:"判断が必要な場面では、前提・論点・選択肢を整理してから進めたい", type:"otaku_you", w:1},
+  {id:"S08", t:"会話が散らかっているとき、論点を分けて見える化することが多い", type:"otaku_you", w:1},
+  {id:"S09", t:"意思決定の根拠や判断基準を言語化して共有するのが得意だ", type:"otaku_you", w:1},
+
+  // 陰キャオタク（整合性・リスク視点）
+  {id:"S10", t:"矛盾や筋の悪さに気づくと、まず整合性を取り直したくなる", type:"otaku_in", w:1},
+  {id:"S11", t:"納得できない前提のまま進めることに、強い違和感を覚えやすい", type:"otaku_in", w:1},
+  {id:"S12", t:"進行中でも、抜けやリスクを指摘して流れを修正することがある", type:"otaku_in", w:1},
+
+  // 柔軟な職人（すり合わせ・反映）
+  {id:"S13", t:"途中段階でも共有し、フィードバックを取り込みながら仕上げたい", type:"shokunin_flexible", w:1},
+  {id:"S14", t:"制約や指摘が出ても、成立する形に組み替えるのが得意だ", type:"shokunin_flexible", w:1},
+  {id:"S15", t:"自分の案に固執するより、対話で最適点を探すほうだ", type:"shokunin_flexible", w:1},
+
+  // 頑固な職人（基準・完成優先）
+  {id:"S16", t:"自分の品質基準があり、そこを下回る修正は受け入れにくい", type:"shokunin_stubborn", w:1},
+  {id:"S17", t:"途中で意見をもらうより、ある程度完成度を上げてから見せたい", type:"shokunin_stubborn", w:1},
+  {id:"S18", t:"意思決定では、納得できる完成形を優先して提案しやすい", type:"shokunin_stubborn", w:1},
+
+  // ひらけたアーティスト（投げる・混ぜる）
+  {id:"S19", t:"言語化が途中でも、違和感や面白さを先に出してみることがある", type:"artist_open", w:1},
+  {id:"S20", t:"他者の反応や視点を取り込むことで、アイデアが育つと感じる", type:"artist_open", w:1},
+  {id:"S21", t:"場が煮詰まると、視点をずらす問いを投げてみたくなる", type:"artist_open", w:1},
+
+  // 不思議アーティスト（没入・自走）
+  {id:"S22", t:"他者の理解よりも、自分の中の確信を優先して進めることがある", type:"artist_mystery", w:1},
+  {id:"S23", t:"説明を増やすより、まず形や結果で示したいと感じることが多い", type:"artist_mystery", w:1},
+  {id:"S24", t:"他人と混ぜるより、一人で考え続けることで深まることが多い", type:"artist_mystery", w:1}
 ];
 
 const OTHER_Q = [
@@ -760,6 +775,7 @@ function renderTypeQuestion(){
 }
 
 function answerSelf(q, val){
+  const v = (val < 0) ? val * 0.5 : val;
   app.typeScores[q.type] += val * q.w;
   app.typeAnswers.push({qid:q.id, val, type:q.type, w:q.w});
   advanceType();
