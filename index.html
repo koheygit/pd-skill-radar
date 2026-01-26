@@ -513,78 +513,101 @@ const SELF_Q = [
 ];
 
 const OTHER_Q = [
-  {id:"O01", p:"会議で仕様や条件がまだ固まっていないとき、よく見られる行動は？",
-    A:{t:"「まずここまででやってみよう」と決めて進める", type:"yanki_aniki"},
-    B:{t:"前提や論点を整理し、条件が揃ってから進める", type:"otaku_you"}},
-  {id:"O02", p:"デザインレビューで修正意見が出たときの反応は？",
-    A:{t:"自分のやり方を変えず、修正の必要性を疑う", type:"shokunin_stubborn"},
-    B:{t:"いったん受け取り、より良くなる余地として検討する", type:"shokunin_flexible"}},
-  {id:"O03", p:"アイデア出しの場での発言タイミングは？",
-    A:{t:"まとまっていなくても、違和感や方向性を口に出す", type:"artist_open"},
-    B:{t:"自分の中でかなり固めてから共有する", type:"artist_mystery"}},
-  {id:"O04", p:"タスクが立て込んだときの振る舞いは？",
-    A:{t:"大丈夫そうに引き受けるが、後からかなり苦しそう", type:"yanki_ubu"},
-    B:{t:"役割を整理し、自分が前に出て状況を動かす", type:"yanki_aniki"}},
-  {id:"O05", p:"判断に迷う場面でよくやるのは？",
-    A:{t:"判断基準や根拠を整理してから決める", type:"otaku_you"},
-    B:{t:"完璧でなくても、まず試してから考える", type:"yanki_aniki"}},
-  {id:"O06", p:"途中経過の共有について近いのは？",
-    A:{t:"ある程度仕上げてからまとめて共有する", type:"shokunin_stubborn"},
-    B:{t:"途中段階でもこまめに共有する", type:"shokunin_flexible"}},
-  {id:"O07", p:"議論が荒れてきたときの態度は？",
-    A:{t:"会話から一歩引き、内側で考え直す", type:"otaku_in"},
-    B:{t:"多少強引でも論点をまとめようとする", type:"yanki_aniki"}},
-  {id:"O08", p:"新しい視点が必要なときの動きは？",
-    A:{t:"視点をずらす発言や問いをその場に投げる", type:"artist_open"},
-    B:{t:"まず既存の構造や前提を整理する", type:"otaku_you"}},
-  {id:"O09", p:"修正や指摘に対する初動は？",
-    A:{t:"「なぜその修正が必要か」を考え込む", type:"otaku_in"},
-    B:{t:"一度取り入れて、形を調整してみる", type:"shokunin_flexible"}},
-  {id:"O10", p:"トラブルが起きた直後の対応は？",
-    A:{t:"自分が前に出て対応し、あとで整える", type:"yanki_aniki"},
-    B:{t:"状況整理や原因確認を優先する", type:"otaku_you"}},
-  {id:"O11", p:"作業の進め方として多いのは？",
-    A:{t:"自分の完成イメージを優先して進める", type:"shokunin_stubborn"},
-    B:{t:"周囲とすり合わせながら形を詰める", type:"shokunin_flexible"}},
-  {id:"O12", p:"アイデアを共有する量として近いのは？",
-    A:{t:"必要最低限しか出さない", type:"artist_mystery"},
-    B:{t:"思いついた段階で結構出す", type:"artist_open"}},
-  {id:"O13", p:"責任が重い役割を任されたときは？",
-    A:{t:"不安そうだが断らず抱え込む", type:"yanki_ubu"},
-    B:{t:"自分が旗を振って進める", type:"yanki_aniki"}},
-  {id:"O14", p:"意思決定の場での得意役割は？",
-    A:{t:"情報を整理し、選択肢を見える化する", type:"otaku_you"},
-    B:{t:"決断して方向を示す", type:"yanki_aniki"}},
-  {id:"O15", p:"意見が通らないときの態度は？",
-    A:{t:"自分の中で納得できず、距離を取る", type:"artist_mystery"},
-    B:{t:"表現や形を調整して通しにいく", type:"shokunin_flexible"}},
-  {id:"O16", p:"「とりあえず進めよう」と言われたときは？",
-    A:{t:"強い違和感を示す", type:"otaku_in"},
-    B:{t:"まずやってみて調整しようとする", type:"yanki_aniki"}},
-  {id:"O17", p:"制約が多い条件下での動きは？",
-    A:{t:"制約の中で成立する形を考える", type:"shokunin_flexible"},
-    B:{t:"制約自体を問い直す", type:"artist_open"}},
-  {id:"O18", p:"資料やアウトプットの出し方は？",
-    A:{t:"ある程度整ってから出す", type:"artist_mystery"},
-    B:{t:"叩き台を早めに出す", type:"otaku_you"}},
-  {id:"O19", p:"会議で発言が少ないときは？",
-    A:{t:"内側で考えていることが多い", type:"otaku_in"},
-    B:{t:"介入タイミングを見ている", type:"yanki_aniki"}},
-  {id:"O20", p:"品質とスピードがトレードオフのときは？",
-    A:{t:"品質を優先して進める", type:"shokunin_stubborn"},
-    B:{t:"期限を優先して前に進める", type:"yanki_aniki"}},
-  {id:"O21", p:"新しい方向性が出たときの反応は？",
-    A:{t:"面白そうなら未整理でも乗る", type:"artist_open"},
-    B:{t:"成立条件をまず確認する", type:"otaku_you"}},
-  {id:"O22", p:"人からどう見られているかについては？",
-    A:{t:"あまり気にしていないように見える", type:"artist_mystery"},
-    B:{t:"気にしていないように振る舞うが気にしている", type:"yanki_ubu"}},
-  {id:"O23", p:"タスクの途中経過報告については？",
-    A:{t:"必要最低限で済ませがち", type:"shokunin_stubborn"},
-    B:{t:"状況を整理して共有する", type:"otaku_you"}},
-  {id:"O24", p:"プロジェクトが停滞したときは？",
-    A:{t:"空気を変える一言や視点を出す", type:"artist_open"},
-    B:{t:"役割や進め方を整理する", type:"shokunin_flexible"}}
+  {id:"O01", p:"仕様や条件がまだ固まっていない状況で多いのは？",
+    A:{t:"暫定の方針を置いて試し、結果を見ながら更新していく", type:"yanki_aniki"},
+    B:{t:"前提・論点・判断基準を整理し、決める順番を作ってから進める", type:"otaku_you"}},
+
+  {id:"O02", p:"役割が曖昧なままタスクが増えたときに多いのは？",
+    A:{t:"主導して役割分担を決め、周囲を動かして進める", type:"yanki_aniki"},
+    B:{t:"引き受ける範囲が増えやすく、後から調整に入ることが多い", type:"yanki_ubu"}},
+
+  {id:"O03", p:"制約（コスト・工程・技術）が強い場面で多いのは？",
+    A:{t:"まず進め方を決めて走り、途中で論点を回収して整える", type:"yanki_aniki"},
+    B:{t:"制約を前提に成立案を組み、手戻りが少ない形に寄せる", type:"shokunin_flexible"}},
+
+  {id:"O04", p:"議論が散らかってきたときに多いのは？",
+    A:{t:"論点を絞って結論を置き、次のアクションに繋げる", type:"yanki_aniki"},
+    B:{t:"矛盾やリスクを指摘し、筋が通る状態に戻してから進める", type:"otaku_in"}},
+
+  {id:"O05", p:"スピードと品質がトレードオフのときに多いのは？",
+    A:{t:"期限を優先して落としどころを決め、前進させる", type:"yanki_aniki"},
+    B:{t:"品質基準を優先し、妥協しない設計を通そうとする", type:"shokunin_stubborn"}},
+
+  {id:"O06", p:"意思決定が必要な場面で多いのは？",
+    A:{t:"関係者の期待を受けてタスクを引き取り、後から調整する", type:"yanki_ubu"},
+    B:{t:"根拠・選択肢・判断基準を揃えて、比較可能にして決める", type:"otaku_you"}},
+
+  {id:"O07", p:"指摘や変更が多い状況で多いのは？",
+    A:{t:"依頼を抱え込みやすく、後から整理して対応する", type:"yanki_ubu"},
+    B:{t:"指摘を取り込みながら、段階的に品質を上げていく", type:"shokunin_flexible"}},
+
+  {id:"O08", p:"「一旦進めよう」と言われたときに多いのは？",
+    A:{t:"進めつつも、追加の確認・調整を自分側で抱えやすい", type:"yanki_ubu"},
+    B:{t:"整合性のズレを明確にし、進め方自体を整える", type:"otaku_in"}},
+
+  {id:"O09", p:"レビューで修正意見が出たときに多いのは？",
+    A:{t:"やり方を大きく変えず、完成形に寄せて対応する", type:"shokunin_stubborn"},
+    B:{t:"修正意見を取り込み、複数案を作って最適化する", type:"shokunin_flexible"}},
+
+  {id:"O10", p:"会議での得意な貢献として多いのは？",
+    A:{t:"論点・前提・選択肢を整理して、判断材料を揃える", type:"otaku_you"},
+    B:{t:"矛盾や危うい前提を見つけ、品質や整合性を守る", type:"otaku_in"}},
+
+  {id:"O11", p:"途中共有のスタイルとして多いのは？",
+    A:{t:"早めに叩き台を出し、論点を明確にしてから詰める", type:"otaku_you"},
+    B:{t:"途中段階でも見せて、すり合わせながら着地させる", type:"shokunin_flexible"}},
+
+  {id:"O12", p:"複数意見が対立したときに多いのは？",
+    A:{t:"判断基準を明文化し、取捨選択の筋道を作る", type:"otaku_you"},
+    B:{t:"自分の品質基準を軸に、設計のブレを抑えようとする", type:"shokunin_stubborn"}},
+
+  {id:"O13", p:"アイデアが停滞したときに多いのは？",
+    A:{t:"視点をずらす問いや仮説を出して、場の発想を動かす", type:"artist_open"},
+    B:{t:"構造を組み替えて、新しい選択肢を論理的に作る", type:"otaku_you"}},
+
+  {id:"O14", p:"成立条件が厳しいときに多いのは？",
+    A:{t:"整合性の崩れを先に直し、品質を守ってから進める", type:"otaku_in"},
+    B:{t:"成立する設計に落として、実装に耐える形にする", type:"shokunin_flexible"}},
+
+  {id:"O15", p:"意見が通りにくいときに多いのは？",
+    A:{t:"内容の筋を整えることを優先し、議論を止めに入る", type:"otaku_in"},
+    B:{t:"完成形を優先し、修正の方向を絞って押し切る", type:"shokunin_stubborn"}},
+
+  {id:"O16", p:"制作の進め方として多いのは？",
+    A:{t:"途中でも共有し、指摘を反映しながら品質を上げる", type:"shokunin_flexible"},
+    B:{t:"完成度を上げてから提示し、途中の介入は少なめ", type:"shokunin_stubborn"}},
+
+  {id:"O17", p:"議論を動かす際に多いのは？",
+    A:{t:"未整理でも方向性を出して、場の流れを変える", type:"artist_open"},
+    B:{t:"制約を踏まえた打ち手に落として、前進できる形にする", type:"shokunin_flexible"}},
+
+  {id:"O18", p:"アウトプットの出し方として多いのは？",
+    A:{t:"自分の基準に沿うまで整えてから出し、説明は最小限", type:"artist_mystery"},
+    B:{t:"自分の基準を守りつつ、レビューで通すために説明も組み立てる", type:"shokunin_stubborn"}},
+
+  {id:"O19", p:"アイデア共有のタイミングとして多いのは？",
+    A:{t:"反応を見ながら育てるため、早い段階で共有する", type:"artist_open"},
+    B:{t:"自分側で深めてから、まとまった形で共有する", type:"artist_mystery"}},
+
+  {id:"O20", p:"トラブルが起きた直後の動きとして多いのは？",
+    A:{t:"関係者を動かし、暫定対応を決めて進める", type:"yanki_aniki"},
+    B:{t:"状況を切り分け、原因と論点を整理してから打つ", type:"otaku_you"}},
+
+  {id:"O21", p:"突発の依頼が重なったときに多いのは？",
+    A:{t:"依頼を引き取りやすく、後で優先度を整理して調整する", type:"yanki_ubu"},
+    B:{t:"論点と優先度を整理して、進め方を組み替える", type:"otaku_in"}},
+
+  {id:"O22", p:"新しい方向性が出たときに多いのは？",
+    A:{t:"まず成立条件を確認し、現実に落ちる筋道を作る", type:"shokunin_flexible"},
+    B:{t:"面白い視点や違和感を出して、発想側に振る", type:"artist_open"}},
+
+  {id:"O23", p:"会議で沈黙が増えたときに多いのは？",
+    A:{t:"介入して結論を置き、次のアクションを決める", type:"yanki_aniki"},
+    B:{t:"必要最小限の発言で、要点だけを提示する", type:"artist_mystery"}},
+
+  {id:"O24", p:"合意が取りにくい局面で多いのは？",
+    A:{t:"判断材料を揃え、比較できる形にして合意へ寄せる", type:"otaku_you"},
+    B:{t:"自分の基準を守り、結論を急がず深掘りして精度を上げる", type:"artist_mystery"}}
 ];
 
 const TYPE_MAP = {
@@ -742,7 +765,7 @@ function answerSelf(q, val){
   advanceType();
 }
 function answerOther(q, pick){
-  const win=1.5, lose=-1.5;
+  const win=1.5, lose=-1.0;
   const a=q.A.type, b=q.B.type;
   if(pick==="A"){ app.typeScores[a]+=win; app.typeScores[b]+=lose; }
   else { app.typeScores[b]+=win; app.typeScores[a]+=lose; }
@@ -769,7 +792,7 @@ function backType(){
     const q = app.typeQ.find(x=>x.id===a.qid);
     if(app.mode==="self"){ app.typeScores[q.type] += a.val * q.w; }
     else{
-      const win=2, lose=-2;
+      const win=1.5, lose=-1.0;
       const ta=q.A.type, tb=q.B.type;
       if(a.pick==="A"){ app.typeScores[ta]+=win; app.typeScores[tb]+=lose; }
       else { app.typeScores[tb]+=win; app.typeScores[ta]+=lose; }
