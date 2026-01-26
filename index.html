@@ -1,251 +1,1124 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PD Type & Skill Diagnostic</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Product Designer Type & Skill Diagnostic</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root{
+      /* Theme: Orange & Shadow */
+      --bg:#f3f4f6;
+      --surface:#ffffff;
+      --text:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --line2:#f3f4f6;
+      
+      /* Orange Scheme */
+      --acc:#f97316;       /* Orange */
+      --accSoft:#fff7ed;   /* Very light orange */
+      --accHover:#ea580c;  /* Darker orange for hover */
+      
+      --danger:#dc2626;
+      --success:#ffe430; 
 
-<style>
-:root{
-  --bg:#f3f4f6;
-  --surface:#ffffff;
-  --text:#111827;
-  --muted:#6b7280;
-  --line:#e5e7eb;
-  --accent:#2563eb;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-.wrap{max-width:1100px;margin:0 auto;padding:20px}
-h1{font-size:22px;margin-bottom:4px}
-h2{font-size:18px;margin:16px 0 6px}
-.small{font-size:12px;color:var(--muted)}
-.rule{height:1px;background:var(--line);margin:14px 0}
+      --radius:24px;       /* Unified Radius */
+      --radius-sm:14px;
+      
+      /* Drop Shadow for Cards (No Border) */
+      --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -2px rgba(0, 0, 0, 0.04);
+    }
 
-button{
-  padding:12px 16px;
-  border-radius:10px;
-  border:1px solid var(--line);
-  background:#fff;
-  font-weight:700;
-  cursor:pointer;
-}
-button.primary{
-  background:var(--accent);
-  color:#fff;
-  border:none;
-}
-button:disabled{
-  opacity:.5;cursor:not-allowed;
-}
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family:"Noto Sans JP", sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
 
-.card{
-  background:#fff;
-  padding:16px;
-  margin-bottom:14px;
-}
+    .wrap{ max-width:1060px; margin:0 auto; padding:18px 14px 40px; }
+    h1{ margin:0 0 6px; font-size:24px; letter-spacing:-.2px; font-family: "Jost", "Noto Sans JP", sans-serif; font-weight: 600;}
+    h2{ margin:0 0 10px; font-size:18px; letter-spacing:-.1px; }
+    h3{ margin:0; font-size:14px; letter-spacing:-.1px; }
+    p{ margin:8px 0 14px; color:var(--muted); line-height:1.65; }
+    .small{ font-size:12px; color:var(--muted); }
 
-.tap{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:14px;
-  border:1.5px solid var(--line);
-  border-radius:14px;
-  margin-bottom:10px;
-  cursor:pointer;
-}
-.tap.selected{
-  border-color:var(--accent);
-  background:#eff6ff;
-}
+    /* Layout Grid */
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    @media (max-width:920px){ .grid2{ grid-template-columns:1fr; } }
+    .row{ display:flex; gap:12px; flex-wrap:wrap; }
+    
+    .vertical-stack{ display:flex; flex-direction:column; gap:24px; max-width:600px; margin:0 auto; }
 
-.hidden{display:none}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:900px){.grid2{grid-template-columns:1fr}}
-</style>
+    /* Surfaces (Updated: No border, Box Shadow) */
+    .surface{
+      background:var(--surface);
+      border-radius:var(--radius);
+      padding:24px;
+      border:none;
+      box-shadow: var(--shadow-card);
+    }
+    .screen{
+      background:var(--surface);
+      border-radius:var(--radius);
+      padding:24px;
+      border:none;
+      box-shadow: var(--shadow-card);
+    }
+    .result-card{
+      background: #fff;
+      border-radius: var(--radius); /* Unified radius */
+      padding: 24px;
+      border: none;
+      box-shadow: var(--shadow-card);
+      height: 100%;
+      min-width: 0;
+    }
+
+    /* Header Info (Updated) */
+    .header-info {
+      background: #fff;
+      border-radius: var(--radius);
+      padding: 16px 24px;
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      border: none;
+      box-shadow: var(--shadow-card);
+    }
+
+    .rule{ height:1px; background:var(--line); margin:18px 0; }
+    .rule.soft{ background:var(--line2); }
+
+    /* Clickable Items */
+    .tap{
+      width:100%;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; padding:14px 14px;
+      border-radius:var(--radius-sm);
+      border:1.5px solid #d1d5db;
+      background:#ffffff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+      cursor:pointer; user-select:none;
+      transition: all .2s ease;
+    }
+    .tap:hover{ background-color: var(--accSoft); border-color: var(--acc); transform: translateY(-1px); }
+    .tap.selected{
+      border-color: var(--acc);
+      background: var(--accSoft);
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.15);
+    }
+    .tap.selected .chev{ background:#ffffff; border-color: rgba(249, 115, 22, 0.35); color: var(--acc); }
+    .tap .chev{
+      flex:0 0 auto; width:30px; height:30px; border-radius:999px;
+      display:grid; place-items:center; background:#f9fafb;
+      border:1px solid var(--line); color:#374151; font-weight:900;
+    }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px; padding:12px 18px; border-radius:12px;
+      border:1px solid var(--line); background:#fff; color:var(--text);
+      font-weight:700; cursor:pointer; min-height:48px; transition: all .2s;
+    }
+    .btn:hover{ background:#f9fafb; }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{ border-color:transparent; background:var(--acc); color:#fff; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25); }
+    .btn.primary:hover{ background:var(--accHover); }
+    .btn.primary:disabled{ opacity:.55; cursor:not-allowed; box-shadow:none; }
+    .btn.danger{ color:var(--danger); background:#fff; border-color: rgba(220,38,38,.25); }
+    .btn.danger-outline{ color:var(--danger); background:#fff; border: 1.5px solid var(--danger); font-weight: 700; }
+    .btn.danger-outline:hover{ background:#fef2f2; }
+
+    /* Components */
+    .pill{ display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:#fff; }
+    .progress{ height:10px; background:#eef2f7; border-radius:999px; overflow:hidden; }
+    .bar{ height:100%; width:0%; background:var(--acc); transition: width 0.3s ease; }
+    
+    input[type="text"]{
+      width:100%; padding:14px 12px; border-radius:12px;
+      border:1px solid var(--line); outline:none; font-weight:650; color:var(--text); background:#fff;
+    }
+    input[type="text"]:focus{ border-color: var(--acc); box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1); }
+
+    /* Accordion / Checkbox */
+    details{ border:1px solid var(--line); border-radius:12px; background:#fff; padding:10px 12px; }
+    summary{ cursor:pointer; font-weight:700; list-style:none; display:flex; align-items:center; justify-content:space-between; padding:6px 4px; user-select:none; }
+    summary::-webkit-details-marker{ display:none; }
+    .chk{ display:flex; gap:10px; align-items:flex-start; padding:10px 4px; border-top:1px solid var(--line2); cursor: pointer; }
+    .chk:hover{ background: #f9fafb; }
+    input[type="checkbox"]{ margin-top:3px; transform:scale(1.15); cursor: pointer; accent-color: var(--acc); }
+
+    .kpi{ display:flex; gap:10px; flex-wrap:wrap; }
+    .kpi .mini{ border:none; border-radius:12px; padding:10px 14px; background:var(--line2); min-width: 100px; }
+    
+    .hidden{ display:none !important; }
+    
+    /* Result Specifics */
+    .mapBox{ border:1px solid var(--line); border-radius:12px; background:#fff; padding:12px; }
+    .result-section-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap:8px; color:var(--acc); }
+    .result-section-header { background:var(--line2); padding:10px 14px; border-radius:8px; margin-bottom:16px; font-weight:bold; text-align:center; }
+    
+    .skill-category-label {
+      font-size: 12px; font-weight: 900; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase;
+      margin: 20px 0 8px; border-bottom: 1px solid var(--line); padding-bottom: 4px;
+    }
+    .skill-desc {
+      font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px;
+    }
+
+    /* Main vs Sub emphasis */
+    .type-display-main { font-size: 24px; font-weight: 900; color: var(--acc); line-height: 1.3; }
+    .type-display-sub { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.4; }
+    .type-label-tag { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
+
+  </style>
 </head>
 
 <body>
 <div class="wrap">
+  <h1>Product Designer Type & Skill Diagnostic</h1>
+  
+  <div class="header-info">
+    <div style="font-weight:700; margin-bottom:4px;">診断概要</div>
+    <div>タイプ：メイン＋サブ ／ 能力：7軸（GATE） ／ 表示：平均＋典型値</div>
+    <div style="margin-top:6px; color:#ef4444;">※優劣判定ではありません。配置・育成・対話の材料として使用してください。</div>
+  </div>
 
-<h1>PD Type & Skill Diagnostic</h1>
-<div class="small">タイプ × 能力 を可視化する診断ツール</div>
-<div class="rule"></div>
+  <div class="rule soft"></div>
 
-<!-- HOME -->
-<section id="home" class="card">
-<h2>1) モード選択</h2>
-<div class="tap" onclick="setMode('self')" id="modeSelf">自己評価</div>
-<div class="tap" onclick="setMode('other')" id="modeOther">他者評価</div>
-<button class="primary" id="startBtn" disabled onclick="start()">スタート</button>
-</section>
+  <section id="view-home" class="surface">
+    <h2>1) モード選択</h2>
+    
+    <div class="vertical-stack">
+      <div>
+        <h3>① 評価モードを選ぶ（必須）</h3>
+        <div class="row" style="flex-direction:column; margin-top:10px;">
+          <div class="tap" role="button" tabindex="0" data-mode="self" id="modeSelf">
+            <div class="left">
+              <div class="title">自己評価（Self）</div>
+            </div>
+            <div class="chev">›</div>
+          </div>
 
-<!-- TYPE RESULT ONLY -->
-<section id="typeResult" class="card hidden">
-<h2>タイプ結果</h2>
-<div id="typeText"></div>
-<div class="rule"></div>
-<div id="typeMap"></div>
-<button onclick="showSkill()">能力も確認する</button>
-<button onclick="downloadCSV()">CSV出力</button>
-</section>
+          <div class="tap" role="button" tabindex="0" data-mode="other" id="modeOther">
+            <div class="left">
+              <div class="title">客観評価（Objective）</div>
+            </div>
+            <div class="chev">›</div>
+          </div>
+        </div>
+      </div>
 
-<!-- SKILL ONLY -->
-<section id="skill" class="card hidden">
-<h2>能力判定（7軸）</h2>
-<div id="skillChecks"></div>
-<button onclick="showResult()">結果を見る</button>
-</section>
+      <div>
+        <h3>② 評価スコープを決める（任意）</h3>
+        <div style="margin-top:10px">
+          <input id="scopeText" type="text" placeholder="例：直近1年 / 今回PJ など" />
+        </div>
+      </div>
 
-<!-- FINAL RESULT -->
-<section id="result" class="card hidden">
-<h2>最終結果</h2>
-<div id="finalType"></div>
+      <div>
+        <h3>スタート</h3>
+        <div style="margin-top:10px; display:flex; flex-direction:column; gap:12px;">
+          <button id="btnStart" class="btn primary" style="width:100%" disabled>タイプ判定へ進む</button>
+          <button id="btnSkip" class="btn" style="width:100%; font-weight:normal; color:#4b5563;">能力判定へ進む（タイプ判定をスキップ）</button>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<div class="rule"></div>
-<canvas id="radar" height="280"></canvas>
-<button onclick="downloadPNG()">PNG保存</button>
-<button onclick="downloadCSV()">CSV保存</button>
+  <section id="view-type" class="screen hidden">
+    <h2>2) タイプ判定</h2>
 
-<div class="rule"></div>
-<div id="typeMapFinal"></div>
-</section>
+    <div class="row" style="justify-content:space-between; align-items:center">
+      <div class="pill"><span id="modeBadge">mode</span><span class="small">｜</span><span id="qCounter">0/24</span></div>
+      <div class="small">PCショートカット：1〜4 / A・B</div>
+    </div>
 
+    <div style="margin-top:10px" class="progress"><div id="qBar" class="bar"></div></div>
+
+    <div class="rule"></div>
+
+    <div>
+      <div class="small" id="qIdText">Q</div>
+      <div id="qText" style="margin-top:6px; font-size:20px; font-weight:950; letter-spacing:-.2px">...</div>
+      <div class="rule"></div>
+
+      <div id="selfChoices" class="row hidden" style="flex-direction:column"></div>
+      <div id="otherChoices" class="row hidden" style="flex-direction:column"></div>
+
+      <div class="rule"></div>
+
+      <div class="row">
+        <button id="btnTypeBack" class="btn">戻る</button>
+        <button id="btnTypeReset" class="btn danger">最初に戻る</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-skill" class="screen hidden">
+    <h2>3) 能力判定（7軸・GATE）</h2>
+    <p>該当する項目にチェックしてください（Lv順不同・未チェックOK）。</p>
+
+    <div class="grid2" id="skillAccordions"></div>
+
+    <div class="rule"></div>
+
+    <div class="row">
+      <button id="btnSkillBack" class="btn">戻る</button>
+      <button id="btnToResult" class="btn primary">結果を見る</button>
+    </div>
+  </section>
+
+ <section id="view-result" class="hidden">
+    
+    <div id="captureArea" style="background:var(--bg); padding:0;">
+      
+      <div class="surface" style="margin-bottom:20px;">
+        <h2>4) 診断結果</h2>
+        <div class="pill">
+          <span id="resultMode">—</span>
+          <span class="small">｜</span>
+          <span id="resultScope" class="small">—</span>
+        </div>
+      </div>
+
+      <div class="grid2">
+        
+        <div class="result-card" id="typeResultCard">
+          <div class="result-section-header">タイプ診断結果</div>
+          
+          <div id="typeResultContent">
+            <div style="background:var(--accSoft); padding:16px; border-radius:12px; border:1px solid rgba(249,115,22,0.1);">
+               <div class="type-label-tag">メインタイプ</div>
+               <div id="mainTypeText" class="type-display-main">—</div>
+            </div>
+
+            <div style="margin-top:12px; padding:12px; border-radius:12px; border:1px solid var(--line); background:#fff;">
+               <div class="type-label-tag">サブタイプ</div>
+               <div id="subTypeText" class="type-display-sub">—</div>
+            </div>
+
+            <div class="rule soft"></div>
+
+            <div class="result-section-title">タイプマップ</div>
+            <div id="typeMapWrap" class="mapBox">—</div>
+
+            <div class="rule soft"></div>
+
+            <div class="result-section-title">説明</div>
+            <div id="typeDesc" class="small" style="white-space:pre-wrap; background:var(--line2); padding:12px; border-radius:12px;">—</div>
+          </div>
+          
+          <div id="typeResultSkipped" class="hidden" style="text-align:center; padding:40px 0; color:var(--muted);">
+            タイプ診断はスキップされました
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="result-section-header">能力診断結果</div>
+
+          <div class="result-section-title">能力詳細（Lv / 差分）</div>
+          <div id="skillList" style="margin-bottom:20px;"></div>
+
+          <div class="rule soft"></div>
+          
+          <div class="result-section-title">能力レーダーチャート</div>
+          <div class="small" style="margin-bottom:8px;">実測（橙太線）／ 平均Lv3（灰点線）<span id="radarTypicalLabel"> ／ タイプ典型（黄破線）</span></div>
+          <div style="position: relative; width: 100%; min-height:300px;">
+             <canvas id="radar"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="small" style="text-align:right; margin-top:20px;">2026, Product Designer Type & Skill Diagnostic</div>
+
+    </div> 
+    <div class="surface" style="margin-top:20px;">
+      <div class="row" style="justify-content: space-between; align-items: flex-end;">
+        <button id="btnRestart" class="btn danger-outline">もう一度（最初に戻る）</button>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span class="small">書き出し：</span>
+          <button id="btnExportCSV" class="btn">CSV保存</button>
+          <button id="btnExportPNG" class="btn">画像保存(PNG)</button>
+        </div>
+      </div>
+    </div>
+
+  </section>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
 <script>
-/* ========= DATA ========= */
-const TYPES=[
-  {id:"yanki_aniki",label:"兄貴肌ヤンキー"},
-  {id:"yanki_ubu",label:"うぶなヤンキー"},
-  {id:"otaku_you",label:"陽キャオタク"},
-  {id:"otaku_in",label:"陰キャオタク"},
-  {id:"shokunin_soft",label:"柔軟な職人"},
-  {id:"shokunin_hard",label:"頑固な職人"},
-  {id:"artist_open",label:"ひらけたアーティスト"},
-  {id:"artist_mystery",label:"不思議アーティスト"}
+/* =========================
+   DATA
+========================= */
+const TYPES = [
+  { id:"yanki_aniki", label:"兄貴肌ヤンキー" },
+  { id:"yanki_ubu", label:"うぶなヤンキー" },
+  { id:"otaku_you", label:"陽キャオタク" },
+  { id:"otaku_in", label:"陰キャオタク" },
+  { id:"shokunin_flexible", label:"柔軟な職人" },
+  { id:"shokunin_stubborn", label:"頑固な職人" },
+  { id:"artist_open", label:"ひらけたアーティスト" },
+  { id:"artist_mystery", label:"不思議アーティスト" }
 ];
 
-const TYPE_MAP={
-  yanki_aniki:{x:-0.7,y:0.6},
-  yanki_ubu:{x:-0.7,y:-0.6},
-  otaku_you:{x:0.7,y:0.6},
-  otaku_in:{x:0.7,y:-0.6},
-  shokunin_soft:{x:0.25,y:0.2},
-  shokunin_hard:{x:0.25,y:-0.3},
-  artist_open:{x:-0.25,y:0.25},
-  artist_mystery:{x:-0.25,y:-0.25}
+/* Updated Descriptions */
+const TYPE_DESC = {
+  yanki_aniki: "現場での停滞や迷いに対して、決断と推進で状況を動かすタイプです。未整理な状態でも「まず進める」判断ができ、チームのエンジンとして機能します。一方で立ち止まって振り返る時間を取りにくく、自己省察や合意形成が弱いと、勢い先行で手戻りや疲弊を招くことがあります。推進力に内省や調整が伴うと、非常に安定したリーダータイプになります。",
+  yanki_ubu: "責任感が強く、期待に応えようと前に出るものの、内面では評価や失敗を強く意識しているタイプです。断る判断が遅れやすく、負荷を抱え込みがちな傾向があります。周囲からのフォローや役割の整理があることで力を発揮しやすく、逆に放置されると消耗しやすい特徴があります。推進力はあるため、支え方次第で大きく伸びます。",
+  otaku_you: "複雑な状況をロジックで整理し、論点や判断材料を共通言語として提示できるタイプです。感情論に流されず、前提や構造を明確にすることで、チーム全体の判断精度を高めます。ただし自ら強く決断するよりは判断を支える役割になりやすく、推進役と組むことで真価を発揮します。設計や企画の軸として信頼されやすい存在です。",
+  otaku_in: "筋が通らない状態に強い違和感を持ち、品質や整合性を守る批評的なタイプです。問題点やリスクを見抜く力は高いものの、納得できないまま進むことを嫌うため、合意形成が弱いとブレーキ役に見られやすくなります。課題定義やレビュー局面では非常に有効で、意見が活きる設計が重要です。",
+  shokunin_flexible: "制約や指摘を前向きに取り込みながら、完成度を高めていく実装志向のタイプです。個人の完成度だけでなく、チーム全体の品質を引き上げる動きができ、再現性のあるアウトプットを生み出します。主張が控えめな場合は便利な人に留まりやすいため、判断軸や意見を明確にすると、より中核的な役割を担えます。",
+  shokunin_stubborn: "自分なりの美意識や基準を強く持ち、妥協せずに品質を追求するタイプです。深く刺さるアウトプットを出すことがあり、表現品質や実装力が高い場合はプロジェクトの要石になります。一方で共有や説明を省きがちで、自己省察が弱いと属人化や摩擦が生じやすくなります。視座更新がされにくいという課題もあります。扱うテーマと裁量の設計が重要です。",
+  artist_open: "言語化しきれていない段階でも感覚や違和感を外に出し、場に刺激を与えるタイプです。停滞した議論に新しい視点を持ち込み、空気を変える触媒として機能します。視座更新力が高く、発想面で価値を発揮しますが、実装や着地を担う相棒がいない場合は、アイデアが広がるだけで終わることがあります。",
+  artist_mystery: "独自の世界観や関心に深く没入し、他者に迎合せず探究を続けるタイプです。尖った視点や表現を生み出す力があり、視座更新や表現品質が突出することもあります。一方で説明や共有を後回しにしやすく、合意形成が弱いと周囲から理解されにくくなります。翻訳役や調整役がいる環境で真価を発揮します。"
 };
 
-const SKILLS=["課題定義力","コンセプト統合力","表現品質力","実装・成立力","自己省察力","合意形成力","視座更新力"];
+const AXES = [
+  { id:"skill_1", name:"課題定義力", category:"Skill",
+    desc:"与えられた要望を鵜呑みにせず、「何を解くべきか」を見立て直し、論点と目的を明確にする力。",
+    items:[
+      "与えられた課題に対し、前提や目的を確認する発言がある",
+      "「本当に解くべき課題は何か」を問い直すことがある",
+      "ユーザー・事業・技術の視点を分けて整理している",
+      "表層の要望と本質のズレを指摘したことがある",
+      "課題設定そのものを変更し、方針に影響を与えた",
+      "チーム内で「課題の定義役」として期待されている"
+    ],
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
+  },
+  { id:"skill_2", name:"コンセプト統合力", category:"Skill",
+    desc:"複数の要件・制約・意見を一本の軸にまとめ、判断基準として機能するコンセプトに落とす力。",
+    items:[
+      "複数の要件を一本の方向性にまとめて説明できる",
+      "判断に迷った際、コンセプトを基準に取捨選択している",
+      "メンバー間の認識ズレを、コンセプトで収束させた",
+      "コンセプトが資料・アウトプットに一貫して反映されている",
+      "関係者がそのコンセプトを引用して判断している",
+      "コンセプトが意思決定を明確に前進させた実績がある"
+    ],
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
+  },
+  { id:"skill_3", name:"表現品質力", category:"Skill",
+    desc:"情報設計と見た目の完成度で、少ない説明でも意図が伝わるアウトプットを安定して出す力。",
+    items:[
+      "大きな修正なくアウトプットが通ることが多い",
+      "見た目・構成・完成度について評価されることがある",
+      "「説明が少なくても伝わる」と言われたことがある",
+      "細部（余白・比率・情報整理）が安定している",
+      "他の人のアウトプット品質を引き上げている",
+      "代表事例として社内外に共有されたことがある"
+    ],
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[2,3], keyLv4:[4], keyLv5:[5] }
+  },
+  { id:"skill_4", name:"実装・成立力", category:"Skill",
+    desc:"技術・コスト・量産などの制約を踏まえ、成立する設計に落とし込み、手戻りを減らす力。",
+    items:[
+      "制約（技術・コスト・量産）を前提に設計している",
+      "開発や他職種と具体的なやり取りができている",
+      "実装段階で大きな手戻りを起こしていない",
+      "成立しない案を早期に見極めて軌道修正している",
+      "制約を踏まえた代替案を自ら提示している",
+      "制約条件が価値に転じた事例がある"
+    ],
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
+  },
+  { id:"skill_5", name:"自己省察力", category:"Behavior",
+    desc:"判断や行動を振り返って学びに変え、指摘や失敗を次のプロジェクトで具体的に更新する力。",
+    items:[
+      "振り返りで自分の判断を言語化している",
+      "失敗やズレを他責にせず整理している",
+      "指摘内容を構造的に捉え直している",
+      "同じ指摘を繰り返されていない",
+      "意思決定の癖や前提を自覚している",
+      "次のプロジェクトで行動が変わっている"
+    ],
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[2,3], keyLv4:[4], keyLv5:[5] }
+  },
+  { id:"skill_6", name:"合意形成力", category:"Behavior",
+    desc:"関係者の立場と論点を整理し、必要情報を揃えて意思決定を前に進める力。",
+    items:[
+      "関係者の立場・関心を整理して説明している",
+      "対立意見を整理し、論点を明確化している",
+      "合意に必要な情報を先回りして準備している",
+      "デザインを通じて意思決定を促している",
+      "会議やレビューを前進させている",
+      "停滞していた案件を動かした経験がある"
+    ],
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3,4], keyLv4:[5], keyLv5:[5] }
+  },
+  { id:"skill_7", name:"視座更新力", category:"Behavior",
+    desc:"トレンド・先行事例・新技術を継続的に取り込み、プロジェクトに新しい視点や仮説を持ち込む力。",
+    items:[
+      "業界・デザイン動向を継続的に把握している",
+      "新しい手法・技術を試している",
+      "先行事例や兆しをプロジェクトに持ち込んでいる",
+      "学習内容がアウトプットに反映されている",
+      "周囲から「新しい視点」を期待されている",
+      "まだ一般化していない視点を提案したことがある"
+    ],
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
+  }
+];
 
-/* ========= STATE ========= */
-let mode=null;
-let mainType="artist_open";
-let subType="otaku_you";
+const TYPE_TEMPLATES = {
+  yanki_aniki:      [3,3,3,4,2,4,3],
+  yanki_ubu:        [3,3,3,3,2,3,3],
+  otaku_you:        [4,4,3,3,3,3,3],
+  otaku_in:         [4,3,3,3,2,2,3],
+  shokunin_flexible:[3,3,3,4,3,3,3],
+  shokunin_stubborn:[3,2,3,4,2,2,2],
+  artist_open:      [4,3,4,2,3,3,4],
+  artist_mystery:   [4,3,4,2,2,2,4]
+};
 
-/* ========= FUNCTIONS ========= */
-function setMode(m){
-  mode=m;
-  document.getElementById("modeSelf").classList.toggle("selected",m==="self");
-  document.getElementById("modeOther").classList.toggle("selected",m==="other");
-  document.getElementById("startBtn").disabled=false;
+const SELF_Q = [
+  {id:"S01", t:"会議が長引くくらいなら、多少荒くても決断して前に進みたい", type:"yanki_aniki", w:2},
+  {id:"S02", t:"周囲が迷っているとき、自分が前に出て空気を動かすことが多い", type:"yanki_aniki", w:1},
+  {id:"S03", t:"詰め切れていないと分かっていても「止まる方がリスク」だと感じる", type:"yanki_aniki", w:1},
+  {id:"S04", t:"強気に振る舞うことが多いが、内心では評価や失敗がかなり気になる", type:"yanki_ubu", w:2},
+  {id:"S05", t:"弱みを見せるより「大丈夫です」と言って抱え込みがち", type:"yanki_ubu", w:1},
+  {id:"S06", t:"無理をしてでも期待に応えようとして、あとで消耗することが多い", type:"yanki_ubu", w:1},
+  {id:"S07", t:"論点・前提・選択肢を整理して共有することで、場を前に進めるタイプだ", type:"otaku_you", w:2},
+  {id:"S08", t:"感情論よりも、事実や構造で話した方が安心できる", type:"otaku_you", w:1},
+  {id:"S09", t:"判断に迷ったときは「何を根拠に決めるか」をまず考える", type:"otaku_you", w:1},
+  {id:"S10", t:"自分の中で筋が通っていない提案には、どうしても納得できない", type:"otaku_in", w:2},
+  {id:"S11", t:"議論が雑になると、会話から一歩引いて内側で固め直す", type:"otaku_in", w:1},
+  {id:"S12", t:"「とりあえず進めよう」に強い違和感を覚えやすい", type:"otaku_in", w:1},
+  {id:"S13", t:"他人からの指摘や制約を取り込みながら、完成度を上げていく方が性に合う", type:"shokunin_flexible", w:2},
+  {id:"S14", t:"途中段階でも共有しながら進める方が、結果的に良くなると感じる", type:"shokunin_flexible", w:1},
+  {id:"S15", t:"自分一人で完璧を目指すより、すり合わせで質を上げたい", type:"shokunin_flexible", w:1},
+  {id:"S16", t:"自分の基準と合わない修正は、正直「本質からズレている」と感じる", type:"shokunin_stubborn", w:2},
+  {id:"S17", t:"作っている途中で意見をもらうより、完成してから見せたい", type:"shokunin_stubborn", w:1},
+  {id:"S18", t:"周囲の評価よりも「自分が納得しているか」を最優先している", type:"shokunin_stubborn", w:1},
+  {id:"S19", t:"言語化しきれていなくても「この方向は面白い」という感覚を外に出す", type:"artist_open", w:2},
+  {id:"S20", t:"他人の反応や違う視点を混ぜることで、アイデアが育つと感じる", type:"artist_open", w:1},
+  {id:"S21", t:"場の空気が停滞すると、意図的に視点をずらしたくなる", type:"artist_open", w:1},
+  {id:"S22", t:"自分の中でしっくり来ていれば、他人の理解は必須ではない", type:"artist_mystery", w:2},
+  {id:"S23", t:"発想や判断を、わざわざ説明しなくてもいいと思うことが多い", type:"artist_mystery", w:1},
+  {id:"S24", t:"他人と混ぜるより、一人で考え続ける方が深まる", type:"artist_mystery", w:1}
+];
+
+const OTHER_Q = [
+  {id:"O01", p:"会議で仕様や条件がまだ固まっていないとき、よく見られる行動は？",
+    A:{t:"「まずここまででやってみよう」と決めて進める", type:"yanki_aniki"},
+    B:{t:"前提や論点を整理し、条件が揃ってから進める", type:"otaku_you"}},
+  {id:"O02", p:"デザインレビューで修正意見が出たときの反応は？",
+    A:{t:"自分のやり方を変えず、修正の必要性を疑う", type:"shokunin_stubborn"},
+    B:{t:"いったん受け取り、より良くなる余地として検討する", type:"shokunin_flexible"}},
+  {id:"O03", p:"アイデア出しの場での発言タイミングは？",
+    A:{t:"まとまっていなくても、違和感や方向性を口に出す", type:"artist_open"},
+    B:{t:"自分の中でかなり固めてから共有する", type:"artist_mystery"}},
+  {id:"O04", p:"タスクが立て込んだときの振る舞いは？",
+    A:{t:"大丈夫そうに引き受けるが、後からかなり苦しそう", type:"yanki_ubu"},
+    B:{t:"役割を整理し、自分が前に出て状況を動かす", type:"yanki_aniki"}},
+  {id:"O05", p:"判断に迷う場面でよくやるのは？",
+    A:{t:"判断基準や根拠を整理してから決める", type:"otaku_you"},
+    B:{t:"完璧でなくても、まず試してから考える", type:"yanki_aniki"}},
+  {id:"O06", p:"途中経過の共有について近いのは？",
+    A:{t:"ある程度仕上げてからまとめて共有する", type:"shokunin_stubborn"},
+    B:{t:"途中段階でもこまめに共有する", type:"shokunin_flexible"}},
+  {id:"O07", p:"議論が荒れてきたときの態度は？",
+    A:{t:"会話から一歩引き、内側で考え直す", type:"otaku_in"},
+    B:{t:"多少強引でも論点をまとめようとする", type:"yanki_aniki"}},
+  {id:"O08", p:"新しい視点が必要なときの動きは？",
+    A:{t:"視点をずらす発言や問いをその場に投げる", type:"artist_open"},
+    B:{t:"まず既存の構造や前提を整理する", type:"otaku_you"}},
+  {id:"O09", p:"修正や指摘に対する初動は？",
+    A:{t:"「なぜその修正が必要か」を考え込む", type:"otaku_in"},
+    B:{t:"一度取り入れて、形を調整してみる", type:"shokunin_flexible"}},
+  {id:"O10", p:"トラブルが起きた直後の対応は？",
+    A:{t:"自分が前に出て対応し、あとで整える", type:"yanki_aniki"},
+    B:{t:"状況整理や原因確認を優先する", type:"otaku_you"}},
+  {id:"O11", p:"作業の進め方として多いのは？",
+    A:{t:"自分の完成イメージを優先して進める", type:"shokunin_stubborn"},
+    B:{t:"周囲とすり合わせながら形を詰める", type:"shokunin_flexible"}},
+  {id:"O12", p:"アイデアを共有する量として近いのは？",
+    A:{t:"必要最低限しか出さない", type:"artist_mystery"},
+    B:{t:"思いついた段階で結構出す", type:"artist_open"}},
+  {id:"O13", p:"責任が重い役割を任されたときは？",
+    A:{t:"不安そうだが断らず抱え込む", type:"yanki_ubu"},
+    B:{t:"自分が旗を振って進める", type:"yanki_aniki"}},
+  {id:"O14", p:"意思決定の場での得意役割は？",
+    A:{t:"情報を整理し、選択肢を見える化する", type:"otaku_you"},
+    B:{t:"決断して方向を示す", type:"yanki_aniki"}},
+  {id:"O15", p:"意見が通らないときの態度は？",
+    A:{t:"自分の中で納得できず、距離を取る", type:"artist_mystery"},
+    B:{t:"表現や形を調整して通しにいく", type:"shokunin_flexible"}},
+  {id:"O16", p:"「とりあえず進めよう」と言われたときは？",
+    A:{t:"強い違和感を示す", type:"otaku_in"},
+    B:{t:"まずやってみて調整しようとする", type:"yanki_aniki"}},
+  {id:"O17", p:"制約が多い条件下での動きは？",
+    A:{t:"制約の中で成立する形を考える", type:"shokunin_flexible"},
+    B:{t:"制約自体を問い直す", type:"artist_open"}},
+  {id:"O18", p:"資料やアウトプットの出し方は？",
+    A:{t:"ある程度整ってから出す", type:"artist_mystery"},
+    B:{t:"叩き台を早めに出す", type:"otaku_you"}},
+  {id:"O19", p:"会議で発言が少ないときは？",
+    A:{t:"内側で考えていることが多い", type:"otaku_in"},
+    B:{t:"介入タイミングを見ている", type:"yanki_aniki"}},
+  {id:"O20", p:"品質とスピードがトレードオフのときは？",
+    A:{t:"品質を優先して進める", type:"shokunin_stubborn"},
+    B:{t:"期限を優先して前に進める", type:"yanki_aniki"}},
+  {id:"O21", p:"新しい方向性が出たときの反応は？",
+    A:{t:"面白そうなら未整理でも乗る", type:"artist_open"},
+    B:{t:"成立条件をまず確認する", type:"otaku_you"}},
+  {id:"O22", p:"人からどう見られているかについては？",
+    A:{t:"あまり気にしていないように見える", type:"artist_mystery"},
+    B:{t:"気にしていないように振る舞うが気にしている", type:"yanki_ubu"}},
+  {id:"O23", p:"タスクの途中経過報告については？",
+    A:{t:"必要最低限で済ませがち", type:"shokunin_stubborn"},
+    B:{t:"状況を整理して共有する", type:"otaku_you"}},
+  {id:"O24", p:"プロジェクトが停滞したときは？",
+    A:{t:"空気を変える一言や視点を出す", type:"artist_open"},
+    B:{t:"役割や進め方を整理する", type:"shokunin_flexible"}}
+];
+
+const TYPE_MAP = {
+  yanki_aniki:        { x:-0.8, y: 0.7 },
+  yanki_ubu:          { x:-0.6, y:-0.35 },
+  otaku_you:          { x: 0.8, y: 0.7 },
+  otaku_in:           { x: 0.8, y:-0.55 },
+  shokunin_flexible:  { x: 0.4, y: 0.25 },
+  shokunin_stubborn:  { x: 0.6, y:-0.6 },
+  artist_open:        { x:-0.5, y: 0.4 },
+  artist_mystery:     { x:-0.8, y:-0.7 }
+};
+
+/* =========================
+   APP STATE
+========================= */
+const app = {
+  mode: null,
+  scopeText: "",
+  typeSkipped: false,
+  typeQ: [],
+  typeIdx: 0,
+  typeAnswers: [],
+  typeScores: {},
+  skillChecks: {},
+  skillLevels: {},
+  mainType: null,
+  subType: null,
+  radarChart: null
+};
+const $ = (id)=>document.getElementById(id);
+
+function initScores(){
+  app.typeScores = {};
+  TYPES.forEach(t => app.typeScores[t.id] = 0);
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function typeLabel(id){ return TYPES.find(t=>t.id===id)?.label ?? id; }
+function typeDesignerLabel(id){ return `${typeLabel(id)}系デザイナー`; }
+
+function show(viewId){
+  ["view-home","view-type","view-skill","view-result"].forEach(v=>$(v).classList.add("hidden"));
+  $(viewId).classList.remove("hidden");
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
-function start(){
-  document.getElementById("home").classList.add("hidden");
-  showTypeResult();
+function resetAll(){
+  app.mode = null;
+  app.typeSkipped = false;
+  app.scopeText = "";
+  app.typeQ = [];
+  app.typeIdx = 0;
+  app.typeAnswers = [];
+  initScores();
+  AXES.forEach(ax => app.skillChecks[ax.id] = Array(ax.items.length).fill(false));
+  app.skillLevels = {};
+  app.mainType = null;
+  app.subType = null;
+
+  document.querySelectorAll('[data-mode]').forEach(el=>el.classList.remove("selected"));
+  $("btnStart").disabled = true;
+  $("scopeText").value = "";
 }
 
-function typeLabel(id){
-  const t=TYPES.find(t=>t.id===id);
-  return t.label+"系デザイナー";
+function setMode(mode){
+  app.mode = mode;
+  document.querySelectorAll('[data-mode]').forEach(el=>{
+    el.classList.toggle("selected", el.dataset.mode===mode);
+  });
+  $("btnStart").disabled = !app.mode;
 }
 
-/* ===== TYPE RESULT ===== */
-function showTypeResult(){
-  document.getElementById("typeResult").classList.remove("hidden");
-  document.getElementById("typeText").innerHTML=
-    `<b>メイン：</b>${typeLabel(mainType)}<br>
-     <b>サブ：</b>${typeLabel(subType)}`;
-  renderTypeMap("typeMap");
+function startTypeTest(){
+  app.scopeText = $("scopeText").value.trim();
+  initScores();
+  app.typeAnswers = [];
+  app.typeIdx = 0;
+  app.typeSkipped = false;
+  app.typeQ = (app.mode==="self") ? shuffle(SELF_Q) : shuffle(OTHER_Q);
+
+  $("modeBadge").textContent = (app.mode==="self") ? "自己評価" : "客観評価";
+  renderTypeQuestion();
+  show("view-type");
 }
 
-/* ===== SKILL ===== */
-function showSkill(){
-  document.getElementById("skill").classList.remove("hidden");
+function skipTypeTest(){
+  app.scopeText = $("scopeText").value.trim();
+  app.typeSkipped = true;
+  app.mainType = null;
+  app.subType = null;
+  buildSkillUI();
+  show("view-skill");
 }
 
-/* ===== FINAL ===== */
-function showResult(){
-  document.getElementById("result").classList.remove("hidden");
-  document.getElementById("finalType").innerHTML=
-    `<b>${typeLabel(mainType)}</b> / ${typeLabel(subType)}`;
-  renderRadar();
-  renderTypeMap("typeMapFinal");
+/* ===== Type Diagnosis ===== */
+function renderTypeQuestion(){
+  const total = app.typeQ.length;
+  const idx = app.typeIdx;
+  $("qCounter").textContent = `${idx+1}/${total}`;
+  $("qBar").style.width = `${Math.round((idx)/total*100)}%`;
+  const q = app.typeQ[idx];
+  $("qIdText").textContent = q.id;
+
+  $("selfChoices").classList.add("hidden");
+  $("otherChoices").classList.add("hidden");
+  $("selfChoices").innerHTML = "";
+  $("otherChoices").innerHTML = "";
+
+  if(app.mode==="self"){
+    $("qText").textContent = q.t;
+    const options = [
+      {label:"とてもそう思う", val: 2}, {label:"ややそう思う", val: 1},
+      {label:"あまりそう思わない", val:-1}, {label:"そう思わない", val:-2}
+    ];
+    options.forEach((op, i)=>{
+      const div = document.createElement("div");
+      div.className = "tap";
+      div.innerHTML = `
+        <div class="left"><div class="title"><span style="margin-right:8px; font-weight:900;">${i+1}</span>${op.label}</div></div>
+        <div class="chev">›</div>`;
+      div.onclick = ()=>answerSelf(q, op.val);
+      $("selfChoices").appendChild(div);
+    });
+    $("selfChoices").classList.remove("hidden");
+  }else{
+    $("qText").textContent = q.p;
+    ["A","B"].forEach(key=>{
+      const div = document.createElement("div");
+      div.className = "tap";
+      div.innerHTML = `
+        <div class="left"><div class="title"><span style="margin-right:8px; font-weight:900;">${key}</span>${q[key].t}</div></div>
+        <div class="chev">›</div>`;
+      div.onclick = ()=>answerOther(q, key);
+      $("otherChoices").appendChild(div);
+    });
+    $("otherChoices").classList.remove("hidden");
+  }
+  $("btnTypeBack").disabled = (app.typeIdx===0);
 }
 
-/* ===== TYPE MAP ===== */
-function renderTypeMap(target){
-  const W=520,H=320,cx=W/2,cy=H/2,s=140;
-  let svg=`<svg width="100%" viewBox="0 0 ${W} ${H}">`;
-  svg+=`<line x1="${cx}" y1="20" x2="${cx}" y2="${H-20}" stroke="#e5e7eb"/>`;
-  svg+=`<line x1="20" y1="${cy}" x2="${W-20}" y2="${cy}" stroke="#e5e7eb"/>`;
+function answerSelf(q, val){
+  app.typeScores[q.type] += val * q.w;
+  app.typeAnswers.push({qid:q.id, val, type:q.type, w:q.w});
+  advanceType();
+}
+function answerOther(q, pick){
+  const win=1.5, lose=-1.5;
+  const a=q.A.type, b=q.B.type;
+  if(pick==="A"){ app.typeScores[a]+=win; app.typeScores[b]+=lose; }
+  else { app.typeScores[b]+=win; app.typeScores[a]+=lose; }
+  app.typeAnswers.push({qid:q.id, pick, A:a, B:b});
+  advanceType();
+}
+function advanceType(){
+  app.typeIdx++;
+  if(app.typeIdx >= app.typeQ.length){
+    finalizeTypes();
+    buildSkillUI();
+    show("view-skill");
+    return;
+  }
+  renderTypeQuestion();
+}
+function backType(){
+  if(app.typeIdx<=0) return;
+  app.typeIdx--;
+  initScores();
+  const answered = app.typeAnswers.slice(0, app.typeIdx);
+  app.typeAnswers = answered;
+  answered.forEach(a=>{
+    const q = app.typeQ.find(x=>x.id===a.qid);
+    if(app.mode==="self"){ app.typeScores[q.type] += a.val * q.w; }
+    else{
+      const win=2, lose=-2;
+      const ta=q.A.type, tb=q.B.type;
+      if(a.pick==="A"){ app.typeScores[ta]+=win; app.typeScores[tb]+=lose; }
+      else { app.typeScores[tb]+=win; app.typeScores[ta]+=lose; }
+    }
+  });
+  renderTypeQuestion();
+}
+function finalizeTypes(){
+  const order = TYPES.map(t=>t.id);
+  const sorted = TYPES
+    .map(t=>({id:t.id, score:app.typeScores[t.id], idx:order.indexOf(t.id)}))
+    .sort((x,y)=> (y.score - x.score) || (x.idx - y.idx));
+  
+  app.mainType = sorted[0].id;
+  
+  // 1位と2位の差が3点以上なら「サブなし」とする
+  const scoreDiff = sorted[0].score - sorted[1].score;
+  const GAP_THRESHOLD = 3; 
 
+  if(scoreDiff >= GAP_THRESHOLD){
+    app.subType = null;
+  } else {
+    app.subType = sorted[1].id;
+  }
+}
+
+/* ===== Skill Diagnosis ===== */
+function anyChecked(arr, idxs){ return idxs.some(i => !!arr[i]); }
+function calcAxisLevel(axisId){
+  const ax = AXES.find(a=>a.id===axisId);
+  const checks = app.skillChecks[axisId] || [];
+  const count = checks.filter(Boolean).length;
+  const g = ax.gateRules;
+  const pass2 = (count >= g.minCountLv2);
+  const pass3 = pass2 && (count >= g.minCountLv3) && anyChecked(checks, g.keyLv3);
+  const pass4 = pass3 && (count >= g.minCountLv4) && anyChecked(checks, g.keyLv4);
+  const pass5 = pass4 && (count >= g.minCountLv5) && anyChecked(checks, g.keyLv5);
+  if(pass5) return 5;
+  if(pass4) return 4;
+  if(pass3) return 3;
+  if(pass2) return 2;
+  return 1;
+}
+
+function buildSkillUI(){
+  const root = $("skillAccordions");
+  root.innerHTML = "";
+  AXES.forEach(ax=>{
+    const det = document.createElement("details");
+    det.open = true;
+    const sum = document.createElement("summary");
+    sum.innerHTML = `<span>${ax.name}</span><span class="caret">▾</span>`;
+    det.appendChild(sum);
+    const box = document.createElement("div");
+    box.style.marginTop="8px";
+
+    const indexedItems = ax.items.map((txt, idx) => ({txt, idx}));
+    const shuffledItems = shuffle(indexedItems);
+
+    shuffledItems.forEach((item)=>{
+      const row = document.createElement("label");
+      row.className = "chk";
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.checked = !!app.skillChecks[ax.id][item.idx];
+      cb.onchange = ()=>{ app.skillChecks[ax.id][item.idx] = cb.checked; };
+
+      const span = document.createElement("span");
+      span.textContent = item.txt;
+      row.appendChild(cb);
+      row.appendChild(span);
+      box.appendChild(row);
+    });
+    det.appendChild(box);
+    root.appendChild(det);
+  });
+}
+
+function finalizeSkills(){
+  app.skillLevels = {};
+  AXES.forEach(ax=>{ app.skillLevels[ax.id] = calcAxisLevel(ax.id); });
+}
+
+function toResult(){
+  finalizeSkills();
+  renderResult();
+  show("view-result");
+}
+
+/* ===== Visualization ===== */
+function renderTypeMapSVG(mainId, subId){
+  // メインタイプが決まっていなければ何も表示しない
+  if(!mainId) return "";
+  
+  const W=560, H=360, pad=34, cx=W/2, cy=H/2, s=150;
+  // 色設定（オレンジテーマ）
+  const axisColor="#e5e7eb", textColor="#6b7280", nodeColor="#d1d5db", mainColor="#f97316";
+  
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%">`;
+  
+  // 軸線
+  svg += `<line x1="${cx}" y1="${pad}" x2="${cx}" y2="${H-pad}" stroke="${axisColor}"/>`;
+  svg += `<line x1="${pad}" y1="${cy}" x2="${W-pad}" y2="${cy}" stroke="${axisColor}"/>`;
+  
+  // 軸ラベル
+  svg += `<text x="${pad}" y="${cy-10}" fill="${textColor}" font-size="12" font-weight="700">推進</text>`;
+  svg += `<text x="${W-pad}" y="${cy-10}" fill="${textColor}" font-size="12" text-anchor="end" font-weight="700">分析</text>`;
+  svg += `<text x="${cx}" y="${pad-10}" fill="${textColor}" font-size="12" text-anchor="middle" font-weight="700">オープン</text>`;
+  svg += `<text x="${cx}" y="${H-pad+22}" fill="${textColor}" font-size="12" text-anchor="middle" font-weight="700">クローズ</text>`;
+
+  // 全タイプのベース（グレーの点と文字）
   TYPES.forEach(t=>{
-    const p=TYPE_MAP[t.id];
-    const x=cx+p.x*s,y=cy-p.y*s;
-    svg+=`<circle cx="${x}" cy="${y}" r="4" fill="#999"/>`;
-    svg+=`<text x="${x+6}" y="${y+4}" font-size="11" fill="#666">${t.label}</text>`;
+    const m = TYPE_MAP[t.id];
+    if(!m) return;
+    const x = cx + m.x*s, y = cy - m.y*s;
+    const right=x>=cx, top=y<=cy;
+    const lx=x+(right?12:-12), ly=y+(top?-10:16), anc=right?"start":"end";
+    svg += `<circle cx="${x}" cy="${y}" r="4" fill="${nodeColor}"/>`;
+    svg += `<text x="${lx}" y="${ly}" font-size="11" fill="${textColor}" text-anchor="${anc}">${t.label}</text>`;
   });
 
-  let pM=TYPE_MAP[mainType];
-  let pS=TYPE_MAP[subType];
-  svg+=`<circle cx="${cx+pM.x*s}" cy="${cy-pM.y*s}" r="9" fill="#2563eb"/>`;
-  svg+=`<circle cx="${cx+pS.x*s}" cy="${cy-pS.y*s}" r="7" fill="none" stroke="#2563eb" stroke-width="2"/>`;
-  svg+="</svg>";
-  document.getElementById(target).innerHTML=svg;
+  // メインタイプの描画（塗りつぶし円）
+  const pm = TYPE_MAP[mainId];
+  if(pm){
+    svg += `<circle cx="${cx+pm.x*s}" cy="${cy-pm.y*s}" r="12" fill="${mainColor}"/>`;
+  }
+
+  // サブタイプの描画（枠線円）※サブがある場合のみ実行
+  if(subId && TYPE_MAP[subId]){
+    const ps = TYPE_MAP[subId];
+    svg += `<circle cx="${cx+ps.x*s}" cy="${cy-ps.y*s}" r="9" fill="none" stroke="${mainColor}" stroke-width="3"/>`;
+  }
+  
+  svg += `</svg>`;
+  return svg;
 }
 
-/* ===== RADAR ===== */
-function renderRadar(){
-  new Chart(document.getElementById("radar"),{
-    type:"radar",
-    data:{
-      labels:SKILLS,
-      datasets:[
-        {label:"実測",data:[3,3,4,3,3,3,4]},
-        {label:"平均",data:[3,3,3,3,3,3,3],borderDash:[4,4]}
-      ]
+function renderResult(){
+  $("resultMode").textContent = app.mode ? (app.mode==="self"?"自己評価":"客観評価") : "評価モードなし";
+  $("resultScope").textContent = app.scopeText ? `スコープ：${app.scopeText}` : "スコープ：—";
+
+  // Type Logic
+  if(app.typeSkipped){
+    $("typeResultContent").classList.add("hidden");
+    $("typeResultSkipped").classList.remove("hidden");
+    $("radarTypicalLabel").classList.add("hidden");
+  } else {
+    $("typeResultContent").classList.remove("hidden");
+    $("typeResultSkipped").classList.add("hidden");
+    $("radarTypicalLabel").classList.remove("hidden");
+
+    // メインタイプ表示
+    $("mainTypeText").textContent = typeDesignerLabel(app.mainType);
+    
+    // サブタイプ表示（分岐）
+    if(app.subType){
+      $("subTypeText").textContent = typeDesignerLabel(app.subType);
+      $("subTypeText").style.color = "var(--text)";
+      
+      $("typeDesc").textContent = 
+        `【メイン】${typeLabel(app.mainType)}：${TYPE_DESC[app.mainType]}\n\n` +
+        `【サブ】${typeLabel(app.subType)}：${TYPE_DESC[app.subType]}`;
+    } else {
+      $("subTypeText").textContent = "なし（メイン特化）";
+      $("subTypeText").style.color = "var(--muted)";
+      
+      $("typeDesc").textContent = 
+        `【メイン】${typeLabel(app.mainType)}：${TYPE_DESC[app.mainType]}\n\n` +
+        `（スコア差が大きいため、このタイプの特性が特に強く出ています）`;
+    }
+
+    $("typeMapWrap").innerHTML = renderTypeMapSVG(app.mainType, app.subType);
+  }
+
+  // Skill List (Split into Skill and Behavior)
+  const listContainer = $("skillList");
+  listContainer.innerHTML = "";
+
+  const renderGroup = (groupLabel, axes) => {
+    if(axes.length === 0) return;
+    const grpTitle = document.createElement("div");
+    grpTitle.className = "skill-category-label";
+    grpTitle.textContent = groupLabel;
+    listContainer.appendChild(grpTitle);
+
+    axes.forEach(ax=>{
+      const lv = app.skillLevels[ax.id];
+      const diff = lv - 3;
+      const diffTxt = (diff===0) ? "±0" : (diff>0 ? `+${diff}` : `${diff}`);
+      const barW = Math.max(5, (lv/5)*100);
+      const line = document.createElement("div");
+      line.style.padding="8px 0";
+      line.style.fontSize="13px";
+      line.innerHTML = `
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px; align-items:flex-end;">
+          <b>${ax.name}</b>
+          <span>Lv${lv} <span style="color:#9ca3af; font-size:11px">(${diffTxt})</span></span>
+        </div>
+        <div style="height:6px; width:100%; background:#f3f4f6; border-radius:99px; overflow:hidden; margin-bottom:4px;">
+          <div style="height:100%; width:${barW}%; background:var(--acc);"></div>
+        </div>
+        <div class="skill-desc">${ax.desc}</div>
+      `;
+      listContainer.appendChild(line);
+    });
+  };
+
+  const skills = AXES.filter(a => a.category === "Skill");
+  const behaviors = AXES.filter(a => a.category === "Behavior");
+  
+  renderGroup("Skill (スキル)", skills);
+  renderGroup("Behavior (行動・態度)", behaviors);
+
+  // Radar Chart
+  const labels = AXES.map(a=>a.name);
+  const actual = AXES.map(a=>app.skillLevels[a.id]);
+  const avg = labels.map(_=>3);
+  
+  const datasets = [
+    { 
+      label:"実測", 
+      data: actual, 
+      borderWidth: 3, 
+      borderColor:"#f97316", 
+      backgroundColor:"rgba(249, 115, 22, 0.1)", 
+      pointRadius: 3 
     },
-    options:{scales:{r:{min:1,max:5}}}
+    { 
+      label:"平均(Lv3)", 
+      data: avg, 
+      borderWidth: 1, 
+      borderDash: [5,5], 
+      borderColor:"#9ca3af", 
+      pointRadius: 0 
+    }
+  ];
+
+  if(!app.typeSkipped && app.mainType && TYPE_TEMPLATES[app.mainType]){
+    datasets.push({
+      label:`タイプ典型`,
+      data: TYPE_TEMPLATES[app.mainType],
+      borderWidth: 2, 
+      borderDash: [5,5], 
+      borderColor:"#ffe430", 
+      pointRadius: 0
+    });
+  }
+
+  const ctx = $("radar").getContext("2d");
+  if(app.radarChart) app.radarChart.destroy();
+
+  app.radarChart = new Chart(ctx, {
+    type: "radar",
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: { r: { min:0, max:5, ticks:{ stepSize:1, showLabelBackdrop:false }, grid:{ circular:true } } },
+      plugins: { legend: { position:'bottom', labels: { boxWidth:12, padding:10, font:{size:11} } } }
+    }
   });
 }
 
-/* ===== EXPORT ===== */
-function downloadPNG(){
-  const c=document.getElementById("radar");
-  const a=document.createElement("a");
-  a.href=c.toDataURL("image/png");
-  a.download="radar.png";
-  a.click();
-}
 function downloadCSV(){
-  let csv="項目,値\n";
-  csv+=`メインタイプ,${typeLabel(mainType)}\n`;
-  csv+=`サブタイプ,${typeLabel(subType)}\n`;
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"}));
-  a.download="result.csv";
+  const bom = "\uFEFF";
+  let csv = "Category,Group,Key,Value\n";
+  csv += `Meta,-,Date,${new Date().toLocaleString()}\n`;
+  csv += `Meta,-,Mode,${app.mode||"-"}\n`;
+  csv += `Meta,-,Scope,${app.scopeText}\n`;
+  
+  if(!app.typeSkipped){
+    csv += `Type,-,Main,${typeDesignerLabel(app.mainType)}\n`;
+    // サブがあるかどうかで分岐
+    const subLabel = app.subType ? typeDesignerLabel(app.subType) : "なし（メイン特化）";
+    csv += `Type,-,Sub,${subLabel}\n`;
+  } else {
+    csv += `Type,-,Main,Skipped\n`;
+  }
+  
+  AXES.forEach(ax=>{ csv += `Skill,${ax.category},${ax.name},${app.skillLevels[ax.id]}\n`; });
+  
+  const blob = new Blob([bom + csv], { type: "text/csv" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.download = `pd_diag_${new Date().getTime()}.csv`;
+  a.href = url;
   a.click();
+  URL.revokeObjectURL(url);
 }
+
+function downloadPNG(){
+  const target = $("captureArea");
+  
+  // oncloneを使って「画像化するデータ（クローン）」だけにスタイルを適用
+  html2canvas(target, { 
+    scale: 2,
+    onclone: (clonedDoc) => {
+      const clonedElement = clonedDoc.getElementById("captureArea");
+      // 画像化する瞬間だけ余白をつける
+      clonedElement.style.padding = "40px"; 
+      // 必要に応じて幅を調整（余白分がはみ出さないように念のため指定）
+      clonedElement.style.boxSizing = "border-box";
+    }
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `pd_diag_${new Date().getTime()}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
+
+/* =========================
+   EVENTS
+========================= */
+resetAll();
+
+document.querySelectorAll('[data-mode]').forEach(el=>{
+  const click = ()=>setMode(el.dataset.mode);
+  el.addEventListener("click", click);
+  el.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); click(); } });
+});
+
+$("btnStart").addEventListener("click", startTypeTest);
+$("btnSkip").addEventListener("click", skipTypeTest);
+
+$("btnTypeBack").addEventListener("click", backType);
+$("btnTypeReset").addEventListener("click", ()=>{ resetAll(); show("view-home"); });
+
+$("btnSkillBack").addEventListener("click", ()=>{ 
+  if(app.typeSkipped){ resetAll(); show("view-home"); }
+  else { show("view-type"); renderTypeQuestion(); }
+});
+$("btnToResult").addEventListener("click", toResult);
+
+$("btnRestart").addEventListener("click", ()=>{ resetAll(); show("view-home"); });
+$("btnExportCSV").addEventListener("click", downloadCSV);
+$("btnExportPNG").addEventListener("click", downloadPNG);
+
+document.addEventListener("keydown",(e)=>{
+  const onType = !$("view-type").classList.contains("hidden");
+  if(!onType) return;
+  if(app.mode==="self"){
+    if(["1","2","3","4"].includes(e.key)){
+      const idx = parseInt(e.key,10)-1;
+      const options = [2,1,-1,-2];
+      answerSelf(app.typeQ[app.typeIdx], options[idx]);
+    }
+  }else{
+    if(e.key.toLowerCase()==="a"){ answerOther(app.typeQ[app.typeIdx],"A"); }
+    if(e.key.toLowerCase()==="b"){ answerOther(app.typeQ[app.typeIdx],"B"); }
+  }
+});
 </script>
 </body>
 </html>
