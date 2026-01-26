@@ -773,7 +773,23 @@ function renderTypeQuestion(){
   }
   $("btnTypeBack").disabled = (app.typeIdx===0);
 }
+const FAMILY = {
+  yanki_aniki:"yanki", yanki_ubu:"yanki",
+  otaku_you:"otaku", otaku_in:"otaku",
+  shokunin_flexible:"shokunin", shokunin_stubborn:"shokunin",
+  artist_open:"artist", artist_mystery:"artist"
+};
 
+const ALLY = {
+  yanki_aniki:"yanki_ubu", yanki_ubu:"yanki_aniki",
+  otaku_you:"otaku_in", otaku_in:"otaku_you",
+  shokunin_flexible:"shokunin_stubborn", shokunin_stubborn:"shokunin_flexible",
+  artist_open:"artist_mystery", artist_mystery:"artist_open"
+};
+
+function addScore(type, pts){
+  app.typeScores[type] = (app.typeScores[type] || 0) + pts;
+}
 function answerSelf(q, val){
   const v = (val < 0) ? val * 0.5 : val;
   app.typeScores[q.type] += val * q.w;
@@ -781,11 +797,14 @@ function answerSelf(q, val){
   advanceType();
 }
 function answerOther(q, pick){
-  const win=1.5, lose=-1.0;
-  const a=q.A.type, b=q.B.type;
-  if(pick==="A"){ app.typeScores[a]+=win; app.typeScores[b]+=lose; }
-  else { app.typeScores[b]+=win; app.typeScores[a]+=lose; }
-  app.typeAnswers.push({qid:q.id, pick, A:a, B:b});
+  const chosen = q[pick].type;
+  const other  = q[pick==="A" ? "B" : "A"].type;
+  const sameFamily = (FAMILY[chosen] === FAMILY[other]);
+
+  addScore(chosen, 1.0);               // 選んだタイプだけ +1
+  if(!sameFamily) addScore(ALLY[chosen], 0.5); // 異系列なら相方に +0.5
+
+  app.typeAnswers.push({ qid: q.id, pick });
   advanceType();
 }
 function advanceType(){
@@ -802,18 +821,29 @@ function backType(){
   if(app.typeIdx<=0) return;
   app.typeIdx--;
   initScores();
+
   const answered = app.typeAnswers.slice(0, app.typeIdx);
   app.typeAnswers = answered;
+
   answered.forEach(a=>{
     const q = app.typeQ.find(x=>x.id===a.qid);
-    if(app.mode==="self"){ app.typeScores[q.type] += a.val * q.w; }
-    else{
-      const win=1.5, lose=-1.0;
-      const ta=q.A.type, tb=q.B.type;
-      if(a.pick==="A"){ app.typeScores[ta]+=win; app.typeScores[tb]+=lose; }
-      else { app.typeScores[tb]+=win; app.typeScores[ta]+=lose; }
+
+    // self と other で復元ロジックを分ける
+    if(app.mode==="self"){
+      // selfは元の復元方式（val*w）でOK
+      app.typeScores[q.type] += a.val * q.w;
+    } else {
+      // otherは新ルールで復元
+      const pick = a.pick;
+      const chosen = q[pick].type;
+      const other  = q[pick==="A" ? "B" : "A"].type;
+      const sameFamily = (FAMILY[chosen] === FAMILY[other]);
+
+      addScore(chosen, 1.0);
+      if(!sameFamily) addScore(ALLY[chosen], 0.5);
     }
   });
+
   renderTypeQuestion();
 }
 function finalizeTypes(){
