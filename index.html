@@ -10,29 +10,32 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700;900&display=swap" rel="stylesheet">
   
   <style>
+    /* ▼▼▼【カスタマイズエリア】色設定 ▼▼▼ */
     :root{
-      /* Theme: Orange & Shadow */
-      --bg:#f3f4f6;
-      --surface:#ffffff;
-      --text:#111827;
-      --muted:#6b7280;
-      --line:#e5e7eb;
-      --line2:#f3f4f6;
+      /* ベースカラー */
+      --bg:#f3f4f6;       /* 全体の背景（薄いグレー） */
+      --surface:#ffffff;  /* カードの背景（白） */
+      --text:#111827;     /* 文字色（黒に近いグレー） */
+      --muted:#6b7280;    /* 薄い文字色 */
+      --line:#e5e7eb;     /* 線の色 */
       
-      /* Orange Scheme */
-      --acc:#f97316;       /* Orange */
-      --accSoft:#fff7ed;   /* Very light orange */
-      --accHover:#ea580c;  /* Darker orange for hover */
+      /* アクセントカラー（オレンジ） */
+      --acc:#f97316;
+      --accSoft:#fff7ed;
+      --accHover:#ea580c;
       
-      --danger:#dc2626;
-      --success:#ffe430; 
+      /* その他 */
+      --danger:#dc2626;   /* 赤 */
+      --success:#1e3a8a;  /* ネイビー */
 
-      --radius:24px;       /* Unified Radius */
+      /* 形状 */
+      --radius:24px;
       --radius-sm:14px;
       
-      /* Drop Shadow for Cards (No Border) */
+      /* 影 */
       --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -2px rgba(0, 0, 0, 0.04);
     }
+    /* ▲▲▲ 設定ここまで ▲▲▲ */
 
     *{ box-sizing:border-box; }
     body{
@@ -49,53 +52,25 @@
     p{ margin:8px 0 14px; color:var(--muted); line-height:1.65; }
     .small{ font-size:12px; color:var(--muted); }
 
-    /* Layout Grid */
+    /* Layout */
     .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
     @media (max-width:920px){ .grid2{ grid-template-columns:1fr; } }
     .row{ display:flex; gap:12px; flex-wrap:wrap; }
-    
     .vertical-stack{ display:flex; flex-direction:column; gap:24px; max-width:600px; margin:0 auto; }
 
-    /* Surfaces (Updated: No border, Box Shadow) */
-    .surface{
-      background:var(--surface);
-      border-radius:var(--radius);
-      padding:24px;
-      border:none;
-      box-shadow: var(--shadow-card);
-    }
-    .screen{
-      background:var(--surface);
-      border-radius:var(--radius);
-      padding:24px;
-      border:none;
-      box-shadow: var(--shadow-card);
-    }
-    .result-card{
-      background: #fff;
-      border-radius: var(--radius); /* Unified radius */
+    /* Surfaces */
+    .surface, .screen, .result-card, .header-info {
+      background: var(--surface);
+      border-radius: var(--radius);
       padding: 24px;
       border: none;
       box-shadow: var(--shadow-card);
-      height: 100%;
-      min-width: 0;
     }
-
-    /* Header Info (Updated) */
-    .header-info {
-      background: #fff;
-      border-radius: var(--radius);
-      padding: 16px 24px;
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--muted);
-      line-height: 1.6;
-      border: none;
-      box-shadow: var(--shadow-card);
-    }
+    .header-info { padding: 16px 24px; font-size: 12px; color: var(--muted); line-height: 1.6; margin-top: 10px; }
+    .result-card { height: 100%; min-width: 0; }
 
     .rule{ height:1px; background:var(--line); margin:18px 0; }
-    .rule.soft{ background:var(--line2); }
+    .rule.soft{ background:#f3f4f6; }
 
     /* Clickable Items */
     .tap{
@@ -110,17 +85,14 @@
       transition: all .2s ease;
     }
     .tap:hover{ background-color: var(--accSoft); border-color: var(--acc); transform: translateY(-1px); }
-    .tap.selected{
-      border-color: var(--acc);
-      background: var(--accSoft);
-      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.15);
-    }
+    .tap.selected{ border-color: var(--acc); background: var(--accSoft); box-shadow: 0 4px 14px rgba(249, 115, 22, 0.15); }
     .tap.selected .chev{ background:#ffffff; border-color: rgba(249, 115, 22, 0.35); color: var(--acc); }
     .tap .chev{
       flex:0 0 auto; width:30px; height:30px; border-radius:999px;
       display:grid; place-items:center; background:#f9fafb;
       border:1px solid var(--line); color:#374151; font-weight:900;
     }
+    .tap.neutral:hover{ background-color: #f3f4f6; border-color: #9ca3af; }
 
     /* Buttons */
     .btn{
@@ -149,47 +121,51 @@
     }
     input[type="text"]:focus{ border-color: var(--acc); box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1); }
 
-    /* Accordion / Checkbox */
+    /* Accordion */
     details{ border:1px solid var(--line); border-radius:12px; background:#fff; padding:10px 12px; }
     summary{ cursor:pointer; font-weight:700; list-style:none; display:flex; align-items:center; justify-content:space-between; padding:6px 4px; user-select:none; }
     summary::-webkit-details-marker{ display:none; }
-    .chk{ display:flex; gap:10px; align-items:flex-start; padding:10px 4px; border-top:1px solid var(--line2); cursor: pointer; }
+    .chk{ display:flex; gap:10px; align-items:flex-start; padding:10px 4px; border-top:1px solid var(--line); cursor: pointer; }
     .chk:hover{ background: #f9fafb; }
     input[type="checkbox"]{ margin-top:3px; transform:scale(1.15); cursor: pointer; accent-color: var(--acc); }
 
-    .kpi{ display:flex; gap:10px; flex-wrap:wrap; }
-    .kpi .mini{ border:none; border-radius:12px; padding:10px 14px; background:var(--line2); min-width: 100px; }
-    
     .hidden{ display:none !important; }
     
     /* Result Specifics */
     .mapBox{ border:1px solid var(--line); border-radius:12px; background:#fff; padding:12px; }
     .result-section-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap:8px; color:var(--acc); }
-    .result-section-header { background:var(--line2); padding:10px 14px; border-radius:8px; margin-bottom:16px; font-weight:bold; text-align:center; }
+    .result-section-header { background:#f3f4f6; padding:10px 14px; border-radius:8px; margin-bottom:16px; font-weight:bold; text-align:center; }
     
     .skill-category-label {
       font-size: 12px; font-weight: 900; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase;
       margin: 20px 0 8px; border-bottom: 1px solid var(--line); padding-bottom: 4px;
     }
-    .skill-desc {
-      font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px;
-    }
+    .skill-desc { font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 4px; }
 
-    /* Main vs Sub emphasis */
     .type-display-main { font-size: 24px; font-weight: 900; color: var(--acc); line-height: 1.3; }
     .type-display-sub { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.4; }
     .type-label-tag { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
 
+    /* ▼▼▼ 追加修正：タイプ説明の背景スタイル ▼▼▼ */
+    #typeDesc {
+      white-space: pre-wrap;
+      background: #f3f4f6; /* 背景色（薄いグレー） */
+      padding: 12px;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1.6;
+    }
   </style>
 </head>
 
 <body>
 <div class="wrap">
-  <h1>Product Designer Type & Skill Diagnostic</h1>
+  <h1>Product Designer Type & Skill Diagnostic v0.2</h1>
   
   <div class="header-info">
     <div style="font-weight:700; margin-bottom:4px;">診断概要</div>
-    <div>タイプ：メイン（属性）＋サブ ／ 能力：7軸（GATE）、表示：平均＋メインタイプの典型値</div>
+    <div>タイプ：メイン（属性）＋サブ ／ 能力：7軸（GATE）、表示：平均＋典型値</div>
     <div style="margin-top:6px;">※優劣判定ではありません。配置・育成・対話の材料として使用してください。</div>
   </div>
 
@@ -229,7 +205,7 @@
         <h3>スタート</h3>
         <div style="margin-top:10px; display:flex; flex-direction:column; gap:12px;">
           <button id="btnStart" class="btn primary" style="width:100%" disabled>タイプ判定へ進む</button>
-          <button id="btnSkip" class="btn" style="width:100%; font-weight:normal; color:#4b5563;">能力判定へ進む（タイプ判定をスキップ）</button>
+          <button id="btnSkip" class="btn" style="width:100%; font-weight:normal; color:#4b5563;">タイプ判定をスキップ（能力判定のみ）</button>
         </div>
       </div>
     </div>
@@ -240,7 +216,7 @@
 
     <div class="row" style="justify-content:space-between; align-items:center">
       <div class="pill"><span id="modeBadge">mode</span><span class="small">｜</span><span id="qCounter">0/24</span></div>
-      <div class="small">PCショートカット：1〜4 / A・B</div>
+      <div class="small">PCショートカット：1〜4 / A・B・C</div>
     </div>
 
     <div style="margin-top:10px" class="progress"><div id="qBar" class="bar"></div></div>
@@ -278,21 +254,22 @@
     </div>
   </section>
 
- <section id="view-result" class="hidden">
+  <section id="view-result" class="hidden">
     
     <div id="captureArea" style="background:var(--bg); padding:0;">
       
-      <div class="surface" style="margin-bottom:20px;">
-        <h2>4) 診断結果</h2>
-        <div class="pill">
-          <span id="resultMode">—</span>
-          <span class="small">｜</span>
-          <span id="resultScope" class="small">—</span>
+      <div class="surface" style="margin-bottom:20px; position:relative;">
+        <div style="margin-top:20px;">
+          <h2>4) 診断結果</h2>
+          <div class="pill">
+            <span id="resultMode">—</span>
+            <span class="small">｜</span>
+            <span id="resultScope" class="small">—</span>
+          </div>
         </div>
       </div>
 
       <div class="grid2">
-        
         <div class="result-card" id="typeResultCard">
           <div class="result-section-header">タイプ診断結果</div>
           
@@ -315,7 +292,7 @@
             <div class="rule soft"></div>
 
             <div class="result-section-title">説明</div>
-            <div id="typeDesc" class="small" style="white-space:pre-wrap; background:var(--line2); padding:12px; border-radius:12px;">—</div>
+            <div id="typeDesc" class="small">—</div>
           </div>
           
           <div id="typeResultSkipped" class="hidden" style="text-align:center; padding:40px 0; color:var(--muted);">
@@ -332,20 +309,23 @@
           <div class="rule soft"></div>
           
           <div class="result-section-title">能力レーダーチャート</div>
-          <div class="small" style="margin-bottom:8px;">実測（橙太線）／ 平均Lv3（灰点線）<span id="radarTypicalLabel"> ／ メインタイプ典型（青破線）</span></div>
+          <div class="small" style="margin-bottom:8px;">実測（橙太線）／ 平均Lv3（グレー線）<span id="radarTypicalLabel"> ／ タイプ典型（青点線）</span></div>
           <div style="position: relative; width: 100%; min-height:300px;">
              <canvas id="radar"></canvas>
           </div>
         </div>
-
       </div>
 
       <div class="small" style="text-align:right; margin-top:20px;">2026, Product Designer Type & Skill Diagnostic</div>
-
     </div> 
+    
     <div class="surface" style="margin-top:20px;">
       <div class="row" style="justify-content: space-between; align-items: flex-end;">
-        <button id="btnRestart" class="btn danger-outline">もう一度（最初に戻る）</button>
+        <div style="display:flex; gap:10px;">
+          <button id="btnResultBack" class="btn">能力判定へ戻る</button>
+          <button id="btnRestart" class="btn danger-outline">最初に戻る</button>
+        </div>
+        
         <div style="display:flex; gap:10px; align-items:center;">
           <span class="small">書き出し：</span>
           <button id="btnExportCSV" class="btn">CSV保存</button>
@@ -362,7 +342,7 @@
 
 <script>
 /* =========================
-   DATA
+   DATA DEFINITIONS
 ========================= */
 const TYPES = [
   { id:"yanki_aniki", label:"兄貴肌ヤンキー" },
@@ -375,7 +355,13 @@ const TYPES = [
   { id:"artist_mystery", label:"不思議アーティスト" }
 ];
 
-/* Updated Descriptions */
+const RELATED_TYPES = {
+  yanki_aniki: "yanki_ubu", yanki_ubu: "yanki_aniki",
+  otaku_you: "otaku_in", otaku_in: "otaku_you",
+  shokunin_flexible: "shokunin_stubborn", shokunin_stubborn: "shokunin_flexible",
+  artist_open: "artist_mystery", artist_mystery: "artist_open"
+};
+
 const TYPE_DESC = {
   yanki_aniki: "現場での停滞や迷いに対して、決断と推進で状況を動かすタイプです。未整理な状態でも「まず進める」判断ができ、チームのエンジンとして機能します。一方で立ち止まって振り返る時間を取りにくく、自己省察や合意形成が弱いと、勢い先行で手戻りや疲弊を招くことがあります。推進力に内省や調整が伴うと、非常に安定したリーダータイプになります。",
   yanki_ubu: "責任感が強く、期待に応えようと前に出るものの、内面では評価や失敗を強く意識しているタイプです。断る判断が遅れやすく、負荷を抱え込みがちな傾向があります。周囲からのフォローや役割の整理があることで力を発揮しやすく、逆に放置されると消耗しやすい特徴があります。推進力はあるため、支え方次第で大きく伸びます。",
@@ -396,7 +382,7 @@ const AXES = [
       "ユーザー・事業・技術の視点を分けて整理している",
       "表層の要望と本質のズレを指摘したことがある",
       "課題設定そのものを変更し、方針に影響を与えた",
-      "チーム内で「課題の定義役」として期待されている"
+      "チーム内で「課題の定義役」を担う場面が多い"
     ],
     gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
   },
@@ -406,7 +392,7 @@ const AXES = [
       "複数の要件を一本の方向性にまとめて説明できる",
       "判断に迷った際、コンセプトを基準に取捨選択している",
       "メンバー間の認識ズレを、コンセプトで収束させた",
-      "コンセプトが資料・アウトプットに一貫して反映されている",
+      "コンセプトが資料や成果物に一貫して反映されている",
       "関係者がそのコンセプトを引用して判断している",
       "コンセプトが意思決定を明確に前進させた実績がある"
     ],
@@ -467,7 +453,7 @@ const AXES = [
       "新しい手法・技術を試している",
       "先行事例や兆しをプロジェクトに持ち込んでいる",
       "学習内容がアウトプットに反映されている",
-      "周囲から「新しい視点」を期待されている",
+      "新しい視点を出す役割を担う場面が増えている",
       "まだ一般化していない視点を提案したことがある"
     ],
     gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
@@ -486,164 +472,116 @@ const TYPE_TEMPLATES = {
 };
 
 const SELF_Q = [
-  // 兄貴肌ヤンキー（推進・決断）
-  {id:"S01", t:"情報が出揃っていなくても、まず方向性を決めて前に進めるほうだ", type:"yanki_aniki", w:1},
-  {id:"S02", t:"議論が停滞すると、結論や次の一手を置いて場を動かすことが多い", type:"yanki_aniki", w:1},
-  {id:"S03", t:"完成度よりも、まず試して学ぶ進め方を選びやすい", type:"yanki_aniki", w:1},
-
-  // うぶヤンキー（責任感・抱え込み）
-  {id:"S04", t:"頼まれると引き受けやすく、後から調整することが多い", type:"yanki_ubu", w:1},
-  {id:"S05", t:"自分の負荷が高いと感じても、すぐに周囲に相談するのは得意ではない", type:"yanki_ubu", w:1},
-  {id:"S06", t:"期待に応えようとして、担当範囲が増えやすい", type:"yanki_ubu", w:1},
-
-  // 陽キャオタク（整理・構造化）
-  {id:"S07", t:"判断が必要な場面では、前提・論点・選択肢を整理してから進めたい", type:"otaku_you", w:1},
-  {id:"S08", t:"会話が散らかっているとき、論点を分けて見える化することが多い", type:"otaku_you", w:1},
-  {id:"S09", t:"意思決定の根拠や判断基準を言語化して共有するのが得意だ", type:"otaku_you", w:1},
-
-  // 陰キャオタク（整合性・リスク視点）
-  {id:"S10", t:"矛盾や筋の悪さに気づくと、まず整合性を取り直したくなる", type:"otaku_in", w:1},
-  {id:"S11", t:"納得できない前提のまま進めることに、強い違和感を覚えやすい", type:"otaku_in", w:1},
-  {id:"S12", t:"進行中でも、抜けやリスクを指摘して流れを修正することがある", type:"otaku_in", w:1},
-
-  // 柔軟な職人（すり合わせ・反映）
-  {id:"S13", t:"途中段階でも共有し、フィードバックを取り込みながら仕上げたい", type:"shokunin_flexible", w:1},
-  {id:"S14", t:"制約や指摘が出ても、成立する形に組み替えるのが得意だ", type:"shokunin_flexible", w:1},
-  {id:"S15", t:"自分の案に固執するより、対話で最適点を探すほうだ", type:"shokunin_flexible", w:1},
-
-  // 頑固な職人（基準・完成優先）
-  {id:"S16", t:"自分の品質基準があり、そこを下回る修正は受け入れにくい", type:"shokunin_stubborn", w:1},
-  {id:"S17", t:"途中で意見をもらうより、ある程度完成度を上げてから見せたい", type:"shokunin_stubborn", w:1},
-  {id:"S18", t:"意思決定では、納得できる完成形を優先して提案しやすい", type:"shokunin_stubborn", w:1},
-
-  // ひらけたアーティスト（投げる・混ぜる）
-  {id:"S19", t:"言語化が途中でも、違和感や面白さを先に出してみることがある", type:"artist_open", w:1},
-  {id:"S20", t:"他者の反応や視点を取り込むことで、アイデアが育つと感じる", type:"artist_open", w:1},
-  {id:"S21", t:"場が煮詰まると、視点をずらす問いを投げてみたくなる", type:"artist_open", w:1},
-
-  // 不思議アーティスト（没入・自走）
-  {id:"S22", t:"他者の理解よりも、自分の中の確信を優先して進めることがある", type:"artist_mystery", w:1},
-  {id:"S23", t:"説明を増やすより、まず形や結果で示したいと感じることが多い", type:"artist_mystery", w:1},
-  {id:"S24", t:"他人と混ぜるより、一人で考え続けることで深まることが多い", type:"artist_mystery", w:1}
+  {id:"S01", t:"状況が未整理でも、「まずはここまで」と区切って前に進める判断ができる", type:"yanki_aniki", w:2},
+  {id:"S02", t:"議論が停滞した際は、自分が叩き台や仮の結論を出して空気を動かす", type:"yanki_aniki", w:1},
+  {id:"S03", t:"机上で考え込むより、動きながら修正していくスタイルが合っている", type:"yanki_aniki", w:1},
+  {id:"S04", t:"期待されると、少し背伸びをしてでも応えようと頑張ってしまう", type:"yanki_ubu", w:2},
+  {id:"S05", t:"不安なことがあっても、表向きは気丈に振る舞うことが多い", type:"yanki_ubu", w:1},
+  {id:"S06", t:"頼られると断るのが難しく、自分のキャパシティを超えてしまいがちだ", type:"yanki_ubu", w:1},
+  {id:"S07", t:"感情や勢いだけでなく、事実やロジックで整理した方が納得感がある", type:"otaku_you", w:2},
+  {id:"S08", t:"複雑な要件を整理し、関係者が理解しやすい言葉に直すのが得意だ", type:"otaku_you", w:1},
+  {id:"S09", t:"判断に迷った時は、まず「何を基準に決めるか」という物差しを作る", type:"otaku_you", w:1},
+  {id:"S10", t:"自分の中で筋が通っていない方針には、違和感を持ちやすい", type:"otaku_in", w:2},
+  {id:"S11", t:"「とりあえず進めよう」と言われると、潜在的なリスクや矛盾が気になる", type:"otaku_in", w:1},
+  {id:"S12", t:"議論が散らかった時は、一度持ち帰って静かに思考を整理したい", type:"otaku_in", w:1},
+  {id:"S13", t:"自分のこだわりよりも、チームの合意やユーザーの要望を形にしたい", type:"shokunin_flexible", w:2},
+  {id:"S14", t:"完成手前のラフな状態でも、こまめに共有してフィードバックをもらう", type:"shokunin_flexible", w:1},
+  {id:"S15", t:"制約条件がある方が、工夫のしがいがあって燃えるタイプだ", type:"shokunin_flexible", w:1},
+  {id:"S16", t:"ある程度納得できる品質になるまでは、自分の中で温めておきたい", type:"shokunin_stubborn", w:2},
+  {id:"S17", t:"周囲の評価も大事だが、自分の美意識や品質基準をより大切にしたい", type:"shokunin_stubborn", w:1},
+  {id:"S18", t:"説明資料を作る時間があったら、アウトプット自体の精度を上げたい", type:"shokunin_stubborn", w:1},
+  {id:"S19", t:"言葉にならない違和感やアイデアでも、とりあえず場に出してみる", type:"artist_open", w:2},
+  {id:"S20", t:"停滞した空気を、新しい視点や発想で切り替えることができる", type:"artist_open", w:1},
+  {id:"S21", t:"一人で黙々と考えるより、他人と会話しながら発想を広げたい", type:"artist_open", w:1},
+  {id:"S22", t:"独自の関心領域があり、周囲の理解が得にくくても深掘りしたい", type:"artist_mystery", w:2},
+  {id:"S23", t:"常識や前例にとらわれず、独自の角度から物事を見ていることが多い", type:"artist_mystery", w:1},
+  {id:"S24", t:"頭の中にあるイメージを、言葉で説明することに難しさを感じる", type:"artist_mystery", w:1}
 ];
 
 const OTHER_Q = [
-  // ヤンキー内（兄貴 vs うぶ）
-  {id:"O01", p:"混乱した場面で、まず出やすい動きは？",
-    A:{t:"周囲に指示や優先順位を出し、その場を前に進める", type:"yanki_aniki"},
-    B:{t:"できるだけ引き受けて支えるが、負荷が表に出やすい", type:"yanki_ubu"}},
-
-  {id:"O02", p:"急な依頼が重なったときの反応は？",
-    A:{t:"役割分担を切り直し、意思決定を促して処理する", type:"yanki_aniki"},
-    B:{t:"断りづらく、抱え込みが増えて調子を崩しやすい", type:"yanki_ubu"}},
-
-  {id:"O03", p:"周囲からの期待が強いとき、見えやすい特徴は？",
-    A:{t:"強気に見せつつも推進を優先して動く", type:"yanki_aniki"},
-    B:{t:"不安が強まり、確認やフォローを求めることが増える", type:"yanki_ubu"}},
-
-  // オタク内（陽キャ vs 陰キャ）
-  {id:"O04", p:"議論が曖昧なまま進みそうなとき、出やすい反応は？",
-    A:{t:"前提・論点・選択肢を整理して可視化する", type:"otaku_you"},
-    B:{t:"筋の悪さやリスクを指摘し、納得できるまで止める", type:"otaku_in"}},
-
-  {id:"O05", p:"レビューで違和感が出たとき、よく見られる動きは？",
-    A:{t:"要点を構造化し、判断材料を整えて合意を取りにいく", type:"otaku_you"},
-    B:{t:"品質や整合性の穴を見つけ、厳密に詰める", type:"otaku_in"}},
-
-  {id:"O06", p:"結論が急がれる場面での立ち位置は？",
-    A:{t:"判断基準を作り、迷いを減らす方向に持っていく", type:"otaku_you"},
-    B:{t:"納得できない根拠には同意せず、慎重に進める", type:"otaku_in"}},
-
-  // 職人内（柔軟 vs 頑固）
-  {id:"O07", p:"修正意見が来たときの初動は？",
-    A:{t:"いったん取り込み、成立する形に整えていく", type:"shokunin_flexible"},
-    B:{t:"自分の品質基準から外れる修正は受け入れにくい", type:"shokunin_stubborn"}},
-
-  {id:"O08", p:"途中共有に対する姿勢は？",
-    A:{t:"途中でも見せて擦り合わせ、完成度を上げる", type:"shokunin_flexible"},
-    B:{t:"完成形に近づけてから提示することが多い", type:"shokunin_stubborn"}},
-
-  {id:"O09", p:"チームの品質に関して出やすい動きは？",
-    A:{t:"他者のアウトプットにも手を入れて底上げする", type:"shokunin_flexible"},
-    B:{t:"自分の担当領域で高品質を出すことに集中する", type:"shokunin_stubborn"}},
-
-  {id:"O10", p:"説明・説得のしかたとして近いのは？",
-    A:{t:"制約や条件を踏まえた代替案を複数示す", type:"shokunin_flexible"},
-    B:{t:"基準や意図は説明するが、譲らない線がはっきりしている", type:"shokunin_stubborn"}},
-
-  // アーティスト内（ひらけた vs 不思議）
-  {id:"O11", p:"新しいアイデアが必要な場面での動きは？",
-    A:{t:"未整理でも問いや方向性を投げて、場を動かす", type:"artist_open"},
-    B:{t:"自分の中で深め、形になるまで外に出しにくい", type:"artist_mystery"}},
-
-  {id:"O12", p:"発想の共有スタイルとして近いのは？",
-    A:{t:"他者反応を取り込みながら発想を育てる", type:"artist_open"},
-    B:{t:"反応に左右されず、独自の探究を優先する", type:"artist_mystery"}},
-
-  {id:"O13", p:"説明の仕方で見えやすい特徴は？",
-    A:{t:"言語化しきれていなくても意図を外に出す", type:"artist_open"},
-    B:{t:"意図の翻訳より、成果物で伝えることが多い", type:"artist_mystery"}},
-
-  // 異系列（系列ボーナス前提で“飛び”を防ぐ）
-  {id:"O14", p:"停滞した会議で最初に起こす行動は？",
-    A:{t:"決めて動かし、あとで整える", type:"yanki_aniki"},
-    B:{t:"論点を再定義し、条件を揃える", type:"otaku_you"}},
-
-  {id:"O15", p:"情報が不足しているときの動きは？",
-    A:{t:"仮置きで前に進め、学びながら修正する", type:"yanki_aniki"},
-    B:{t:"不足情報を洗い出し、判断の前提を固める", type:"otaku_you"}},
-
-  {id:"O16", p:"新しい方向性を出すときのアプローチは？",
-    A:{t:"視点をずらす問いを出し、発想の幅を広げる", type:"artist_open"},
-    B:{t:"既存構造を整理し、成立する選択肢を作る", type:"otaku_you"}},
-
-  {id:"O17", p:"品質と期限が衝突したときの優先は？",
-    A:{t:"期限・進行を守る判断をしやすい", type:"yanki_aniki"},
-    B:{t:"品質基準を守る判断をしやすい", type:"shokunin_stubborn"}},
-
-  {id:"O18", p:"制約が多い条件での解き方は？",
-    A:{t:"制約内で成立する形に落とす", type:"shokunin_flexible"},
-    B:{t:"制約の捉え直しや前提変更から入る", type:"artist_open"}},
-
-  // ★ここが肝：頑固 vs 不思議を“行動の違い”で分離（置き換え必須）
-  {id:"O19", p:"「周囲が理解していない」と感じたときの反応は？",
-    A:{t:"意図や基準を説明し、理解を取りにいく（ただし譲らない線はある）", type:"shokunin_stubborn"},
-    B:{t:"理解を前提にせず、自分の探究を優先して進める", type:"artist_mystery"}},
-
-  {id:"O20", p:"アウトプットの狙いが伝わらないときの動きは？",
-    A:{t:"見せ方・構成を調整して通しにいく", type:"shokunin_flexible"},
-    B:{t:"伝わらなくても、自分の意図を崩さずに深める", type:"artist_mystery"}},
-
-  {id:"O21", p:"「とりあえず進めよう」と言われたときの反応は？",
-    A:{t:"違和感や論理の穴を指摘し、止めることがある", type:"otaku_in"},
-    B:{t:"まず進め、途中で調整する", type:"yanki_aniki"}},
-
-  {id:"O22", p:"合意形成でよく担う役割は？",
-    A:{t:"情報を整理し、比較可能な選択肢にする", type:"otaku_you"},
-    B:{t:"決断し、進行を前に進める", type:"yanki_aniki"}},
-
-  {id:"O23", p:"アイデアの出し方として近いのは？",
-    A:{t:"思いつき段階でも共有し、反応で育てる", type:"artist_open"},
-    B:{t:"自分の中で形にしてから共有する", type:"shokunin_stubborn"}},
-
-  {id:"O24", p:"トラブル直後の第一手は？",
-    A:{t:"現場対応を主導し、後で整える", type:"yanki_aniki"},
-    B:{t:"原因と再発防止の筋を整理してから動く", type:"otaku_in"}}
+  {id:"O01", p:"仕様が未定で進まない時の反応は？",
+    A:{t:"仮決定をして、まず前に進める", type:"yanki_aniki"},
+    B:{t:"前提条件を整理し直す", type:"otaku_you"}},
+  {id:"O02", p:"スケジュールが厳しい局面での動きは？",
+    A:{t:"期限を守ることを最優先にする", type:"yanki_aniki"},
+    B:{t:"関係者と調整して着地点を探る", type:"shokunin_flexible"}},
+  {id:"O03", p:"アイデア出しの場での振る舞いは？",
+    A:{t:"現実的な実現案を素早く探る", type:"yanki_aniki"},
+    B:{t:"意外性のあるアイデアで場を刺激する", type:"artist_open"}},
+  {id:"O04", p:"トラブル発生時の初動は？",
+    A:{t:"自ら率先して動き、指示を出す", type:"yanki_aniki"},
+    B:{t:"不安だが「大丈夫」と引き受ける", type:"yanki_ubu"}}, 
+  {id:"O05", p:"曖昧な指示が来た時の対応は？",
+    A:{t:"「まずは形にしてみます」と動く", type:"yanki_aniki"},
+    B:{t:"目的や背景を丁寧に確認する", type:"otaku_in"}},
+  {id:"O06", p:"品質基準で意見が割れたときは？",
+    A:{t:"スピードや効率を優先する", type:"yanki_aniki"},
+    B:{t:"自身の品質基準を優先する", type:"shokunin_stubborn"}},
+  {id:"O07", p:"全く新しい技術へのスタンスは？",
+    A:{t:"使えるならすぐに試してみる", type:"yanki_aniki"},
+    B:{t:"独自の世界観に取り込めそうか考える", type:"artist_mystery"}},
+  {id:"O08", p:"難しい修正依頼が来たときは？",
+    A:{t:"期待に応えようと引き受ける", type:"yanki_ubu"},
+    B:{t:"矛盾点を指摘して調整する", type:"otaku_in"}},
+  {id:"O09", p:"タスク過多になった時の様子は？",
+    A:{t:"責任感から一人で頑張ろうとする", type:"yanki_ubu"},
+    B:{t:"周囲と連携しながらこなす", type:"shokunin_flexible"}},
+  {id:"O10", p:"大きなチャンスが来た時の反応は？",
+    A:{t:"失敗しないよう入念に準備する", type:"yanki_ubu"},
+    B:{t:"面白そうなら直感で飛びつく", type:"artist_open"}},
+  {id:"O11", p:"意思決定を迫られたときは？",
+    A:{t:"正解かどうか慎重になる", type:"yanki_ubu"},
+    B:{t:"判断基準を作って決める", type:"otaku_you"}},
+  {id:"O12", p:"周囲からの評価については？",
+    A:{t:"期待されているか気にする方だ", type:"yanki_ubu"},
+    B:{t:"あまり気にしていないようだ", type:"artist_mystery"}},
+  {id:"O13", p:"フィードバックを受けた時の反応は？",
+    A:{t:"構造的に整理して理解する", type:"otaku_you"},
+    B:{t:"柔軟に取り入れて改善する", type:"shokunin_flexible"}},
+  {id:"O14", p:"新しい企画を提案するときは？",
+    A:{t:"ロジックと根拠を固めて出す", type:"otaku_you"},
+    B:{t:"未完成でも感覚や兆しを共有する", type:"artist_open"}},
+  {id:"O15", p:"議論が紛糾したときは？",
+    A:{t:"論点を整理して交通整理する", type:"otaku_you"},
+    B:{t:"納得いくまで立ち止まって考える", type:"otaku_in"}}, 
+  {id:"O16", p:"アウトプットのこだわり方は？",
+    A:{t:"説明可能性や整合性を重視", type:"otaku_you"},
+    B:{t:"細部の美しさや完成度を重視", type:"shokunin_stubborn"}},
+  {id:"O17", p:"興味の対象は？",
+    A:{t:"仕組みや構造の解明", type:"otaku_you"},
+    B:{t:"独自の深淵な世界観", type:"artist_mystery"}},
+  {id:"O18", p:"納得できない仕様に対する態度は？",
+    A:{t:"懸念点を伝えて慎重になる", type:"otaku_in"},
+    B:{t:"自分の美学でより良く上書きする", type:"shokunin_stubborn"}},
+  {id:"O19", p:"他者とのコミュニケーションは？",
+    A:{t:"内省や思考の時間を大切にする", type:"otaku_in"},
+    B:{t:"理解されなくても気にしない", type:"artist_mystery"}},
+  {id:"O20", p:"チームでの立ち位置は？",
+    A:{t:"リスクや課題を見つける役", type:"otaku_in"},
+    B:{t:"空気を変える発想役", type:"artist_open"}},
+  {id:"O21", p:"作業の進め方で近いのは？",
+    A:{t:"対話しながら形を作る", type:"shokunin_flexible"},
+    B:{t:"一人で没頭して作り込む", type:"shokunin_stubborn"}}, 
+  {id:"O22", p:"アイデアの広げ方は？",
+    A:{t:"実現可能な範囲で着実に広げる", type:"shokunin_flexible"},
+    B:{t:"制限なく自由に広げる", type:"artist_open"}},
+  {id:"O23", p:"未知の領域に取り組むときは？",
+    A:{t:"既存の手法を応用して挑む", type:"shokunin_flexible"},
+    B:{t:"独自のやり方を探究する", type:"artist_mystery"}},
+  {id:"O24", p:"完成したものに対する態度は？",
+    A:{t:"細部まで完璧に仕上げたい", type:"shokunin_stubborn"},
+    B:{t:"他人の反応を見て変化させたい", type:"artist_open"}}
 ];
 
 const TYPE_MAP = {
-  // ヤンキー系
-  yanki_aniki:        { x:-0.8, y: 0.4, group:'open' },
-  yanki_ubu:          { x:-0.6, y:-0.2, group:'close' },
-  // オタク系
-  otaku_you:          { x: 0.7, y: 0.4, group:'open' },
-  otaku_in:           { x: 0.7, y:-0.4, group:'close' },
-  // 職人系
-  shokunin_flexible:  { x:-0.4, y:-0.7, group:'open' },
-  shokunin_stubborn:  { x: 0.3, y:-0.8, group:'close' },
-  // アーティスト系
+  yanki_aniki:        { x:-0.7, y:-0.1, group:'open' },
+  yanki_ubu:          { x:-0.6, y:-0.6, group:'close' },
+  otaku_you:          { x: 0.7, y: 0.2, group:'open' },
+  otaku_in:           { x: 0.8, y:-0.5, group:'close' },
+  shokunin_flexible:  { x: 0.2, y:-0.4, group:'open' },
+  shokunin_stubborn:  { x:-0.2, y:-0.8, group:'close' },
   artist_open:        { x:-0.5, y: 0.7, group:'open' },
-  artist_mystery:     { x: 0.2, y: 0.8, group:'close' }
+  artist_mystery:     { x: 0.5, y: 0.8, group:'close' }
 };
 
 /* =========================
@@ -701,7 +639,7 @@ function resetAll(){
 
   document.querySelectorAll('[data-mode]').forEach(el=>el.classList.remove("selected"));
   $("btnStart").disabled = true;
-  $("scopeText").value = "";
+  // Note: We do NOT clear $("scopeText").value here to keep user input
 }
 
 function setMode(mode){
@@ -766,62 +704,76 @@ function renderTypeQuestion(){
     $("selfChoices").classList.remove("hidden");
   }else{
     $("qText").textContent = q.p;
-    ["A","C","B"].forEach(key=>{
+    
+    // Option A & B
+    ["A","B"].forEach(key=>{
       const div = document.createElement("div");
       div.className = "tap";
-      const label = (key==="C")
-  ? "どちらともいえない（判断材料が不足 / 場面による）"
-  : q[key].t;
       div.innerHTML = `
-        <div class="left"><div class="title"><span style="margin-right:8px; font-weight:900;">${key}</span>${label}</div></div>
+        <div class="left"><div class="title"><span style="margin-right:8px; font-weight:900;">${key}</span>${q[key].t}</div></div>
         <div class="chev">›</div>`;
       div.onclick = ()=>answerOther(q, key);
       $("otherChoices").appendChild(div);
     });
+
+    // Option C (Neutral)
+    const divC = document.createElement("div");
+    divC.className = "tap neutral";
+    divC.innerHTML = `
+      <div class="left">
+        <div class="title"><span style="margin-right:8px; font-weight:900;">C</span>どちらともいえない（判断材料が不足 / 場面による）</div>
+      </div>
+      <div class="chev">›</div>`;
+    divC.onclick = ()=>answerOther(q, "C");
+    $("otherChoices").appendChild(divC);
+
     $("otherChoices").classList.remove("hidden");
   }
-  $("btnTypeBack").disabled = (app.typeIdx===0);
+  // Back button always enabled
+  $("btnTypeBack").disabled = false;
 }
-const FAMILY = {
-  yanki_aniki:"yanki", yanki_ubu:"yanki",
-  otaku_you:"otaku", otaku_in:"otaku",
-  shokunin_flexible:"shokunin", shokunin_stubborn:"shokunin",
-  artist_open:"artist", artist_mystery:"artist"
-};
 
-const ALLY = {
-  yanki_aniki:"yanki_ubu", yanki_ubu:"yanki_aniki",
-  otaku_you:"otaku_in", otaku_in:"otaku_you",
-  shokunin_flexible:"shokunin_stubborn", shokunin_stubborn:"shokunin_flexible",
-  artist_open:"artist_mystery", artist_mystery:"artist_open"
-};
-
-function addScore(type, pts){
-  app.typeScores[type] = (app.typeScores[type] || 0) + pts;
-}
 function answerSelf(q, val){
-  const v = (val < 0) ? val * 0.5 : val; // ←弱めたいなら
+  const v = (val < 0) ? val * 0.5 : val; // 否定だけ弱める
   app.typeScores[q.type] += v * q.w;
   app.typeAnswers.push({qid:q.id, val, v, type:q.type, w:q.w});
   advanceType();
 }
+
 function answerOther(q, pick){
-  if(pick==="C"){
-    app.typeAnswers.push({ qid: q.id, pick });
+  // C: Neither
+  if(pick === "C"){
+    app.typeAnswers.push({qid:q.id, pick, scoreDetails: null});
     advanceType();
     return;
   }
 
-  const chosen = q[pick].type;
-  const other  = q[pick==="A" ? "B" : "A"].type;
-  const sameFamily = (FAMILY[chosen] === FAMILY[other]);
+  // A or B
+  const selectedType = (pick === "A") ? q.A.type : q.B.type;
+  const opposingType = (pick === "A") ? q.B.type : q.A.type;
+  const relatedType  = RELATED_TYPES[selectedType];
 
-  addScore(chosen, 1.0);
-  if(!sameFamily) addScore(ALLY[chosen], 0.5);
+  // 1. Selected +1
+  app.typeScores[selectedType] += 1.0;
 
-  app.typeAnswers.push({ qid: q.id, pick });
+  // 2. Related logic
+  let addedRelated = false;
+  if(opposingType !== relatedType){
+    app.typeScores[relatedType] += 0.5;
+    addedRelated = true;
+  }
+
+  app.typeAnswers.push({
+    qid: q.id, 
+    pick, 
+    selectedType, 
+    relatedType, 
+    addedRelated 
+  });
+  
   advanceType();
 }
+
 function advanceType(){
   app.typeIdx++;
   if(app.typeIdx >= app.typeQ.length){
@@ -832,38 +784,28 @@ function advanceType(){
   }
   renderTypeQuestion();
 }
+
 function backType(){
   if(app.typeIdx<=0) return;
-
   app.typeIdx--;
-  initScores();
+  
+  const lastAns = app.typeAnswers.pop();
+  const q = app.typeQ.find(x=>x.id===lastAns.qid);
 
-  const answered = app.typeAnswers.slice(0, app.typeIdx);
-  app.typeAnswers = answered;
-
-  answered.forEach(a=>{
-    const q = app.typeQ.find(x=>x.id===a.qid);
-
-    if(app.mode==="self"){
-      const vv = (a.v ?? a.val); // v保存してるなら v を優先
-      app.typeScores[q.type] += vv * q.w;
-      return;
+  if(app.mode==="self"){
+    const v = (lastAns.v !== undefined) ? lastAns.v : lastAns.val;
+  　app.typeScores[q.type] -= v * q.w;
+  }else{
+    if(lastAns.pick !== "C"){
+      app.typeScores[lastAns.selectedType] -= 1.0;
+      if(lastAns.addedRelated){
+        app.typeScores[lastAns.relatedType] -= 0.5;
+      }
     }
-
-    // Objective
-    const pick = a.pick;
-    if(pick==="C") return;
-
-    const chosen = q[pick].type;
-    const other  = q[pick==="A" ? "B" : "A"].type;
-    const sameFamily = (FAMILY[chosen] === FAMILY[other]);
-
-    addScore(chosen, 1.0);
-    if(!sameFamily) addScore(ALLY[chosen], 0.5);
-  });
-
+  }
   renderTypeQuestion();
 }
+
 function finalizeTypes(){
   const order = TYPES.map(t=>t.id);
   const sorted = TYPES
@@ -872,9 +814,9 @@ function finalizeTypes(){
   
   app.mainType = sorted[0].id;
   
-  // 1位と2位の差が3点以上なら「サブなし」とする
+  // Diff > 4 means no sub type
   const scoreDiff = sorted[0].score - sorted[1].score;
-  const GAP_THRESHOLD = 3; 
+  const GAP_THRESHOLD = 4; 
 
   if(scoreDiff >= GAP_THRESHOLD){
     app.subType = null;
@@ -948,24 +890,19 @@ function toResult(){
 
 /* ===== Visualization ===== */
 function renderTypeMapSVG(mainId, subId){
-  // メインタイプが決まっていなければ何も表示しない
   if(!mainId) return "";
   
-const W=560, H=360, pad=40, cx=W/2, cy=H/2, s=140;
+  const W=560, H=360, pad=40, cx=W/2, cy=H/2, s=140;
 
-  // ▼▼▼ 1. 軸ラベル（推進・分析など）の設定 ▼▼▼
-  const axisLabelColor = "#9ca3af"; // 色（薄いグレー）
-  const axisLabelSize  = "14";      // サイズ（標準は14）
-
-  // ▼▼▼ 2. タイプ名（兄貴肌ヤンキーなど）の設定 ▼▼▼
-  const typeLabelSize  = "12";      // サイズ（標準は11）
-  const colorOpen      = "#c2410c"; // OPEN属性の文字色（濃いオレンジ）
-  const colorClose     = "#1e3a8a"; // CLOSE属性の文字色（濃いネイビー）
-
-// ▼▼▼ 3. ドットのサイズ設定（半径 r の値） ▼▼▼
-  const dotR_Base = 6;  // 通常のグレーの点（元は4）
-  const dotR_Main = 9;  // メインタイプの点（元は6）
-  const dotR_Sub  = 11; // サブタイプの枠線（元は8）
+  // ▼▼▼ 【カスタマイズ】マップの文字色・サイズ設定 ▼▼▼
+  const axisLabelColor = "#9ca3af"; 
+  const axisLabelSize  = "12";      
+  const typeLabelSize  = "11";      
+  const colorOpen      = "#c2410c"; 
+  const colorClose     = "#1e3a8a"; 
+  const dotR_Base = 6;  
+  const dotR_Main = 9;  
+  const dotR_Sub  = 11; 
   // ▲▲▲ 設定ここまで ▲▲▲
 
   const axisColor="#e5e7eb";
@@ -973,46 +910,45 @@ const W=560, H=360, pad=40, cx=W/2, cy=H/2, s=140;
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="font-family:'Jost', 'Noto Sans JP', sans-serif;">`;
   
-  // 軸線
+  // Axes
   svg += `<line x1="${cx}" y1="${pad}" x2="${cx}" y2="${H-pad}" stroke="${axisColor}"/>`;
   svg += `<line x1="${pad}" y1="${cy}" x2="${W-pad}" y2="${cy}" stroke="${axisColor}"/>`;
   
-  // 軸ラベル
+  // Labels
   svg += `<text x="${pad}" y="${cy-10}" fill="${axisLabelColor}" font-size="${axisLabelSize}" font-weight="700">推進</text>`;
   svg += `<text x="${W-pad}" y="${cy-10}" fill="${axisLabelColor}" font-size="${axisLabelSize}" text-anchor="end" font-weight="700">分析</text>`;
   svg += `<text x="${cx}" y="${pad-10}" fill="${axisLabelColor}" font-size="${axisLabelSize}" text-anchor="middle" font-weight="700">発想</text>`;
   svg += `<text x="${cx}" y="${H-pad+22}" fill="${axisLabelColor}" font-size="${axisLabelSize}" text-anchor="middle" font-weight="700">実装</text>`;
 
-  // 各タイプ描画
+  // Nodes
   TYPES.forEach(t=>{
     const m = TYPE_MAP[t.id];
     if(!m) return;
     const x = cx + m.x*s, y = cy - m.y*s;
     const right = x >= cx;
     const top = y <= cy;
-    const lx = x + (right ? 12 : -12); // 文字との距離も少し離しました
+    const lx = x + (right ? 12 : -12); 
     const ly = y + (top ? -10 : 16);
     const anc = right ? "start" : "end";
 
     const txtColor = (m.group === 'open') ? colorOpen : colorClose;
     const dotColor = "#d1d5db";
 
-    // 通常ドットの描画（サイズ変数を使用）
     svg += `<circle cx="${x}" cy="${y}" r="${dotR_Base}" fill="${dotColor}"/>`;
     svg += `<text x="${lx}" y="${ly}" font-size="${typeLabelSize}" fill="${txtColor}" font-weight="700" text-anchor="${anc}">${t.label}</text>`;
   });
 
-  // メインタイプ（サイズ変数を使用）
+  // Main
   const pm = TYPE_MAP[mainId];
   if(pm){
-    svg += `<circle cx="${cx+pm.x*s}" cy="${cy-pm.y*s}" r="${dotR_Main * 3}" fill="${mainColor}" opacity="0.3"/>`; // 背景の薄い円も連動して大きく
+    svg += `<circle cx="${cx+pm.x*s}" cy="${cy-pm.y*s}" r="${dotR_Main * 3}" fill="${mainColor}" opacity="0.15"/>`; 
     svg += `<circle cx="${cx+pm.x*s}" cy="${cy-pm.y*s}" r="${dotR_Main}" fill="${mainColor}"/>`;
   }
 
-  // サブタイプ（サイズ変数を使用）
+  // Sub
   if(subId && TYPE_MAP[subId]){
     const ps = TYPE_MAP[subId];
-    svg += `<circle cx="${cx+ps.x*s}" cy="${cy-ps.y*s}" r="${dotR_Sub}" fill="none" stroke="${mainColor}" stroke-width="3"/>`;
+    svg += `<circle cx="${cx+ps.x*s}" cy="${cy-ps.y*s}" r="${dotR_Sub}" fill="none" stroke="${mainColor}" stroke-width="2"/>`;
   }
   
   svg += `</svg>`;
@@ -1032,7 +968,6 @@ function renderResult(){
     $("typeResultSkipped").classList.add("hidden");
     $("radarTypicalLabel").classList.remove("hidden");
 
-    // メイン・サブ表示
     $("mainTypeText").textContent = typeDesignerLabel(app.mainType);
     if(app.subType){
       $("subTypeText").textContent = typeDesignerLabel(app.subType);
@@ -1048,19 +983,14 @@ function renderResult(){
         `（スコア差が大きいため、このタイプの特性が特に強く出ています）`;
     }
 
-    // マップ描画
     $("typeMapWrap").innerHTML = renderTypeMapSVG(app.mainType, app.subType);
 
-    // ▼▼▼ ここが追加：属性判定エリアの挿入 ▼▼▼
     const pm = TYPE_MAP[app.mainType];
     const isOpen = (pm.group === 'open');
 
-    // スタイル定義
     const styleBase = "font-size:11px; font-weight:700; padding:6px 14px; border-radius:99px; transition:all 0.3s; display:flex; align-items:center; gap:6px;";
-    // 活性時の色（オープン=オレンジ系 / クローズ=ネイビー系）
     const styleOpenOn  = "background:#fff7ed; color:#c2410c; border:1px solid #c2410c; opacity:1;";
     const styleCloseOn = "background:#f0f9ff; color:#1e3a8a; border:1px solid #1e3a8a; opacity:1;";
-    // 非活性時の色（グレーアウト）
     const styleOff     = "background:transparent; color:#d1d5db; border:1px solid #e5e7eb; opacity:0.5;";
 
     const htmlAttr = `
@@ -1079,10 +1009,9 @@ function renderResult(){
     $("typeMapWrap").insertAdjacentHTML('beforeend', htmlAttr);
   }
 
-  // Skill List (Split into Skill and Behavior)
+  // Skill List
   const listContainer = $("skillList");
   listContainer.innerHTML = "";
-
   const renderGroup = (groupLabel, axes) => {
     if(axes.length === 0) return;
     const grpTitle = document.createElement("div");
@@ -1114,7 +1043,6 @@ function renderResult(){
 
   const skills = AXES.filter(a => a.category === "Skill");
   const behaviors = AXES.filter(a => a.category === "Behavior");
-  
   renderGroup("Skill (スキル)", skills);
   renderGroup("Behavior (行動・態度)", behaviors);
 
@@ -1124,38 +1052,19 @@ function renderResult(){
   const avg = labels.map(_=>3);
   
   const datasets = [
-    { 
-      label:"実測", 
-      data: actual, 
-      borderWidth: 3, 
-      borderColor:"#f97316", 
-      backgroundColor:"rgba(249, 115, 22, 0.1)", 
-      pointRadius: 3 
-    },
-    { 
-      label:"平均(Lv3)", 
-      data: avg, 
-      borderWidth: 1, 
-      borderDash: [4,4], 
-      borderColor:"#9ca3af", 
-      pointRadius: 0 
-    }
+    { label:"実測", data: actual, borderWidth: 3, borderColor:"#f97316", backgroundColor:"rgba(249, 115, 22, 0.1)", pointRadius: 3 },
+    { label:"平均(Lv3)", data: avg, borderWidth: 1, borderDash: [5,5], borderColor:"#9ca3af", pointRadius: 0 }
   ];
-
   if(!app.typeSkipped && app.mainType && TYPE_TEMPLATES[app.mainType]){
     datasets.push({
       label:`メインタイプ典型`,
       data: TYPE_TEMPLATES[app.mainType],
-      borderWidth: 2, 
-      borderDash: [4,4], 
-      borderColor:"#1e3a8a", 
-      pointRadius: 0
+      borderWidth: 2, borderDash: [5,5], borderColor:"#1e3a8a", pointRadius: 0
     });
   }
 
   const ctx = $("radar").getContext("2d");
   if(app.radarChart) app.radarChart.destroy();
-
   app.radarChart = new Chart(ctx, {
     type: "radar",
     data: { labels, datasets },
@@ -1168,16 +1077,34 @@ function renderResult(){
   });
 }
 
+function downloadPNG(){
+  const target = $("captureArea");
+  html2canvas(target, { 
+    scale: 2,
+    onclone: (clonedDoc) => {
+      const clonedElement = clonedDoc.getElementById("captureArea");
+      clonedElement.style.padding = "40px"; 
+      clonedElement.style.boxSizing = "border-box";
+    }
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `pd_diag_${new Date().getTime()}.png`;
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+
 function downloadCSV(){
   const bom = "\uFEFF";
   let csv = "Category,Group,Key,Value\n";
+  const modeLabel = app.mode === "self" ? "自己評価" : (app.mode === "other" ? "客観評価" : "-");
+  
   csv += `Meta,-,Date,${new Date().toLocaleString()}\n`;
-  csv += `Meta,-,Mode,${app.mode||"-"}\n`;
-  csv += `Meta,-,Scope,${app.scopeText}\n`;
+  csv += `Meta,-,Mode,${modeLabel}\n`;
+  csv += `Meta,-,Scope,"${app.scopeText}"\n`;
   
   if(!app.typeSkipped){
     csv += `Type,-,Main,${typeDesignerLabel(app.mainType)}\n`;
-    // サブがあるかどうかで分岐
     const subLabel = app.subType ? typeDesignerLabel(app.subType) : "なし（メイン特化）";
     csv += `Type,-,Sub,${subLabel}\n`;
   } else {
@@ -1195,43 +1122,33 @@ function downloadCSV(){
   URL.revokeObjectURL(url);
 }
 
-function downloadPNG(){
-  const target = $("captureArea");
-  
-  // oncloneを使って「画像化するデータ（クローン）」だけにスタイルを適用
-  html2canvas(target, { 
-    scale: 2,
-    onclone: (clonedDoc) => {
-      const clonedElement = clonedDoc.getElementById("captureArea");
-      // 画像化する瞬間だけ余白をつける
-      clonedElement.style.padding = "40px"; 
-      // 必要に応じて幅を調整（余白分がはみ出さないように念のため指定）
-      clonedElement.style.boxSizing = "border-box";
-    }
-  }).then(canvas => {
-    const link = document.createElement('a');
-    link.download = `pd_diag_${new Date().getTime()}.png`;
-    link.href = canvas.toDataURL();
-    link.click();
-  });
-}
-
-
 /* =========================
-   EVENTS
+   EVENTS & INIT
 ========================= */
+// 画面読み込み時に初期化
 resetAll();
 
+// モード選択ボタン
 document.querySelectorAll('[data-mode]').forEach(el=>{
   const click = ()=>setMode(el.dataset.mode);
   el.addEventListener("click", click);
   el.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); click(); } });
 });
 
+// 各種ボタンイベント
 $("btnStart").addEventListener("click", startTypeTest);
 $("btnSkip").addEventListener("click", skipTypeTest);
 
-$("btnTypeBack").addEventListener("click", backType);
+// 1問目で戻るボタンを押した時の挙動修正
+$("btnTypeBack").addEventListener("click", ()=>{
+  if(app.typeIdx === 0){
+    resetAll();
+    show("view-home");
+  } else {
+    backType();
+  }
+});
+
 $("btnTypeReset").addEventListener("click", ()=>{ resetAll(); show("view-home"); });
 
 $("btnSkillBack").addEventListener("click", ()=>{ 
@@ -1240,10 +1157,12 @@ $("btnSkillBack").addEventListener("click", ()=>{
 });
 $("btnToResult").addEventListener("click", toResult);
 
+$("btnResultBack").addEventListener("click", ()=>{ show("view-skill"); });
 $("btnRestart").addEventListener("click", ()=>{ resetAll(); show("view-home"); });
 $("btnExportCSV").addEventListener("click", downloadCSV);
 $("btnExportPNG").addEventListener("click", downloadPNG);
 
+// キーボードショートカット
 document.addEventListener("keydown",(e)=>{
   const onType = !$("view-type").classList.contains("hidden");
   if(!onType) return;
