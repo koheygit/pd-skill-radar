@@ -10,67 +10,117 @@
   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;700;900&display=swap" rel="stylesheet">
   
   <style>
-    /* ▼▼▼【カスタマイズエリア】色設定 ▼▼▼ */
+    /* ▼▼▼ リキッドグラス・デザイン設定（ブルーグレー改・調整版） ▼▼▼ */
     :root{
       /* ベースカラー */
-      --bg:#f3f4f6;       /* 全体の背景（薄いグレー） */
-      --surface:#ffffff;  /* カードの背景（白） */
-      --text:#111827;     /* 文字色（黒に近いグレー） */
-      --muted:#6b7280;    /* 薄い文字色 */
-      --line:#e5e7eb;     /* 線の色 */
+      --bg: linear-gradient(135deg, #f1f5f9 0%, #dbeafe 100%); 
+      --surface: rgba(255, 255, 255, 0.45); 
+      --text: #1e293b;     /* Slate 800 */
+      --muted: #475569;    /* Slate 600 */
       
-      /* アクセントカラー（オレンジ） */
-      --acc:#f97316;
-      --accSoft:#fff7ed;
-      --accHover:#ea580c;
+      /* メインカラー（ロイヤルブルー） */
+      --acc: #2563eb;      
+      --accSoft: rgba(219, 234, 254, 0.6); 
+      --accHover: #1d4ed8; 
       
       /* その他 */
-      --danger:#dc2626;   /* 赤 */
-      --success:#1e3a8a;  /* ネイビー */
+      --danger: #ef4444;   
+      --success: #10b981;  
+
+      /* 線 */
+      --line: rgba(255, 255, 255, 0.5);     
+      --line2: rgba(51, 65, 85, 0.15);       
 
       /* 形状 */
-      --radius:24px;
-      --radius-sm:14px;
+      --radius: 24px;
+      --radius-sm: 16px;
       
-      /* 影 */
-      --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 2px 6px -2px rgba(0, 0, 0, 0.04);
+      /* ガラスの影と境界 */
+      --shadow-card: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.7);
     }
-    /* ▲▲▲ 設定ここまで ▲▲▲ */
 
     *{ box-sizing:border-box; }
     body{
       margin:0;
       font-family:"Noto Sans JP", sans-serif;
-      background:var(--bg);
+      background: var(--bg);
       color:var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    .wrap{ max-width:1060px; margin:0 auto; padding:18px 14px 40px; }
-    h1{ margin:0 0 6px; font-size:24px; letter-spacing:-.2px; font-family: "Jost", "Noto Sans JP", sans-serif; font-weight: 600;}
-    h2{ margin:0 0 10px; font-size:18px; letter-spacing:-.1px; }
+    /* 背景アニメーション */
+    .bg-blobs {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.6;
+      animation: float 25s infinite ease-in-out alternate;
+    }
+    .blob-1 { top: -10%; left: -10%; width: 50vw; height: 50vw; background: #bfdbfe; animation-delay: 0s; } 
+    .blob-2 { bottom: -10%; right: -10%; width: 60vw; height: 60vw; background: #e9d5ff; animation-delay: -5s; } 
+    .blob-3 { top: 40%; left: 30%; width: 40vw; height: 40vw; background: #bae6fd; animation-delay: -10s; } 
+
+    @keyframes float {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 50px) scale(1.1); }
+    }
+
+    .wrap{ max-width:1060px; margin:0 auto; padding:40px 20px 60px; }
+    
+    h1{ 
+      margin:0 0 6px; font-size:24px; letter-spacing:-.2px; 
+      font-family: "Jost", "Noto Sans JP", sans-serif; font-weight: 700;
+      color: #0f172a; 
+      text-shadow: 0 2px 4px rgba(255,255,255,0.6);
+      transition: margin-bottom 0.3s ease; 
+      display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px;
+    }
+    
+    /* バージョン表示のスタイル */
+    .version-tag {
+      font-size: 0.6em;
+      font-weight: 400;
+      color: var(--muted);
+      opacity: 0.8;
+    }
+
+    /* 修正: h2の文字色を無彩色（--text）に変更 */
+    h2{ margin:0 0 10px; font-size:18px; letter-spacing:-.1px; color: var(--text); font-weight: 700; }
+    
+    /* 結果画面のタイトル用（念のため個別指定も維持） */
+    h2.result-title { margin:0; color: var(--text); }
+
     h3{ margin:0; font-size:14px; letter-spacing:-.1px; }
     p{ margin:8px 0 14px; color:var(--muted); line-height:1.65; }
     .small{ font-size:12px; color:var(--muted); }
 
-    /* Layout */
     .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
     @media (max-width:920px){ .grid2{ grid-template-columns:1fr; } }
     .row{ display:flex; gap:12px; flex-wrap:wrap; }
     .vertical-stack{ display:flex; flex-direction:column; gap:24px; max-width:600px; margin:0 auto; }
 
     /* Surfaces */
-    /* .header-info はここから除外して個別に定義 */
     .surface, .screen, .result-card {
       background: var(--surface);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius);
       padding: 24px;
-      border: none;
+      border: var(--glass-border);
       box-shadow: var(--shadow-card);
     }
     
-    /* 修正：ヘッダー情報を座布団なし・左揃えに変更 */
     .header-info {
-      padding: 4px 0 16px 0;
+      padding: 0 0 24px 0; 
       font-size: 12px;
       color: var(--muted);
       line-height: 1.6;
@@ -83,7 +133,8 @@
     .result-card { height: 100%; min-width: 0; }
 
     .rule{ height:1px; background:var(--line); margin:18px 0; }
-    .rule.soft{ background:#f3f4f6; }
+    .rule.soft{ background:var(--line2); }
+    .rule.hidden-line { display: none; margin: 0; }
 
     /* Clickable Items */
     .tap{
@@ -91,73 +142,110 @@
       display:flex; align-items:center; justify-content:space-between;
       gap:12px; padding:14px 14px;
       border-radius:var(--radius-sm);
-      border:1.5px solid #d1d5db;
-      background:#ffffff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+      border: 1px solid rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.5);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.02);
       cursor:pointer; user-select:none;
       transition: all .2s ease;
     }
-    .tap:hover{ background-color: var(--accSoft); border-color: var(--acc); transform: translateY(-1px); }
-    .tap.selected{ border-color: var(--acc); background: var(--accSoft); box-shadow: 0 4px 14px rgba(249, 115, 22, 0.15); }
-    .tap.selected .chev{ background:#ffffff; border-color: rgba(249, 115, 22, 0.35); color: var(--acc); }
+    .tap:hover{ 
+      background: rgba(255,255,255,0.9); 
+      border-color: var(--acc); 
+      transform: translateY(-2px); 
+      box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15); 
+    }
+    .tap.selected{ 
+      border-color: var(--acc); 
+      background: #eff6ff; 
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); 
+    }
+    .tap.selected .chev{ background:var(--acc); border-color: var(--acc); color: #fff; }
     .tap .chev{
       flex:0 0 auto; width:30px; height:30px; border-radius:999px;
-      display:grid; place-items:center; background:#f9fafb;
-      border:1px solid var(--line); color:#374151; font-weight:900;
+      display:grid; place-items:center; background: rgba(255,255,255,0.6);
+      border:1px solid rgba(255,255,255,0.8); color:var(--text); font-weight:900;
+      transition: all .2s;
     }
-    .tap.neutral:hover{ background-color: var(--accSoft); border-color: var(--acc); }
+    .tap.neutral:hover{ background-color: rgba(255,255,255,0.8); border-color: #94a3b8; }
 
     /* Buttons */
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
-      gap:8px; padding:12px 18px; border-radius:12px;
-      border:1px solid var(--line); background:#fff; color:var(--text);
+      gap:8px; padding:12px 18px; border-radius:16px;
+      border:1px solid rgba(255,255,255,0.6); 
+      background: rgba(255,255,255,0.5); 
+      color:var(--text);
       font-weight:700; cursor:pointer; min-height:48px; transition: all .2s;
+      backdrop-filter: blur(4px);
     }
-    .btn:hover{ background:#f9fafb; }
+    .btn:hover{ background: rgba(255,255,255,0.9); transform: translateY(-1px); }
     .btn:active{ transform: translateY(1px); }
     
-    .btn.primary{ border-color:transparent; background:var(--acc); color:#fff; box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25); }
-    .btn.primary:hover{ background:var(--accHover); }
-    .btn.primary:disabled{ opacity:.55; cursor:not-allowed; box-shadow:none; background:var(--muted); }
+    .btn.primary{ 
+      border:none;
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); 
+      color:#fff; 
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); 
+    }
+    .btn.primary:hover{ filter: brightness(1.1); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4); }
+    .btn.primary:disabled{ opacity:.6; filter: grayscale(0.8); cursor:not-allowed; box-shadow:none; }
     
     .btn.orange-outline{
-      border: 1.5px solid var(--acc);
+      border: 2px solid var(--acc);
       color: var(--acc);
-      background: #fff;
+      background: rgba(255,255,255,0.3);
     }
-    .btn.orange-outline:hover{ background: var(--accSoft); }
-    .btn.orange-outline:disabled{ border-color:var(--line); color:var(--muted); background:#f9fafb; opacity:1; }
+    .btn.orange-outline:hover{ background: #fff; }
+    .btn.orange-outline:disabled{ border-color:#cbd5e1; color:#94a3b8; background:rgba(255,255,255,0.2); opacity:1; }
 
-    .btn.danger{ color:var(--danger); background:#fff; border-color: rgba(220,38,38,.25); }
-    .btn.danger-outline{ color:var(--danger); background:#fff; border: 1.5px solid var(--danger); font-weight: 700; }
+    .btn.danger{ color:var(--danger); background:rgba(255,255,255,0.8); border-color: rgba(220,38,38,.25); }
+    .btn.danger-outline{ color:var(--danger); background:rgba(255,255,255,0.3); border: 2px solid var(--danger); font-weight: 700; }
     .btn.danger-outline:hover{ background:#fef2f2; }
 
     /* Components */
-    .pill{ display:inline-flex; align-items:center; gap:8px; padding:8px 10px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:#fff; }
-    .progress{ height:10px; background:#eef2f7; border-radius:999px; overflow:hidden; }
+    .pill{ 
+      display:inline-flex; align-items:center; gap:8px; padding:8px 10px; 
+      border:1px solid rgba(255,255,255,0.6); border-radius:999px; 
+      color:var(--muted); background:rgba(255,255,255,0.4); 
+    }
+    .progress{ height:10px; background:rgba(0,0,0,0.05); border-radius:999px; overflow:hidden; }
     .bar{ height:100%; width:0%; background:var(--acc); transition: width 0.3s ease; }
     
     input[type="text"]{
       width:100%; padding:14px 12px; border-radius:12px;
-      border:1px solid var(--line); outline:none; font-weight:650; color:var(--text); background:#fff;
+      border:1px solid rgba(255,255,255,0.6); outline:none; font-weight:650; color:var(--text); 
+      background: rgba(255,255,255,0.5);
+      transition: all .2s;
     }
-    input[type="text"]:focus{ border-color: var(--acc); box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.1); }
+    input[type="text"]:focus{ border-color: var(--acc); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); background: #fff; }
 
     /* Accordion */
-    details{ border:1px solid var(--line); border-radius:12px; background:#fff; padding:10px 12px; }
+    details{ 
+      border:1px solid rgba(255,255,255,0.6); border-radius:12px; 
+      background: rgba(255,255,255,0.3); padding:10px 12px; 
+    }
     summary{ cursor:pointer; font-weight:700; list-style:none; display:flex; align-items:center; justify-content:space-between; padding:6px 4px; user-select:none; }
     summary::-webkit-details-marker{ display:none; }
     .chk{ display:flex; gap:10px; align-items:flex-start; padding:10px 4px; border-top:1px solid var(--line2); cursor: pointer; }
-    .chk:hover{ background: #f9fafb; }
+    .chk:hover{ background: rgba(255,255,255,0.5); }
     input[type="checkbox"]{ margin-top:3px; transform:scale(1.15); cursor: pointer; accent-color: var(--acc); }
 
     .hidden{ display:none !important; }
     
     /* Result Specifics */
-    .mapBox{ border:1px solid var(--line); border-radius:12px; background:#fff; padding:12px; }
-    .result-section-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap:8px; color:var(--acc); }
-    .result-section-header { background:#f3f4f6; padding:10px 14px; border-radius:8px; margin-bottom:16px; font-weight:bold; text-align:center; }
+    .mapBox{ 
+      border:1px solid var(--line); border-radius:12px; 
+      background: rgba(255,255,255,0.5); padding:12px; 
+    }
+    .result-section-title { 
+      font-size: 16px; font-weight: 700; margin-bottom: 12px; 
+      display: flex; align-items: center; gap:8px; 
+      color: #374151; /* ダークグレー */
+    }
+    .result-section-header { 
+        background: rgba(0,0,0,0.03); 
+        padding:10px 14px; border-radius:8px; margin-bottom:16px; font-weight:bold; text-align:center; 
+    }
     
     .skill-category-label {
       font-size: 12px; font-weight: 900; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase;
@@ -169,30 +257,47 @@
     .type-display-sub { font-size: 15px; font-weight: 700; color: var(--text); line-height: 1.4; }
     .type-label-tag { font-size: 11px; color: var(--muted); margin-bottom: 2px; }
 
-    /* タイプ説明の背景（CSSで固定） */
     #typeDesc {
       white-space: pre-wrap;
-      background: #f3f4f6;
+      background: rgba(255,255,255,0.5);
       padding: 12px;
       border-radius: 12px;
       color: var(--text);
       font-size: 12px;
       line-height: 1.6;
+      border: 1px solid rgba(255,255,255,0.4);
+    }
+    
+    /* 能力判定の区切り線（影なし） */
+    #skillAccordions .surface {
+        box-shadow: none;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.4);
     }
   </style>
 </head>
 
 <body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
 <div class="wrap">
-  <h1>Product Designer Type & Skill Diagnostic (Ver.0.3)</h1>
+  <h1 id="mainTitle">
+    Product Designer Type & Skill Diagnostic 
+    <span id="versionText" class="version-tag"></span>
+  </h1>
   
-  <div class="header-info">
+  <div id="topHeaderInfo" class="header-info">
     <div style="font-weight:700; margin-bottom:4px;">診断概要</div>
     <div>タイプ：メイン（属性）＋サブ ／ 能力：7軸（GATE）、表示：平均＋メインタイプ典型値</div>
     <div style="margin-top:6px;">※優劣判定ではありません。配置・育成・対話の材料として使用してください。</div>
   </div>
 
-  <div class="rule soft"></div>
+  <div class="rule hidden-line"></div>
 
   <section id="view-home" class="surface">
     <h2>1) モード選択</h2>
@@ -289,15 +394,15 @@
 
   <section id="view-result" class="hidden">
     
-    <div id="captureArea" style="background:var(--bg); padding:0;">
+    <div id="captureArea" style="background:transparent; padding:0;">
       
-      <div class="surface" style="margin-bottom:20px; position:relative;">
-        <div style="margin-top:20px;">
-          <h2>4) 診断結果</h2>
-          <div class="pill">
-            <span id="resultMode">—</span>
-            <span class="small">｜</span>
-            <span id="resultScope" class="small">—</span>
+      <div class="surface" style="margin-bottom:20px; position:relative; padding: 24px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h2 class="result-title">診断結果</h2>
+          <div class="pill" id="resultHeaderContainer">
+            <span id="resultModeLabel">－</span>
+            <span style="margin:0 8px; color:var(--muted)">｜</span>
+            <span id="resultScopeLabel">スコープ：－</span>
           </div>
         </div>
       </div>
@@ -307,12 +412,12 @@
           <div class="result-section-header">タイプ診断結果</div>
           
           <div id="typeResultContent">
-            <div style="background:var(--accSoft); padding:16px; border-radius:12px; border:1px solid rgba(249,115,22,0.1);">
+            <div style="background: rgba(219, 234, 254, 0.4); padding:16px; border-radius:12px; border:1px solid rgba(37, 99, 235, 0.2);">
                <div class="type-label-tag">メインタイプ</div>
                <div id="mainTypeText" class="type-display-main">—</div>
             </div>
 
-            <div style="margin-top:12px; padding:12px; border-radius:12px; border:1px solid var(--line); background:#fff;">
+            <div style="margin-top:12px; padding:12px; border-radius:12px; border:1px solid var(--line2); background:rgba(255,255,255,0.4);">
                <div class="type-label-tag">サブタイプ</div>
                <div id="subTypeText" class="type-display-sub">—</div>
             </div>
@@ -342,14 +447,16 @@
           <div class="rule soft"></div>
           
           <div class="result-section-title">能力レーダーチャート</div>
-          <div class="small" style="margin-bottom:8px;">実測（橙太線）／ 平均Lv3（グレー線）<span id="radarTypicalLabel"> ／ メインタイプ典型（青点線）</span></div>
+          <div class="small" style="margin-bottom:8px;">実測（濃い線）／ 平均Lv3（塗り）<span id="radarTypicalLabel"> ／ メインタイプ典型（薄い点線）</span></div>
           <div style="position: relative; width: 100%; min-height:300px;">
              <canvas id="radar"></canvas>
           </div>
         </div>
       </div>
-
-      <div class="small" style="text-align:right; margin-top:20px;">Product Designer Type & Skill Diagnostic v0.3</div>
+      
+      <div class="small" style="text-align:right; margin-top:20px;">
+        Product Designer Type & Skill Diagnostic <span id="footerVersion"></span>
+      </div>
     </div> 
     
     <div class="surface" style="margin-top:20px;">
@@ -374,6 +481,11 @@
 <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 <script>
+/* =========================
+   APP CONFIG & INIT
+========================= */
+const APP_VERSION = "(Ver.0.4)"; 
+
 /* =========================
    DATA DEFINITIONS
 ========================= */
@@ -406,7 +518,6 @@ const TYPE_DESC = {
   artist_mystery: "独自の世界観や関心に深く没入し、他者に迎合せず探究を続けるタイプです。尖った視点や表現を生み出す力があり、視座更新や表現品質が突出することもあります。一方で説明や共有を後回しにしやすく、合意形成が弱いと周囲から理解されにくくなります。翻訳役や調整役がいる環境で真価を発揮します。"
 };
 
-// Grouping definitions
 const SKILL_GROUPS = [
   { name: "① 定義・設計フェーズ", axes: ["skill_1", "skill_2"] },
   { name: "② 表現・実装フェーズ", axes: ["skill_3", "skill_4"] },
@@ -422,21 +533,20 @@ const AXES = [
         "要件の抜けや誤解に気づき、整理し直している",
         "表面的な要望だけで判断しないようにしている",
         "ユーザー・事業・技術で課題を切り分けて考えている",
-        "【Key2】課題の捉え方を見直し、設計方針を更新している",
-        "【Key1】課題に対する「問い」を自ら設定できている"
+        "課題の捉え方を見直し、設計方針を更新している",
+        "【Key】課題に対する「問い」を自ら設定できている"
       ],
       other: [
         "与えられた課題の背景や目的を確認している",
         "要望の前提や条件を整理し直して説明している",
         "表層の要望と本質的な課題のズレを指摘している",
         "ユーザー・事業・技術の視点を分けて課題を整理している",
-        "【Key2】課題設定を見直すことで方針に影響を与えている",
-        "【Key1】課題に対する「問い」を自ら設定できている"
+        "課題設定を見直すことで方針に影響を与えている",
+        "【Key】課題に対する「問い」を自ら設定できている"
       ]
     },
-    gateRules:{ minCountLv2:2, minCountLv3:3, key1:[5], key2:[4] }
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
   },
-
   { id:"skill_2", name:"コンセプト統合力", category:"Skill",
     desc:"複数の要件・制約・意見を一本の軸にまとめ、判断基準として機能するコンセプトに落とす力。",
     items:{
@@ -445,21 +555,20 @@ const AXES = [
         "判断に迷った時、立ち戻る軸を設定している",
         "認識のズレを、考え方や方向性で整えようとしている",
         "成果物全体で、同じ意図が伝わるよう設計している",
-        "【Key2】コンセプトを基に、取捨選択や説明を行っている",
-        "【Key1】実現性が未確定でも、方向性や構想をデザインで可視化し示している"
+        "コンセプトを基に、取捨選択や説明を行っている",
+        "【Key】実現性が未確定でも、方向性や構想をデザインで可視化し示している"
       ],
       other:[
         "複数の要件を整理し、方向性として説明している",
         "迷った際、コンセプトを判断基準として使っている",
         "メンバー間の認識のズレを、コンセプトで整えている",
         "資料や成果物に、コンセプトが一貫して表れている",
-        "【Key2】関係者がコンセプトを前提に判断・議論している",
-        "【Key1】実現性が未確定でも、方向性や構想をデザインで可視化し示している"
+        "関係者がコンセプトを前提に判断・議論している",
+        "【Key】実現性が未確定でも、方向性や構想をデザインで可視化し示している"
       ]
     },
-    gateRules:{ minCountLv2:2, minCountLv3:3, key1:[5], key2:[4] }
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
   },
-
   { id:"skill_3", name:"表現品質力", category:"Skill",
     desc:"情報設計と見た目の完成度で、少ない説明でも意図が伝わるアウトプットを安定して出す力。",
     items:{
@@ -468,21 +577,20 @@ const AXES = [
         "CMF・形・構成・体験を通して内容を表現している",
         "何を伝えるかに応じて、表現の方法を選んでいる",
         "表現に関する知識やルールを体系的に理解し、活用している",
-        "【Key2】説明に頼らず、体験や構成で意図が伝わるよう設計している",
-        "【Key1】表現する対象や媒体が変わっても、品質を保てている"
+        "説明に頼らず、体験や構成で意図が伝わるよう設計している",
+        "【Key】表現する対象や媒体が変わっても、品質を保てている"
       ],
       other:[
         "見た目や情報が整理され、意図が伝わりやすい",
         "CMF・形・構成・体験の工夫が表現に活かされている",
         "目的や伝えたい内容に応じて、表現方法を選んでいる",
         "表現の原則や型を体系的に理解し、意図的に使っている",
-        "【Key2】説明がなくても内容が理解されている",
-        "【Key1】対象や媒体が変わっても、表現品質が安定している"
+        "説明がなくても内容が理解されている",
+        "【Key】対象や媒体が変わっても、表現品質が安定している"
       ]
     },
-    gateRules:{ minCountLv2:2, minCountLv3:3, key1:[5], key2:[4] }
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[2,3], keyLv4:[4], keyLv5:[5] }
   },
-
   { id:"skill_4", name:"実装・成立力", category:"Skill",
     desc:"技術・コスト・量産などの制約を踏まえ、成立する設計に落とし込み、手戻りを減らす力。",
     items:{
@@ -491,21 +599,20 @@ const AXES = [
         "成立しない案を早い段階で見極めている",
         "制約条件を踏まえ、現実的な代替案を考えている",
         "実装段階で手戻りが起きにくいデザイン・設計をしている",
-        "【Key2】制約条件の中でも体験の質を保つよう工夫している",
-        "【Key1】デザインの意図を基準に、前提や制約を見直して設計に反映している"
+        "制約条件の中でも体験の質を保つよう工夫している",
+        "【Key】デザインの意図を基準に、前提や制約を見直して設計に反映している"
       ],
       other:[
         "技術・コストなどの前提を理解した提案をしている",
         "成立しない案を早期に見極め、修正している",
         "制約を踏まえた現実的な代替案を提示している",
         "実装段階で大きな手戻りを出していない",
-        "【Key2】制約条件下でも体験の質が保たれている",
-        "【Key1】デザインの意図を基準に、前提や制約の捉え方を更新している"
+        "制約条件下でも体験の質が保たれている",
+        "【Key】デザインの意図を基準に、前提や制約の捉え方を更新している"
       ]
     },
-    gateRules:{ minCountLv2:2, minCountLv3:3, key1:[5], key2:[4] }
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
   },
-
   { id:"skill_5", name:"自己省察力", category:"Behavior",
     desc:"判断や行動を振り返って学びに変え、指摘や失敗を次のプロジェクトで具体的に更新する力。",
     items:{
@@ -514,21 +621,20 @@ const AXES = [
         "指摘や意見を、素直に受け止めようとしている",
         "結果の良し悪しを分けた要因を捉えようとしている",
         "経験や指摘を、次の判断に反映している",
-        "【Key2】気づきをもとに行動を変え、成果が改善した経験がある",
-        "【Key1】指摘や失敗を受け、判断や行動を継続的に更新している"
+        "気づきをもとに行動を変え、成果が改善した経験がある",
+        "【Key】指摘や失敗を受け、判断や行動を継続的に更新している"
       ],
       other:[
         "自身の強みや苦手な点を理解しているように見える",
         "指摘や意見に対し、防御的にならず受け止めている",
         "結果の良し悪しを分けた要因を整理して捉えている",
         "経験や指摘が、次の判断に反映されている",
-        "【Key2】振る舞いや判断が変わり、成果の改善が見られる",
-        "【Key1】指摘や失敗を踏まえ、判断や行動を継続的に更新している"
+        "振る舞いや判断が変わり、成果の改善が見られる",
+        "【Key】指摘や失敗を踏まえ、判断や行動を継続的に更新している"
       ]
     },
-    gateRules:{ minCountLv2:2, minCountLv3:3, key1:[5], key2:[4] }
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[2,3], keyLv4:[4], keyLv5:[5] }
   },
-
   { id:"skill_6", name:"合意形成力", category:"Behavior",
     desc:"関係者の立場と論点を整理し、必要情報を揃えて意思決定を前に進める力。",
     items:{
@@ -537,21 +643,20 @@ const AXES = [
         "意見が割れた際、論点を整理して話そうとしている",
         "会議やレビューで、結論に向けた進行を意識している",
         "合意に必要な情報や判断材料を事前に揃えている",
-        "【Key2】意思決定に必要な会議体やレビュー体制を設計している",
-        "【Key1】デザインの意図や理想を理由とともに説明し、合意を得ている"
+        "意思決定に必要な会議体やレビュー体制を設計している",
+        "【Key】デザインの意図や理想を理由とともに説明し、合意を得ている"
       ],
       other:[
         "関係者ごとの立場や関心を踏まえた発言や整理が見られる",
         "意見が割れた場面で、論点を整理して対話を促している",
         "会議やレビューが結論に向かうよう進行している",
         "合意に必要な情報や判断材料が事前に整理・共有されている",
-        "【Key2】意思決定に必要な会議体やレビューの進め方を設計している",
-        "【Key1】デザインの意図や理想を理由とともに説明し、合意を得ている"
+        "意思決定に必要な会議体やレビューの進め方を設計している",
+        "【Key】デザインの意図や理想を理由とともに説明し、合意を得ている"
       ]
     },
-    gateRules:{ minCountLv2:2, minCountLv3:3, key1:[5], key2:[4] }
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3,4], keyLv4:[5], keyLv5:[5] }
   },
-
   { id:"skill_7", name:"視座更新力", category:"Behavior",
     desc:"トレンド・先行事例・新技術を継続的に取り込み、プロジェクトに新しい視点や仮説を持ち込む力。",
     items:{
@@ -560,20 +665,20 @@ const AXES = [
         "自分が直接関わらないデザイン分野や、デザイン以外の分野の動向・事例にも目を向けている",
         "先行事例や過去の取り組みを踏まえ、中長期の変化も意識して考えている",
         "新しいツールや手法を試し、実務に取り入れている",
-        "【Key2】得た知見やノウハウを、周囲に共有するよう意識している",
-        "【Key1】得た視点や知見をもとに、アウトプットや提案を更新している"
+        "得た知見やノウハウを、周囲に共有するよう意識している",
+        "【Key】得た視点や知見をもとに、アウトプットや提案を更新している"
       ],
       other:[
         "担当分野のデザイン動向を把握している様子が見られる",
         "担当領域外のデザイン分野や、デザイン以外の分野の動向・事例も取り入れている",
         "先行事例や過去の事例を踏まえ、中長期視点での発言や検討がある",
         "新しいツールや手法を試し、実務で活用している",
-        "【Key2】得ている知見やノウハウを共有したり、相談を受けている",
-        "【Key1】得た知見をアウトプットや提案に反映し、内容を更新している"
+        "得ている知見やノウハウを共有したり、相談を受けている",
+        "【Key】得た知見をアウトプットや提案に反映し、内容を更新している"
       ]
     },
-    gateRules:{ minCountLv2:2, minCountLv3:3, key1:[5], key2:[4] }
-  },
+    gateRules:{ minCountLv2:2, minCountLv3:3, minCountLv4:5, minCountLv5:6, keyLv3:[3], keyLv4:[4], keyLv5:[5] }
+  }
 ];
 
 const TYPE_TEMPLATES = {
@@ -735,6 +840,14 @@ function typeLabel(id){ return TYPES.find(t=>t.id===id)?.label ?? id; }
 function typeDesignerLabel(id){ return `${typeLabel(id)}系デザイナー`; }
 
 function show(viewId){
+  if(viewId === "view-home"){
+    $("topHeaderInfo").classList.remove("hidden");
+    if($("mainTitle")) $("mainTitle").style.marginBottom = "6px";
+  } else {
+    $("topHeaderInfo").classList.add("hidden");
+    if($("mainTitle")) $("mainTitle").style.marginBottom = "40px"; 
+  }
+
   ["view-home","view-type","view-skill","view-result"].forEach(v=>$(v).classList.add("hidden"));
   $(viewId).classList.remove("hidden");
   window.scrollTo({top:0, behavior:"smooth"});
@@ -777,7 +890,6 @@ function startTypeTest(){
   app.typeQ = (app.mode==="self") ? shuffle(SELF_Q) : shuffle(OTHER_Q);
 
   $("modeBadge").textContent = (app.mode==="self") ? "自己評価" : "客観評価";
-  // 修正: タイプ判定画面にもモードを表示
   const modeText = (app.mode === 'self') ? "【自己評価】" : "【客観評価】";
   $("typeModeDisplay").textContent = `現在は${modeText}モードです`;
 
@@ -939,24 +1051,18 @@ function calcAxisLevel(axisId){
   const checks = app.skillChecks[axisId] || [];
   const count = checks.filter(Boolean).length;
   const g = ax.gateRules;
-
-  // Key判定（index指定）
-  const hasKey1 = (g.key1 || []).some(i => !!checks[i]);
-  const hasKey2 = (g.key2 || []).some(i => !!checks[i]);
-
-  // Lv2 / Lv3（Key不要）
+  
   const pass2 = (count >= g.minCountLv2);
-  const pass3 = pass2 && (count >= g.minCountLv3);
-
-  // Lv4：Lv3を満たしつつ
-  // (A) チェック 5個以上 OR
-  // (B) チェック 4個 かつ Key1
-  const pass4 = pass3 && ( (count >= 5) || (count === 4 && hasKey1) );
-
-  // Lv5：Lv4を満たしつつ
-  // (A) チェック 6個（すべてにチェック） OR
-  // (B) チェック 5個以上 かつ Key1とKey2
-  const pass5 = pass4 && ( (count === 6) || (count >= 5 && hasKey1 && hasKey2) );
+  const pass3 = pass2 && (count >= g.minCountLv3) && anyChecked(checks, g.keyLv3);
+  const pass4 = pass3 && (count >= g.minCountLv4) && anyChecked(checks, g.keyLv4);
+  
+  let pass5 = false;
+  if(app.mode === 'self'){
+     const keyCheck = !!checks[5]; // Key item is always last (index 5)
+     pass5 = pass4 && (count >= 5) && keyCheck;
+  } else {
+     pass5 = pass4 && (count >= g.minCountLv5) && anyChecked(checks, g.keyLv5);
+  }
 
   if(pass5) return 5;
   if(pass4) return 4;
@@ -965,7 +1071,6 @@ function calcAxisLevel(axisId){
   return 1;
 }
 
-// 修正: buildSkillUI でグループ化とランダム配置
 function buildSkillUI(){
   const root = $("skillAccordions");
   root.innerHTML = "";
@@ -975,16 +1080,16 @@ function buildSkillUI(){
 
   const modeKey = (app.mode === 'self') ? 'self' : 'other';
 
-  // 修正: 影なし、線ありのデザインに変更
   SKILL_GROUPS.forEach(grp => {
     const card = document.createElement("div");
-    // surfaceクラスの影を無効化し、ボーダーを追加
-    card.style.background = "var(--surface)";
+    card.style.background = "var(--glass-bg)";
+    card.style.backdropFilter = "blur(12px)";
+    card.style.webkitBackdropFilter = "blur(12px)";
     card.style.borderRadius = "var(--radius)";
     card.style.padding = "20px";
     card.style.marginBottom = "0";
-    card.style.boxShadow = "none"; // 影なし
-    card.style.border = "1px solid var(--line)"; // 線あり
+    card.style.boxShadow = "none"; 
+    card.style.border = "1px solid var(--glass-border)";
 
     const title = document.createElement("div");
     title.style.fontWeight = "900";
@@ -1001,7 +1106,7 @@ function buildSkillUI(){
        const ax = AXES.find(a=>a.id===axId);
        const items = ax.items[modeKey];
        items.forEach((txtRaw, i) => {
-         const displayTxt = txtRaw.replace("【Key】", "").replace("【Key1】", "").replace("【Key2】", "");
+         const displayTxt = txtRaw.replace("【Key】", "");
          groupItems.push({ txt: displayTxt, axisId: axId, idx: i });
        });
     });
@@ -1017,7 +1122,7 @@ function buildSkillUI(){
       const row = document.createElement("label");
       row.className = "chk";
       row.style.borderTop = "none";
-      row.style.borderBottom = "1px solid var(--line2)";
+      row.style.borderBottom = "1px solid rgba(0,0,0,0.06)";
       
       const cb = document.createElement("input");
       cb.type = "checkbox";
@@ -1050,7 +1155,6 @@ function toResult(){
   show("view-result");
 }
 
-/* ===== Visualization ===== */
 function renderTypeMapSVG(mainId, subId){
   if(!mainId) return "";
   
@@ -1059,14 +1163,16 @@ function renderTypeMapSVG(mainId, subId){
   const axisLabelColor = "#9ca3af"; 
   const axisLabelSize  = "12";      
   const typeLabelSize  = "11";      
-  const colorOpen      = "#c2410c"; 
-  const colorClose     = "#1e3a8a"; 
+  
+  const colorOpen      = "#c026d3"; // Magenta/Violet
+  const colorClose     = "#4f46e5"; // Indigo
+  
   const dotR_Base = 6;  
   const dotR_Main = 9;  
   const dotR_Sub  = 11; 
 
   const axisColor="#e5e7eb";
-  const mainColor="#f97316"; 
+  const mainColor="#2563eb"; 
 
   let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="font-family:'Jost', 'Noto Sans JP', sans-serif;">`;
   
@@ -1088,8 +1194,9 @@ function renderTypeMapSVG(mainId, subId){
     const ly = y + (top ? -10 : 16);
     const anc = right ? "start" : "end";
 
+    // OPEN属性＝赤紫系、CLOSE属性＝青紫系
     const txtColor = (m.group === 'open') ? colorOpen : colorClose;
-    const dotColor = "#d1d5db";
+    const dotColor = "#94a3b8"; 
 
     svg += `<circle cx="${x}" cy="${y}" r="${dotR_Base}" fill="${dotColor}"/>`;
     svg += `<text x="${lx}" y="${ly}" font-size="${typeLabelSize}" fill="${txtColor}" font-weight="700" text-anchor="${anc}">${t.label}</text>`;
@@ -1111,10 +1218,10 @@ function renderTypeMapSVG(mainId, subId){
 }
 
 function renderResult(){
-  $("resultMode").textContent = app.mode ? (app.mode==="self"?"自己評価":"客観評価") : "評価モードなし";
+  $("resultModeLabel").textContent = (app.mode === "self" ? "自己評価" : (app.mode === "other" ? "客観評価" : "-"));
   
   const sText = app.scopeText || $("scopeText").value || "—";
-  $("resultScope").textContent = `スコープ：${sText}`;
+  $("resultScopeLabel").textContent = `スコープ：${sText}`;
 
   if(app.typeSkipped){
     $("typeResultContent").classList.add("hidden");
@@ -1142,16 +1249,20 @@ function renderResult(){
 
     $("typeMapWrap").innerHTML = renderTypeMapSVG(app.mainType, app.subType);
 
+    // 属性判定ロジック（追加された区切り線含む）
     const pm = TYPE_MAP[app.mainType];
     const isOpen = (pm.group === 'open');
 
     const styleBase = "font-size:11px; font-weight:700; padding:6px 14px; border-radius:99px; transition:all 0.3s; display:flex; align-items:center; gap:6px;";
-    const styleOpenOn  = "background:#fff7ed; color:#c2410c; border:1px solid #c2410c; opacity:1;";
-    const styleCloseOn = "background:#f0f9ff; color:#1e3a8a; border:1px solid #1e3a8a; opacity:1;";
-    const styleOff     = "background:transparent; color:#d1d5db; border:1px solid #e5e7eb; opacity:0.5;";
+    
+    // OPEN属性色（マゼンタ系）
+    const styleOpenOn  = "background:#fdf4ff; color:#c026d3; border:1px solid #c026d3; opacity:1;";
+    // CLOSE属性色（インディゴ系）
+    const styleCloseOn = "background:#eef2ff; color:#4f46e5; border:1px solid #4f46e5; opacity:1;";
+    const styleOff     = "background:transparent; color:#94a3b8; border:1px solid #cbd5e1; opacity:0.5;";
 
     const htmlAttr = `
-      <div style="margin-top:16px; padding-top:12px; border-top:1px dashed var(--line); display:flex; flex-direction:column; align-items:center;">
+      <div style="margin-top:16px; padding-top:16px; border-top:1px solid rgba(0,0,0,0.1); display:flex; flex-direction:column; align-items:center;">
         <div class="type-label-tag" style="margin-bottom:8px;">メイン属性</div>
         <div style="display:flex; gap:12px;">
           <div style="${styleBase} ${isOpen ? styleOpenOn : styleOff}">
@@ -1188,7 +1299,7 @@ function renderResult(){
           <b>${ax.name}</b>
           <span>Lv${lv} <span style="color:#9ca3af; font-size:11px">(${diffTxt})</span></span>
         </div>
-        <div style="height:6px; width:100%; background:#f3f4f6; border-radius:99px; overflow:hidden; margin-bottom:4px;">
+        <div style="height:6px; width:100%; background:rgba(255,255,255,0.5); border-radius:99px; overflow:hidden; margin-bottom:4px;">
           <div style="height:100%; width:${barW}%; background:var(--acc);"></div>
         </div>
         <div class="skill-desc">${ax.desc}</div>
@@ -1207,14 +1318,32 @@ function renderResult(){
   const avg = labels.map(_=>3);
   
   const datasets = [
-    { label:"実測", data: actual, borderWidth: 3, borderColor:"#f97316", backgroundColor:"rgba(249, 115, 22, 0.1)", pointRadius: 3 },
-    { label:"平均(Lv3)", data: avg, borderWidth: 1, borderDash: [5,5], borderColor:"#9ca3af", pointRadius: 0 }
+    { 
+      label:"実測", 
+      data: actual, 
+      borderWidth: 3, 
+      borderColor:"#2563eb", 
+      backgroundColor:"rgba(37, 99, 235, 0.2)", 
+      pointRadius: 3 
+    },
+    { 
+      label:"平均(Lv3)", 
+      data: avg, 
+      borderWidth: 0, // 修正：線なし
+      backgroundColor: "rgba(148, 163, 184, 0.2)", // 修正：グレーのベタ塗り
+      pointRadius: 0,
+      fill: true
+    }
   ];
   if(!app.typeSkipped && app.mainType && TYPE_TEMPLATES[app.mainType]){
     datasets.push({
       label:`メインタイプ典型`,
       data: TYPE_TEMPLATES[app.mainType],
-      borderWidth: 2, borderDash: [5,5], borderColor:"#1e3a8a", pointRadius: 0
+      borderWidth: 2, 
+      borderDash: [4,4], // 修正：点線
+      borderColor:"rgba(147, 197, 253, 0.8)", // 修正：実測より薄い青
+      pointRadius: 0,
+      fill: false
     });
   }
 
@@ -1235,13 +1364,16 @@ function renderResult(){
 function downloadPNG(){
   const target = $("captureArea");
   
-  // ★ 強制的に文字と色を指定して画像化する（空欄防止）
+  // バージョン情報も含めるために textContent を JS の変数から取得
   const modeMap = { "self": "自己評価", "other": "客観評価" };
   const currentMode = modeMap[app.mode] || "-";
   const currentScope = $("scopeText").value || app.scopeText || "—";
 
-  $("resultMode").textContent = currentMode;
-  $("resultScope").textContent = `スコープ：${currentScope}`;
+  $("resultModeLabel").textContent = currentMode;
+  $("resultScopeLabel").textContent = `スコープ：${currentScope}`;
+  
+  // フッターのバージョン表示も更新（念のため）
+  $("footerVersion").textContent = APP_VERSION;
 
   html2canvas(target, { 
     scale: 2,
@@ -1252,19 +1384,16 @@ function downloadPNG(){
       clonedElement.style.padding = "40px"; 
       clonedElement.style.boxSizing = "border-box";
       
-      const cMode = clonedDoc.getElementById("resultMode");
-      const cScope = clonedDoc.getElementById("resultScope");
-      
-      // クローン側にも強制適用 & 色指定（白飛び防止）
-      if(cMode) {
-        cMode.textContent = currentMode;
-        cMode.style.color = "#374151"; 
-        cMode.style.visibility = "visible";
-      }
-      if(cScope) {
-        cScope.textContent = `スコープ：${currentScope}`;
-        cScope.style.color = "#374151";
-        cScope.style.visibility = "visible";
+      const pill = clonedElement.querySelector('.pill');
+      if(pill){
+        pill.innerHTML = `
+          <span style="font-weight:700; color:#1e293b;">${currentMode}</span>
+          <span style="margin:0 8px; color:#64748b;">｜</span>
+          <span style="color:#1e293b;">スコープ：${currentScope}</span>
+        `;
+        pill.style.border = "1px solid #cbd5e1";
+        pill.style.background = "#ffffff";
+        pill.style.color = "#1e293b";
       }
     }
   }).then(canvas => {
@@ -1310,6 +1439,11 @@ function downloadCSV(){
    EVENTS & INIT
 ========================= */
 resetAll();
+// 初期化時にバージョンを表示
+document.addEventListener("DOMContentLoaded", () => {
+    $("versionText").textContent = APP_VERSION;
+    $("footerVersion").textContent = APP_VERSION;
+});
 
 document.querySelectorAll('[data-mode]').forEach(el=>{
   const click = ()=>setMode(el.dataset.mode);
