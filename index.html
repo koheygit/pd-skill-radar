@@ -85,7 +85,6 @@
       display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px;
     }
     
-    /* バージョン表示のスタイル */
     .version-tag {
       font-size: 0.6em;
       font-weight: 400;
@@ -93,10 +92,8 @@
       opacity: 0.8;
     }
 
-    /* 修正: h2の文字色を無彩色（--text）に変更 */
     h2{ margin:0 0 10px; font-size:18px; letter-spacing:-.1px; color: var(--text); font-weight: 700; }
     
-    /* 結果画面のタイトル用（念のため個別指定も維持） */
     h2.result-title { margin:0; color: var(--text); }
 
     h3{ margin:0; font-size:14px; letter-spacing:-.1px; }
@@ -274,6 +271,17 @@
         border: 1px solid var(--line);
         background: rgba(255, 255, 255, 0.4);
     }
+    
+    /* 追加: タイプ画像のスタイル */
+    #mainTypeImage {
+      display: block;
+      margin: 8px auto;
+      max-width: 240px; /* 画像の最大幅 */
+      height: auto;
+      border-radius: 12px;
+      /* 画像自体にも少しグラスっぽい演出を加えるなら以下 */
+      /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); */
+    }
   </style>
 </head>
 
@@ -414,6 +422,9 @@
           <div id="typeResultContent">
             <div style="background: rgba(219, 234, 254, 0.4); padding:16px; border-radius:12px; border:1px solid rgba(37, 99, 235, 0.2);">
                <div class="type-label-tag">メインタイプ</div>
+               
+               <img id="mainTypeImage" src="" alt="Type Image" class="hidden">
+
                <div id="mainTypeText" class="type-display-main">—</div>
             </div>
 
@@ -484,7 +495,25 @@
 /* =========================
    APP CONFIG & INIT
 ========================= */
-const APP_VERSION = "(Ver.0.4)"; 
+const APP_VERSION = "(Ver.0.5)"; 
+
+/* ▼▼▼ 画像の設定エリア ▼▼▼ */
+/* ここに各タイプに対応する画像のURLを記述してください。
+   ローカルファイルの場合は "./images/yanki_aniki.png" のように記述します。
+   現在はダミー画像（placehold.co）を設定しています。
+*/
+const TYPE_IMAGES = {
+  yanki_aniki:       "./yanki_aniki.png",
+  yanki_ubu:         "./yanki_ubu.png",
+  otaku_you:         "./otaku_you.png",
+  otaku_in:          "./otaku_in.png",
+  shokunin_flexible: "./shokunin_flexible.png",
+  shokunin_stubborn: "./shokunin_stubborn.png",
+  artist_open:       "./artist_open.png",
+  artist_mystery:    "./artist_mystery.png"
+};
+/* ▲▲▲ 設定ここまで ▲▲▲ */
+
 
 /* =========================
    DATA DEFINITIONS
@@ -1249,7 +1278,16 @@ function renderResult(){
 
     $("typeMapWrap").innerHTML = renderTypeMapSVG(app.mainType, app.subType);
 
-    // 属性判定ロジック（追加された区切り線含む）
+    // 画像ロジック
+    const imgUrl = TYPE_IMAGES[app.mainType];
+    const imgEl = $("mainTypeImage");
+    if(imgUrl){
+      imgEl.src = imgUrl;
+      imgEl.classList.remove("hidden");
+    } else {
+      imgEl.classList.add("hidden");
+    }
+
     const pm = TYPE_MAP[app.mainType];
     const isOpen = (pm.group === 'open');
 
