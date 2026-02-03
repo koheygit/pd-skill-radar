@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
   <title>Product Designer Type & Skill Diagnostic</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,6 +48,7 @@
       color:var(--text);
       min-height: 100vh;
       overflow-x: hidden;
+      -webkit-text-size-adjust: 100%; /* iOSでのフォントサイズ自動拡大防止 */
     }
 
     /* 背景アニメーション */
@@ -93,7 +94,6 @@
     }
 
     h2{ margin:0 0 10px; font-size:18px; letter-spacing:-.1px; color: var(--text); font-weight: 700; }
-    
     h2.result-title { margin:0; color: var(--text); }
 
     h3{ margin:0; font-size:14px; letter-spacing:-.1px; }
@@ -101,7 +101,6 @@
     .small{ font-size:12px; color:var(--muted); }
 
     .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-    @media (max-width:920px){ .grid2{ grid-template-columns:1fr; } }
     .row{ display:flex; gap:12px; flex-wrap:wrap; }
     .vertical-stack{ display:flex; flex-direction:column; gap:24px; max-width:600px; margin:0 auto; }
 
@@ -111,7 +110,7 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius);
-      padding: 24px;
+      padding: 32px; /* デフォルトPC用 */
       border: var(--glass-border);
       box-shadow: var(--shadow-card);
     }
@@ -137,7 +136,7 @@
     .tap{
       width:100%;
       display:flex; align-items:center; justify-content:space-between;
-      gap:12px; padding:14px 14px;
+      gap:12px; padding:16px 20px;
       border-radius:var(--radius-sm);
       border: 1px solid rgba(255,255,255,0.6);
       background: rgba(255,255,255,0.5);
@@ -172,7 +171,7 @@
       border:1px solid rgba(255,255,255,0.6); 
       background: rgba(255,255,255,0.5); 
       color:var(--text);
-      font-weight:700; cursor:pointer; min-height:48px; transition: all .2s;
+      font-weight:700; cursor:pointer; min-height:52px; transition: all .2s;
       backdrop-filter: blur(4px);
     }
     .btn:hover{ background: rgba(255,255,255,0.9); transform: translateY(-1px); }
@@ -265,22 +264,70 @@
       border: 1px solid rgba(255,255,255,0.4);
     }
     
-    /* 能力判定の区切り線（影なし） */
     #skillAccordions .surface {
         box-shadow: none;
         border: 1px solid var(--line);
         background: rgba(255, 255, 255, 0.4);
     }
     
-    /* 追加: タイプ画像のスタイル */
     #mainTypeImage {
       display: block;
       margin: 8px auto;
-      max-width: 240px; /* 画像の最大幅 */
+      max-width: 240px; 
       height: auto;
       border-radius: 12px;
-      /* 画像自体にも少しグラスっぽい演出を加えるなら以下 */
-      /* box-shadow: 0 4px 12px rgba(0,0,0,0.1); */
+    }
+
+    /* ▼▼▼ レスポンシブ最適化 (Mobile / Tablet) ▼▼▼ */
+    @media (max-width: 920px){ 
+      .grid2{ grid-template-columns:1fr; } 
+    }
+
+    @media (max-width: 600px) {
+      .wrap { padding: 30px 16px 60px; } /* 余白を縮小 */
+      
+      h1 { font-size: 20px; line-height: 1.4; }
+      
+      .surface, .screen, .result-card {
+        padding: 20px; /* カード内余白を縮小 */
+      }
+      
+      .btn {
+        width: 100%; /* ボタンをフル幅に */
+        min-height: 48px;
+        font-size: 14px;
+      }
+      
+      .tap {
+        padding: 14px 16px;
+      }
+      
+      /* 結果画面下部のボタンエリアを縦積みに */
+      .surface .row {
+        flex-direction: column;
+        gap: 16px;
+        align-items: stretch;
+      }
+      
+      .surface .row > div {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+      }
+      
+      /* 結果画面のタイトル周り */
+      .surface > div[style*="justify-content:space-between"] {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+      
+      /* タイプ画像 */
+      #mainTypeImage {
+        max-width: 100%;
+        width: 200px;
+      }
     }
   </style>
 </head>
@@ -495,22 +542,18 @@
 /* =========================
    APP CONFIG & INIT
 ========================= */
-const APP_VERSION = "(Ver.0.5)"; 
+const APP_VERSION = "(Ver.0.6)"; 
 
 /* ▼▼▼ 画像の設定エリア ▼▼▼ */
-/* ここに各タイプに対応する画像のURLを記述してください。
-   ローカルファイルの場合は "./images/yanki_aniki.png" のように記述します。
-   現在はダミー画像（placehold.co）を設定しています。
-*/
 const TYPE_IMAGES = {
-  yanki_aniki:       "./yanki_aniki.png",
-  yanki_ubu:         "./yanki_ubu.png",
-  otaku_you:         "./otaku_you.png",
-  otaku_in:          "./otaku_in.png",
-  shokunin_flexible: "./shokunin_flexible.png",
-  shokunin_stubborn: "./shokunin_stubborn.png",
-  artist_open:       "./artist_open.png",
-  artist_mystery:    "./artist_mystery.png"
+  yanki_aniki:       "./images/yanki_aniki.png",
+  yanki_ubu:         "./images/yanki_ubu.png",
+  otaku_you:         "./images/otaku_you.png",
+  otaku_in:          "./images/otaku_in.png",
+  shokunin_flexible: "./images/shokunin_flexible.png",
+  shokunin_stubborn: "./images/shokunin_stubborn.png",
+  artist_open:       "./images/artist_open.png",
+  artist_mystery:    "./images/artist_mystery.png"
 };
 /* ▲▲▲ 設定ここまで ▲▲▲ */
 
