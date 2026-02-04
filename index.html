@@ -329,6 +329,30 @@
         width: 200px;
       }
     }
+
+    /* ===== PATCH: ①②③ (見た目のみ変更 / 挙動・文言・構成は不変) ===== */
+
+    /* ① ボタン右端の「›」丸記号を全て削除（非表示） */
+    .tap .chev{
+      display: none !important;
+    }
+
+    /* ② 客観評価C（.tap.neutral）のhoverをA/Bと同じにする */
+    .tap.neutral:hover{
+      background: rgba(255,255,255,0.9);
+      border-color: var(--acc);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15);
+    }
+
+    /* ③ ベタ色ボタンをグラデーションにする */
+    .btn.orange-outline{
+      background: linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(219,234,254,0.55) 100%);
+    }
+
+    .btn.danger{
+      background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(254,242,242,0.75) 100%);
+    }
   </style>
 </head>
 
