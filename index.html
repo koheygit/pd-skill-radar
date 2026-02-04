@@ -49,7 +49,7 @@
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-text-size-adjust: 100%;
-      -webkit-tap-highlight-color: transparent; /* タップ時のグレー背景を削除 */
+      -webkit-tap-highlight-color: transparent; /* モバイルのデフォルトタップ色を消す */
     }
 
     /* 背景アニメーション */
@@ -111,7 +111,7 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius);
-      padding: 32px;
+      padding: 32px; 
       border: var(--glass-border);
       box-shadow: var(--shadow-card);
     }
@@ -133,7 +133,7 @@
     .rule.soft{ background:var(--line2); }
     .rule.hidden-line { display: none; margin: 0; }
 
-    /* Clickable Items */
+    /* Clickable Items (Base Style) */
     .tap{
       width:100%;
       display:flex; align-items:center; justify-content:space-between;
@@ -143,25 +143,26 @@
       background: rgba(255,255,255,0.5);
       box-shadow: 0 2px 5px rgba(0,0,0,0.02);
       cursor:pointer; user-select:none;
-      transition: all .2s ease;
+      transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
+    .tap .chev{ display: none !important; }
 
+    /* 選択状態は常時適用 */
     .tap.selected{ 
       border-color: var(--acc); 
       background: #eff6ff; 
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); 
     }
     .tap.selected .chev{ background:var(--acc); border-color: var(--acc); color: #fff; }
-    .tap .chev{ display: none !important; }
 
-    /* Buttons */
+    /* Buttons (Base Style) */
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
       gap:8px; padding:12px 18px; border-radius:16px;
       border:1px solid rgba(255,255,255,0.6); 
       background: rgba(255,255,255,0.5); 
       color:var(--text);
-      font-weight:700; cursor:pointer; min-height:52px; transition: all .2s;
+      font-weight:700; cursor:pointer; min-height:52px; transition: all 0.2s ease;
       backdrop-filter: blur(4px);
     }
     
@@ -186,33 +187,52 @@
       border-color: rgba(220,38,38,.25); 
     }
     .btn.danger-outline{ color:var(--danger); background:rgba(255,255,255,0.3); border: 2px solid var(--danger); font-weight: 700; }
+
+    /* ▼▼▼ 【重要】インタラクションの最適化 ▼▼▼ */
     
-    /* ▼▼▼ スマホ対策: Hover効果は「マウスが使えるデバイス」のみ適用 ▼▼▼ */
+    /* A. ホバー効果は「マウスが使えるデバイス」のみに適用 (スマホのSticky Hover防止) */
     @media (hover: hover) {
-      .tap:hover{ 
+      .tap:hover { 
         background: rgba(255,255,255,0.9); 
         border-color: var(--acc); 
         transform: translateY(-2px); 
         box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15); 
       }
-      .tap.neutral:hover{
+      .tap.neutral:hover {
         background: rgba(255,255,255,0.9);
         border-color: var(--acc);
         transform: translateY(-2px);
         box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15);
       }
-      .btn:hover{ background: rgba(255,255,255,0.9); transform: translateY(-1px); }
-      .btn.primary:hover{ filter: brightness(1.1); box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4); }
-      .btn.orange-outline:hover{ background: #fff; }
-      .btn.danger-outline:hover{ background: #fff5f5; }
+      .btn:hover { 
+        background: rgba(255,255,255,0.9); 
+        transform: translateY(-1px); 
+      }
+      .btn.primary:hover { 
+        filter: brightness(1.1); 
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4); 
+      }
+      .btn.orange-outline:hover { 
+        background: #fff; 
+      }
+      .btn.danger-outline:hover { 
+        background: #fff5f5; 
+      }
     }
-    
-    /* スマホでタップした瞬間（Active）のスタイルは別途定義 */
+
+    /* B. アクティブ効果 (タッチ/クリックした瞬間) は全デバイスで適用 */
+    /* これにより「押した感」を出す */
     .tap:active, .btn:active {
-      transform: translateY(0);
-      background: var(--accSoft);
+      transform: scale(0.98) translateY(0) !important; /* 少し縮む */
+      background-color: var(--accSoft) !important; /* 色を変える */
+      transition: transform 0.1s;
     }
-    /* ▲▲▲ スマホ対策ここまで ▲▲▲ */
+    .btn.primary:active {
+      filter: brightness(0.9);
+      box-shadow: none;
+    }
+
+    /* ▲▲▲ インタラクション設定ここまで ▲▲▲ */
 
 
     /* Components */
@@ -518,7 +538,7 @@
 /* =========================
    APP CONFIG & INIT
 ========================= */
-const APP_VERSION = "(Ver.0.7)"; 
+const APP_VERSION = "(Ver.0.8)"; 
 
 /* ▼▼▼ 画像の設定エリア ▼▼▼ */
 const TYPE_IMAGES = {
@@ -993,7 +1013,6 @@ function renderTypeQuestion(){
         <div class="left"><div class="title"><span style="margin-right:8px; font-weight:900;">${i+1}</span>${op.label}</div></div>
         <div class="chev">›</div>`;
       
-      // クリック時にフォーカスを外して、スマホでのhover残留を防ぐ
       div.onclick = (e)=>{ 
         e.currentTarget.blur();
         answerSelf(q, op.val); 
