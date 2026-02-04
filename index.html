@@ -48,16 +48,16 @@
       color:var(--text);
       min-height: 100vh;
       overflow-x: hidden;
-      -webkit-text-size-adjust: 100%; /* iOSでのフォントサイズ自動拡大防止 */
+      -webkit-text-size-adjust: 100%;
     }
 
     /* 背景アニメーション */
     .bg-blobs {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
-      z-index: -1;
+      z-index: 0; /* 一番奥に配置 */
       overflow: hidden;
-      pointer-events: none;
+      pointer-events: none; /* クリックを阻害しない */
     }
     .blob {
       position: absolute;
@@ -75,7 +75,12 @@
       100% { transform: translate(30px, 50px) scale(1.1); }
     }
 
-    .wrap{ max-width:1060px; margin:0 auto; padding:40px 20px 60px; }
+    /* コンテンツ全体を包むラッパー：Z-indexで手前に持ってくる */
+    .wrap{ 
+      position: relative; 
+      z-index: 10; 
+      max-width:1060px; margin:0 auto; padding:40px 20px 60px; 
+    }
     
     h1{ 
       margin:0 0 6px; font-size:24px; letter-spacing:-.2px; 
@@ -110,7 +115,7 @@
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-radius: var(--radius);
-      padding: 32px; /* デフォルトPC用 */
+      padding: 32px; 
       border: var(--glass-border);
       box-shadow: var(--shadow-card);
     }
@@ -156,13 +161,13 @@
       box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); 
     }
     .tap.selected .chev{ background:var(--acc); border-color: var(--acc); color: #fff; }
-    .tap .chev{
-      flex:0 0 auto; width:30px; height:30px; border-radius:999px;
-      display:grid; place-items:center; background: rgba(255,255,255,0.6);
-      border:1px solid rgba(255,255,255,0.8); color:var(--text); font-weight:900;
-      transition: all .2s;
+    .tap .chev{ display: none !important; }
+    .tap.neutral:hover{ 
+      background: rgba(255,255,255,0.9);
+      border-color: var(--acc);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15);
     }
-    .tap.neutral:hover{ background-color: rgba(255,255,255,0.8); border-color: #94a3b8; }
 
     /* Buttons */
     .btn{
@@ -189,12 +194,16 @@
     .btn.orange-outline{
       border: 2px solid var(--acc);
       color: var(--acc);
-      background: rgba(255,255,255,0.3);
+      background: linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(219,234,254,0.55) 100%);
     }
     .btn.orange-outline:hover{ background: #fff; }
     .btn.orange-outline:disabled{ border-color:#cbd5e1; color:#94a3b8; background:rgba(255,255,255,0.2); opacity:1; }
 
-    .btn.danger{ color:var(--danger); background:rgba(255,255,255,0.8); border-color: rgba(220,38,38,.25); }
+    .btn.danger{ 
+      color:var(--danger); 
+      background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(254,242,242,0.75) 100%);
+      border-color: rgba(220,38,38,.25); 
+    }
     .btn.danger-outline{ color:var(--danger); background:rgba(255,255,255,0.3); border: 2px solid var(--danger); font-weight: 700; }
     .btn.danger-outline:hover{ background:#fef2f2; }
 
@@ -215,13 +224,7 @@
     }
     input[type="text"]:focus{ border-color: var(--acc); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); background: #fff; }
 
-    /* Accordion */
-    details{ 
-      border:1px solid rgba(255,255,255,0.6); border-radius:12px; 
-      background: rgba(255,255,255,0.3); padding:10px 12px; 
-    }
-    summary{ cursor:pointer; font-weight:700; list-style:none; display:flex; align-items:center; justify-content:space-between; padding:6px 4px; user-select:none; }
-    summary::-webkit-details-marker{ display:none; }
+    /* Accordion / Lists */
     .chk{ display:flex; gap:10px; align-items:flex-start; padding:10px 4px; border-top:1px solid var(--line2); cursor: pointer; }
     .chk:hover{ background: rgba(255,255,255,0.5); }
     input[type="checkbox"]{ margin-top:3px; transform:scale(1.15); cursor: pointer; accent-color: var(--acc); }
@@ -236,7 +239,7 @@
     .result-section-title { 
       font-size: 16px; font-weight: 700; margin-bottom: 12px; 
       display: flex; align-items: center; gap:8px; 
-      color: #374151; /* ダークグレー */
+      color: #374151;
     }
     .result-section-header { 
         background: rgba(0,0,0,0.03); 
@@ -284,74 +287,15 @@
     }
 
     @media (max-width: 600px) {
-      .wrap { padding: 30px 16px 60px; } /* 余白を縮小 */
-      
+      .wrap { padding: 30px 16px 60px; }
       h1 { font-size: 20px; line-height: 1.4; }
-      
-      .surface, .screen, .result-card {
-        padding: 20px; /* カード内余白を縮小 */
-      }
-      
-      .btn {
-        width: 100%; /* ボタンをフル幅に */
-        min-height: 48px;
-        font-size: 14px;
-      }
-      
-      .tap {
-        padding: 14px 16px;
-      }
-      
-      /* 結果画面下部のボタンエリアを縦積みに */
-      .surface .row {
-        flex-direction: column;
-        gap: 16px;
-        align-items: stretch;
-      }
-      
-      .surface .row > div {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        width: 100%;
-      }
-      
-      /* 結果画面のタイトル周り */
-      .surface > div[style*="justify-content:space-between"] {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-      }
-      
-      /* タイプ画像 */
-      #mainTypeImage {
-        max-width: 100%;
-        width: 200px;
-      }
-    }
-
-    /* ===== PATCH: ①②③ (見た目のみ変更 / 挙動・文言・構成は不変) ===== */
-
-    /* ① ボタン右端の「›」丸記号を全て削除（非表示） */
-    .tap .chev{
-      display: none !important;
-    }
-
-    /* ② 客観評価C（.tap.neutral）のhoverをA/Bと同じにする */
-    .tap.neutral:hover{
-      background: rgba(255,255,255,0.9);
-      border-color: var(--acc);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15);
-    }
-
-    /* ③ ベタ色ボタンをグラデーションにする */
-    .btn.orange-outline{
-      background: linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(219,234,254,0.55) 100%);
-    }
-
-    .btn.danger{
-      background: linear-gradient(135deg, rgba(255,255,255,0.92) 0%, rgba(254,242,242,0.75) 100%);
+      .surface, .screen, .result-card { padding: 20px; }
+      .btn { width: 100%; min-height: 48px; font-size: 14px; }
+      .tap { padding: 14px 16px; }
+      .surface .row { flex-direction: column; gap: 16px; align-items: stretch; }
+      .surface .row > div { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+      .surface > div[style*="justify-content:space-between"] { flex-direction: column; align-items: flex-start; gap: 10px; }
+      #mainTypeImage { max-width: 100%; width: 200px; }
     }
   </style>
 </head>
@@ -566,7 +510,7 @@
 /* =========================
    APP CONFIG & INIT
 ========================= */
-const APP_VERSION = "(Ver.0.6)"; 
+const APP_VERSION = "(Ver.0.7)"; 
 
 /* ▼▼▼ 画像の設定エリア ▼▼▼ */
 const TYPE_IMAGES = {
@@ -946,7 +890,9 @@ function show(viewId){
 
   ["view-home","view-type","view-skill","view-result"].forEach(v=>$(v).classList.add("hidden"));
   $(viewId).classList.remove("hidden");
-  window.scrollTo({top:0, behavior:"smooth"});
+  
+  // 修正②：必ずページ最上部から表示（smooth除外）
+  window.scrollTo(0, 0);
 }
 
 function resetAll(){
@@ -980,6 +926,11 @@ function setMode(mode){
 function startTypeTest(){
   app.scopeText = $("scopeText").value.trim();
   initScores();
+  
+  // 修正①：診断開始時に必ずスキル選択状態をリセットする
+  AXES.forEach(ax => app.skillChecks[ax.id] = Array(ax.items.other.length).fill(false));
+  app.skillLevels = {};
+
   app.typeAnswers = [];
   app.typeIdx = 0;
   app.typeSkipped = false;
@@ -998,6 +949,11 @@ function skipTypeTest(){
   app.typeSkipped = true;
   app.mainType = null;
   app.subType = null;
+  
+  // 修正①：スキップ時も必ずスキル選択状態をリセットする
+  AXES.forEach(ax => app.skillChecks[ax.id] = Array(ax.items.other.length).fill(false));
+  app.skillLevels = {};
+
   buildSkillUI();
   show("view-skill");
 }
@@ -1167,6 +1123,7 @@ function calcAxisLevel(axisId){
   return 1;
 }
 
+// 修正: buildSkillUI でグループ化とランダム配置
 function buildSkillUI(){
   const root = $("skillAccordions");
   root.innerHTML = "";
@@ -1176,16 +1133,18 @@ function buildSkillUI(){
 
   const modeKey = (app.mode === 'self') ? 'self' : 'other';
 
+  // 修正: 影なし、線ありのデザインに変更
   SKILL_GROUPS.forEach(grp => {
     const card = document.createElement("div");
-    card.style.background = "var(--glass-bg)";
+    // surfaceクラスの影を無効化し、ボーダーを追加
+    card.style.background = "var(--surface)";
     card.style.backdropFilter = "blur(12px)";
     card.style.webkitBackdropFilter = "blur(12px)";
     card.style.borderRadius = "var(--radius)";
     card.style.padding = "20px";
     card.style.marginBottom = "0";
-    card.style.boxShadow = "none"; 
-    card.style.border = "1px solid var(--glass-border)";
+    card.style.boxShadow = "none"; // 影なし
+    card.style.border = "1px solid var(--glass-border)"; // 線あり
 
     const title = document.createElement("div");
     title.style.fontWeight = "900";
